@@ -1,0 +1,225 @@
+{
+    "language": {
+        "title": "Available Languages",
+        "currently": "Language currently defined:",
+        "menu": {
+            "place": "Select a language:",
+            "label": "Cancel",
+            "description": [
+                "Cancel the language exchange",
+                "Select the language: {{language}}"
+            ]
+        },
+        "responses": {
+            "filter": "This language does not exist or is not yet available.",
+            "filter_currently": "This language is currently set.",
+            "success": "Language successfully changed.",
+            "cancel": "This operation was successfully canceled",
+            "none": "The provided argument is not a valid language."
+        }
+    },
+
+    "antinvite": {
+        "help": {
+            "title": "Anti-invite",
+            "description": "The anti-invite system consists of prohibiting the dissemination of links from other servers on your server.",
+            "field_1": "System Status:",
+            "field_2": "Permitted Roles",
+            "field_3": "Allowed Channels",
+            "field_4": "Defined message:",
+            "value_1": "The system is:",
+            "status": [
+                "activated",
+                "disabled"
+            ],
+            "value_2": [
+                "No Roles",
+                "and more",
+                "roles"
+            ],
+            "value_3": [
+                "No Channel",
+                "and more",
+                "channels"
+            ],
+            "value_4": "No custom message set",
+            "value_5": [
+                "Displays the member's name.",
+                "Displays the channels's name.",
+                "Displays the guild's name."
+            ]
+        },
+        "select": {
+            "place": "Define a function:",
+            "label_1": "Activate or deactivate the system",
+            "description_1": "Activate or deactivate the anti-invitation system.",
+            "label_2": "Change the message",
+            "description_2": "Defines the message that will appear if a user sends an invitation.",
+            "label_3": "Add or remove channels",
+            "description_3": "Add or remove channels that will be allowed to be advertised.",
+            "label_4": "Add or remove role",
+            "description_4": "Adds or removes roles that will be allowed to be advertised."
+        },
+        "collector": {
+            "reply": [
+                "Set the message:",
+                "Enter the channel you want to add or remove:",
+                "Enter the role you want to add or remove:"
+            ],
+            "success": [
+                "The system has been successfully activated.",
+                "The system has been successfully deactivated.",
+                "The message was successfully set to: `{msg}`.",
+                "The channel has been successfully set.",
+                "The role has been successfully set."
+            ],
+            "errors": {
+                "!msg": "You have not entered the message you want to set in the system.",
+                "same": "The message entered is the same as currently defined.",
+                "!channel": "You must enter the `ID or mention the channel` you want to add in the anti-invite system.",
+                "!role": "You must enter the `ID or mention the role` you want to add in the anti-invite system.",
+                "length": [
+                    "You must enter a message up to **`1000 characters`**.",
+                    "You have reached the limit of 15 channels in the anti-invite system.",
+                    "You have reached the limit of 15 roles in the anti-invite system."
+                ],
+                "already": [
+                    "The channel entered was already in the list so I removed it.",
+                    "The role entered was already on the list so I removed it."
+                ]
+            }
+        }
+    },
+
+    "prefix": {
+        "errors": {
+            "cancel": "This operation was successfully canceled",
+            "length": "You must enter a prefix with a maximum of 5 characters.",
+            "same": "Unable to change prefix. The prefix entered is the same as currently defined, please try again."
+        },
+        "embeds": {
+            "title": "Current prefix on server:"
+        },
+        "row": {
+            "new": "Define a new prefix"
+        },
+        "new": "Enter the new prefix:",
+        "success": "My prefix on this server was successfully changed to **`{{content}}`**.",
+        "done": "Done."
+    },
+
+    "antifake": {
+        "embeds": {
+            "description": "The anti-fake system consists of blocking the entry of new members with certain account creation days.",
+            "fields": [
+                "System Status:",
+                "Creation days to block:"
+            ],
+            "values": [
+                "The system is:",
+                "Not defined",
+                "disabled",
+                "activated",
+                "days"
+            ]
+        },
+        "row": {
+            "holder": "Define a function:",
+            "labels": [
+                "Set",
+                "Activate or deactivate the system"
+            ],
+            "descriptions": [
+                "Set the days.",
+                "Enable or disable the anti-fake system."
+            ]
+        },
+        "errors": {
+            "permissions": "You are weak, you lack `Manage Server` permissions to execute this command.",
+            "days": "The value entered is not valid (Cannot be less than 1 and must be an integer).",
+            "length": "You cannot enter days less than 1 and greater than 30.",
+            "same": "The number of days entered is the same as currently defined.",
+            "defined": "It is not possible to activate the system without the number of days being defined.",
+            "activated": "The system is already activated.",
+            "disabled": "The system is already deactivated."
+        },
+        "collector": {
+            "reply": "Enter the minimum number of days of account creation a user can log into the server:",
+            "success": [
+                "The number of days has been successfully changed.",
+                "The system has been activated successfully.",
+                "The system has been successfully deactivated."
+            ]
+        }
+    },
+    
+    "callconfig": {
+        "embeds": {
+            "title": "Call's Configuration",
+            "description": "The call's configuration system consists of setting channels and roles that will not record the call times.\n**Note:** All channels that are not defined will be recorded the call time.",
+            "fields": [
+                "Blocked channels:",
+                "Blocked roles:",
+                "Log system status:"
+            ],
+            "values": [
+                "No channel blocked",
+                "No roles blocked",
+                "The system is:",
+                "activated",
+                "disabled",
+                "and more",
+                "channels",
+                "roles"
+            ]
+        },
+        "row": {
+            "holder": "Define a function:",
+            "labels": [
+                "Add All (Channels)",
+                "Remove All (Channels)",
+                "Add channel",
+                "Add All (Roles)",
+                "Remove All (Roles)",
+                "Add role",
+                "On/Off Log System"
+            ],
+            "values": [
+                "Adds all voice channels to the list.",
+                "Removes all voice channels from the list.",
+                "Adds/removes the specified channel to the list.",
+                "Adds all roles to the list.",
+                "Removes all roles from the list.",
+                "Adds/removes the specified role to the list.",
+                "Enables user voice logs."
+            ]
+        },
+        "errors": {
+            "permissions": "You are weak, you lack `Manage Server` permissions to execute this command.",
+            "!channels": "There are no channels in the list.",
+            "!channel": "You must `mention or enter the ID` of the desired channel.",
+            "type": "The channel entered is not a voice channel.",
+            "!roles": "There is no role in the list.",
+            "!role": "You must `mention or enter the ID` of the desired role.",
+            "!logs": "The {client} `log system` must be **on** so that the `call logging system` is also. To activate the logging system type: `{prefix}logs`, set the log channel and activate the system."
+        },
+        "collector": {
+            "reply": [
+                "Mention or enter the ID of the channel you want to add to the list:",
+                "Mention or enter the ID of the role you want to add to the list:"
+            ],
+            "success": [
+                "All channels have been successfully defined.",
+                "I successfully removed all channels.",
+                "The channel entered was already in the list so I removed it.",
+                "The channel entered has been successfully added to the list.",
+                "All roles have been successfully defined.",
+                "I have successfully removed all roles.",
+                "The role entered was already on the list so I removed it.",
+                "The role entered has been successfully added to the list.",
+                "The system has been successfully activated.",
+                "The system has been successfully deactivated."
+            ]
+        }
+    }
+}

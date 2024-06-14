@@ -1,0 +1,87 @@
+{
+    "permissions": {
+        "title": "Missing permissions!",
+        "alert": [
+            "{{user}}, I'm weal, I lack",
+            "{{user}}, you're weak, you lack",
+            "`{{permissions}}` permissions to run this command.",
+            "Hi {{member}}, unfortunately I cannot reply to you because I don't have the `Send Messages` permission on this guild. Please contact someone to grant me this permission, thank you. ❤️"
+        ]
+    },
+    "mentions": {
+        "client": "Hey {{author}}, I'm **{{name}}** and my prefix on that server is: **`{{prefix}}`**, want to know my commands? Use `{{prefix}}help`!",
+        "button": {
+            "github": "Github",
+            "support": "Support",
+            "add": "Add me!" 
+        }
+    },
+    "cooldown": {
+        "reply": "Calm down my boss! You must wait `{{time}} second(s)` before using the `{{command}}` command again."
+    },
+    "owner": {
+        "reply": "Only the `{{client}} developer` can use this command."
+    },
+    "errors": {
+        "interaction": [
+            "There was an error running this application, I have already contacted my developer, please try again later."
+        ],
+        "message": [
+            "There was an error running this command, I already contacted my developer, please try again later.",
+            "I couldn't find any command named: `{{command}}`.",
+            "Hmmm, this doesn't look like an existing command to me, didn't you mean: `{{command}}`? Use `{{prefix}}help` to see my list of commands."
+        ]
+    },
+    "maintenance": {
+        "client": {
+            "embed": {
+                "title": "{{client}} it's on maintenance.",
+                "description": "I'm currently undergoing maintenance, please try again later."
+            }
+        },
+        "command":{
+            "embed": {
+                "title": "{{command}} it's on maintenance!",
+                "description": "The command **`{{command}}`** is currently under maintenance."
+            }
+        }
+    },
+    "blacklist": {
+        "user": "{{user}}, you cannot use my commands at the moment, you are on my `blacklist`."
+    },
+    "args": {
+        "help": {
+            "embed": {
+                "fields": {
+                    "title": [
+                        "How to use:",
+                        "Aliases"
+                    ]
+                }
+            }
+        },
+        "how": {
+            "embed": {
+                "title": "🤨 How args works?",
+                "fields": {
+                    "title": [
+                        "Args style:",
+                        "Args type:"
+                    ],
+                    "values": [
+                        "`<arg>` - Required argument\n`[argumento]` - Optional argument",
+                        "`text` - Any text.\n`user` - Mention or ID of an user."
+                    ]
+                }
+            }
+        }
+    },
+    "vote": {
+        "embeds": {
+            "voted": {
+                "title": "Thanks for voting!",
+                "description": "Thank you for voting for me {{user}}, your vote is very important for other users to see that I am a useful bot and consequently increasing my visibility to new users.\n\nEach time you vote you can win up to `$5,000`, turn on notifications and stay tuned whenever you can vote again!\n\nYou now have {{votes}} votes and as a reward you have earned **{{money}}** (R$ {{ abbrevMoney}})"
+            }
+        }
+    }
+}

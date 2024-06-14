@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <iframe style="display: none" name="dummyframe" id="dummyframe"></iframe>
+    <form action="/sendMessage" method="POST" target="dummyframe">
+        <input type="hidden" name="token" value="{{this.token}}" />
+        <header>
+            <h1>Command: {{this.title}}</h1>
+        </header>
+        <p>
+            <label for="guild">Guild:</label>
+            <select name="guild" id="guildSelect">
+                {{#each guilds}}
+                <option value="{{this.id}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+            <label for="channel">Channel:</label>
+            <select name="channel" id="channelSelect">
+                {{#each channels}}
+                <option value="{{this.id}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+            <textarea name="text" rows="10" cols="50" id="textSelect" placeholder="Message" maxlength="200" autocomplete="off"></textarea>
+            <input type="submit" class="button" id="submitSelect" value="Send">
+        </p>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const guildSelect = document.getElementById('guildSelect');
+            const channelSelect = document.getElementById('channelSelect');
+            const messageSelect = document.getElementById('textSelect');
+            const submitSelect = document.getElementById('submitSelect');
+
+            channelSelect.disabled = true;
+            messageSelect.disabled = true;
+            submitSelect.disabled = true;
+            channelSelect.value = null;
+
+            guildSelect.addEventListener('change', () => {
+                if (guildSelect.value !== '') {
+                    channelSelect.innerHTML = '';
+                    messageSelect.value = '';
+                    channelSelect.disabled = false;
+                    const id = guildSelect.value;
+
+                    fetch('guildId/' + id)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.channels.forEach(channel => {
+                                const option = document.createElement('option');
+                                option.value = channel.id;
+                                option.text = channel.name;
+                                channelSelect.appendChild(option);
+                            });
+                        });
+
+                    if (channelSelect.value == '') {
+                        messageSelect.disabled = false;
+
+                        messageSelect.addEventListener('input', () => {
+                            if (messageSelect.value.length !== 0) submitSelect.disabled = false;
+                            else submitSelect.disabled = true;
+                        });
+                    }
+                } else {
+                    channelSelect.disabled = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

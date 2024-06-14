@@ -1,0 +1,227 @@
+{
+    "language": {
+        "title": "Idiomas Disponíveis",
+        "currently": "Idioma definido atualmente:",
+        "menu": {
+            "place": "Escolha uma língua:",
+            "label": "Cancelar",
+            "description": [
+                "Cancelar a troca de idioma",
+                "Selecionar o idioma: {{language}}"
+            ]
+        },
+        "responses": {
+            "filter": "Este idioma não existe ou ainda não está disponível.",
+            "filter_currently": "Este idioma já está definido atualmente.",
+            "success": "Idioma alterado com sucesso.",
+            "cancel": "Essa operação foi cancelada com sucesso.",
+            "none": "O argumento fornecido não é uma linguagem válida."
+        }
+    },
+
+    "antinvite": {
+        "permissions": "Você é fraco, lhe falta permissões de `Gerenciar Servidor` para executar este comando.",
+        "help": {
+            "title": "Anti-convites",
+            "description": "O sistema de anti-convites consiste em proibir divulgações de links de outros servidores em seu servidor.",
+            "field_1": "Status do sistema:",
+            "field_2": "Cargos Permitidos",
+            "field_3": "Canais Permitidos",
+            "field_4": "Mensagem definida:",
+            "value_1": "O sistema se encontra:",
+            "status": [
+                "ativado",
+                "desativado"
+            ],
+            "value_2": [
+                "Nenhum Cargo",
+                "e mais",
+                "cargos"
+            ],
+            "value_3": [
+                "Nenhum Canal",
+                "e mais",
+                "canais"
+            ],
+            "value_4": "Nenhuma mensagem personalizada definida",
+            "value_5": [
+                "Exibe o nome do membro.",
+                "Exibe o nome do canal.",
+                "Exibe o nome do servidor."
+            ]
+        },
+        "select": {
+            "place": "Defina uma função:",
+            "label_1": "Ativar ou desativar o sistema",
+            "description_1": "Ative ou desative o sistema de anti-convites.",
+            "label_2": "Alterar a mensagem",
+            "description_2": "Define a mensagem que aparecerá se algum usuário enviar algum convite.",
+            "label_3": "Adicionar ou remover canais",
+            "description_3": "Adiciona ou remove canais que serão permitidos a divulgação.",
+            "label_4": "Adicionar ou remover cargos",
+            "description_4": "Adiciona ou remove cargos que serão permitidos a divulgação."
+        },
+        "collector": {
+            "reply": [
+                "Defina a mensagem:",
+                "Insira o canal que você deseja adicionar ou remover:",
+                "Insira o cargo que você deseja adicionar ou remover:"
+            ],
+            "success": [
+                "O sistema foi ativado com sucesso.",
+                "O sistema foi desativado com sucesso.",
+                "A mensagem foi definida com sucesso como: `{msg}`.",
+                "O canal foi inserido com sucesso.",
+                "O cargo foi inserido com sucesso."
+            ],
+            "errors": {
+                "!msg": "Você não inseriu a mensagem que deseja definir no sistema.",
+                "same": "A mensagem inserida é a mesma definida atualmente.",
+                "!channel": "Você deve inserir o `ID ou mencionar do canal` que deseja adicionar no sistema de anti-invite.",
+                "!role": "Você deve `inserir o ID ou mencionar do cargo` que deseja adicionar no sistema de anti-convites.",
+                "length": [
+                    "Você deve inserir uma mensagem de até **`1000 caracteres`**.",
+                    "Você chegou no limite de 15 canais no sistema de anti-convites.",
+                    "Você chegou no limite de 15 cargos no sistema de anti-convites."
+                ],
+                "already": [
+                    "O canal inserido já estava na lista portanto eu removi.",
+                    "O cargo inserido já estava na lista portanto eu removi."
+                ]
+            }
+        }
+    },
+
+
+    "prefix": {
+        "errors": {
+            "cancel": "Esta operação foi cancelada com sucesso!",
+            "length": "Você deve inserir um prefixo com no máximo 5 caracteres.",
+            "same": "Não foi possível alterar o prefixo. O prefixo inserido é o mesmo definido atualmente, tente novamente."
+        },
+        "embeds": {
+            "title": "Prefixo atual no servidor:"
+        },
+        "row": {
+            "new": "Defina um novo prefixo"
+        },
+        "new": "Insira o novo prefixo:",
+        "success": "O meu prefixo neste servidor foi alterado para **`{{content}}`** com sucesso.",
+        "done": "Pronto."
+    },
+
+    "antifake": {
+        "embeds": {
+            "description": "O sistema de anti-fake consiste em proibir a entrada de novos membros com determinados dias de criação de conta.",
+            "fields": [
+                "Status do sistema:",
+                "Dias de criação para expulsar:"
+            ],
+            "values": [
+                "O sistema se encontra:",
+                "Não definido",
+                "desativado",
+                "ativado",
+                "dias"
+            ]
+        },
+        "row": {
+            "holder": "Defina uma função:",
+            "labels": [
+                "Definir",
+                "Ativar ou desativar o sistema"
+            ],
+            "descriptions": [
+                "Definir os dias.",
+                "Ative ou desative o sistema de anti-fake."
+            ]
+        },
+        "errors": {
+            "permissions": "Você é fraco, lhe falta permissões de `Gerenciar Servidor` para executar este comando.",
+            "days": "O valor inserido não é válido (Não pode ser inferior a 1 e deve ser um número inteiro).",
+            "length": "Você não pode inserir dias menor que 1 e maiores que 30.",
+            "same": "A quantidade de dias inserido é a mesma definida atualmente.",
+            "defined": "Não é possível ativar o sistema sem a quantidade de dias estar definida.",
+            "activated": "O sistema já se encontra ativado.",
+            "disabled": "`O sistema já se encontra desativado."
+        },
+        "collector": {
+            "reply": "Insira a quantidade de dias mínimas de criação de conta um usuário poderá entrar no servidor:",
+            "success": [
+                "A quantidade de dias foi alterada com sucesso.",
+                "O sistema foi ativado com sucesso.",
+                "O sistema foi desativado com sucesso."
+            ]
+        }
+    },
+
+    "callconfig": {
+        "embeds": {
+            "title": "Configuração de Call's",
+            "description": "O sistema de configuração de call's consiste em configurar canais e cargos que não serão gravados os tempos de call.\n**Obs:** Todos os canais que não estiverem definidos serão gravados o tempo em call.",
+            "fields": [
+                "Canais bloqueados:",
+                "Cargos bloqueados:",
+                "Status do sistema de logs:"
+            ],
+            "values": [
+                "Nenhum canal bloqueado",
+                "Nenhum cargo bloqueado",
+                "O sistema se encontra:",
+                "ativado",
+                "desativado",
+                "e mais",
+                "canais",
+                "cargos"
+            ]
+        },
+        "row": {
+            "holder": "Defina uma função:",
+            "labels": [
+                "Adicionar todos (Canais)",
+                "Remover todos (Canais)",
+                "Adicionar canal",
+                "Adicionar todos (Cargos)",
+                "Remover todos (Cargos)",
+                "Adicionar cargo",
+                "Ativar/Desativar logs"
+            ],
+            "values": [
+                "Adiciona todos os canais de voz à lista.",
+                "Remove todos os canais de voz da lista.",
+                "Adiciona/remove o canal especificado à lista.",
+                "Adiciona todos os cargos à lista.",
+                "Remove todos os cargos da lista.",
+                "Adiciona/remove o cargo específicado à lista.",
+                "Ativa logs de voz de usuários."
+            ]
+        },
+        "errors": {
+            "permissions": "Você é fraco, lhe falta permissões de `Gerenciar Servidor` para executar este comando.",
+            "!channels": "Não há nenhum canal na lista.",
+            "!channel": "Você deve `mencionar ou inserir o ID` do canal desejado.",
+            "type": "O canal inserido não é um canal de voz.",
+            "!roles": "Não há nenhum cargo na lista.",
+            "!role": "Você deve `mencionar ou inserir o ID` do cargo desejado.",
+            "!logs": "O `sistema de logs` do {client} deve estar **ativado** para que o `sistema de logs de call` também esteja. Para ativar o sistema de logs digite: `{prefix}logs`, defina o canal de logs e ative o sistema."
+        },
+        "collector": {
+            "reply": [
+                "Mencione ou insira o ID do canal que você deseja adicionar à lista:",
+                "Mencione ou insira o ID do cargo que você deseja adicionar à lista."
+            ],
+            "success": [
+                "Todos os canais foram definidos com sucesso.",
+                "Eu removi todos os canais com sucesso.",
+                "O canal inserido já estava na lista portanto eu o removi.",
+                "O canal inserido foi adicionado na lista com sucesso.",
+                "Todos os cargos foram definidos com sucesso.",
+                "Removi todos os cargos com sucesso.",
+                "O cargo inserido já estava na lista portanto eu o removi.",
+                "O cargo inserido foi adicionado na lista com sucesso.",
+                "O sistema foi ativado com sucesso.",
+                "O sistema foi desativado com sucesso."
+            ]
+        }
+    }
+}

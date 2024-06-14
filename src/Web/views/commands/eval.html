@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/commands/eval.css" />
+</head>
+
+<body>
+    <div class="playground">
+        <textarea id="codeInput" class="code-input" placeholder="Insira seu c�digo TypeScript aqui"></textarea>
+        <button onclick="runCode()" class="btn-run">Execute</button>
+        <div class="output">
+            <div class="output-title">Output:</div>
+            <pre id="outputResult"></pre>
+        </div>
+    </div>
+
+    <script>
+        function runCode() {
+            const code = document.getElementById('codeInput').value;
+
+            try {
+                const res = ts.transpileModule(code, {
+                    compilerOptions: {
+                        module: ts.ModuleKind.CommonJS,
+                        declaration: true,
+                        emitDeclarationOnly: true
+                    }
+                }).outputText;
+
+                const logs = [];
+                const originalConsoleLog = console.log;
+                console.log = function (...args) {
+                    logs.push(args.join(' '));
+                    originalConsoleLog(...args);
+                };
+
+                try {
+                    eval(res);
+                } catch (error) {
+                    logs.push(`Erro: ${error.message}`);
+                }
+
+                console.log = originalConsoleLog;
+
+                document.getElementById('outputResult').innerText = logs.join('\n');
+            } catch (error) {
+                document.getElementById('outputResult').innerText = `Erro ao transpilar o c�digo: ${error.message}`;
+            }
+        }
+    </script>
+
+    <!-- TypeScript Compiler Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/4.6.2/typescript.min.js"></script>
+</body>
+</html>
