@@ -2,12 +2,12 @@ declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			CLIENT_TOKEN: string;
+			TOPGG_TOKEN: string;
+			TOPGG_WH_AUTH: string;
 			CLIENT_ID: string;
 			OWNER_ID: string;
 			EMBED_COLOR: string;
 			PREFIX: string;
-			TOPGG_TOKEN: string;
-			TOPGG_WH_AUTH: string;
 			STATE: string;
 			LANG_PATH: string;
 			SERVER_SECRET: string;

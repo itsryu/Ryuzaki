@@ -26,7 +26,11 @@ export class Translate {
 
         await Promise.all(
             dirs.map((file) => {
-                const [language, ns] = file.split('\\').slice(-2); // node 20: .split('\\').slice(-2);
+                // node 22: .split('\\').slice(-2); 
+                // node 20: .split('/').slice(-2);
+
+                const [language, ns] = file.split('\\').slice(-2);
+                
                 if (!this.languages[language]) {
                     this.languages[language] = {};
                 }

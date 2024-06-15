@@ -70,7 +70,7 @@
                     ],
                     "values": [
                         "`<argumento>` - Argumento obrigatório\n`[argumento]` - Argumento opcional",
-                        "`texto` - Um texto qualquer.\n`usuário` - Menção ou ID de um usuário."
+                        "`texto` - Um texto qualquer.\n`número` - Um número inteiro.\n`usuário` - Menção ou ID de um usuário."
                     ]
                 }
             }

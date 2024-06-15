@@ -55,8 +55,8 @@ export class Ryuzaki extends Client {
     }
 
     private async loadWS() {
-        const { default: WebSocket } = await import('./Web/server');
-        await new WebSocket(this, process.env.SERVER_SECRET).serverExecute();
+        const { default: App } = await import('./Web/server');
+        await new App(this).serverExecute();
     }
 
     private async registerSlashCommands() {

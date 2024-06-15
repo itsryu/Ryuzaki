@@ -1,6 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
 import { AppStructure } from '../Structures';
-import { resolve } from 'node:path';
 import { Server } from 'node:http';
 import express, { Express, Router } from 'express';
 import { Client, } from 'discord.js';
@@ -16,13 +15,9 @@ export default class App extends AppStructure {
     private readonly app: Express = express();
     public readonly logger: Logger = new Logger();
     private server!: Server;
-    private token!: string;
 
-    constructor(client: Ryuzaki, token: string) {
+    constructor(client: Ryuzaki) {
         super(client);
-
-        this.token = token;
-        this.server;
     }
 
     async serverExecute(): Promise<void> {
@@ -32,9 +27,6 @@ export default class App extends AppStructure {
 
     private configServer(): void {
         this.app.set('view engine', 'html');
-        this.app.set('views', resolve(__dirname, '..', '..', '..', 'src', 'Web', 'views'));
-        this.app.set('views', resolve(__dirname, '..', '..', '..', 'src', 'Web', 'views', 'commands'));
-        this.app.use(express.static(resolve(__dirname, '..', '..', '..', 'src', 'Web', 'public')));
         this.app.use(urlencoded({ extended: true }));
         this.app.use(json());
         this.app.use(this.initRoutes());
@@ -68,8 +60,8 @@ export default class App extends AppStructure {
                 }, 30 * 60 * 1000);
 
                 this.server = this.app.listen(process.env.PORT || 3000, () => {
-                    this.client.logger.info(`[WEB Socket] API Websocket started on shard [${shardId}] on port ` + shardPort, 'WebSocket');
-                    this.client.logger.info('[WEB Socket] http://localhost:' + shardPort + '?token=' + this.token, 'Websocket');
+                    this.client.logger.info(`[WEB Socket] Server started on shard [${shardId}] on port ` + shardPort, 'Server');
+                    this.client.logger.info('[WEB Socket] http://localhost:' + shardPort, 'Server');
                 });
             }
         }
@@ -133,118 +125,4 @@ export default class App extends AppStructure {
 
         return routes;
     }
-
-    /*
-    private registerRoots(): void {
-        const guilds: Guild[] = [];
-        this.client.guilds.cache.forEach(guild => {
-            guilds.push(guild);
-        });
-
-        const commands = new Collection<string, CommandStructure>();
-        this.client.commands.forEach(command => {
-            commands.set(command.data.options.name, command);
-        });
-
-        this.app.get('/say', (req, res) => {
-            const token = req.query.token as string;
-
-            if (!this.checkToken(token)) {
-                res.render('error', { title: 'ERROR' });
-                return;
-            }
-
-            const sayCommand = commands.get('say');
-
-            res.render('say', {
-                token,
-                title: sayCommand?.data.options.name,
-                data: sayCommand,
-                guilds
-            });
-        });
-
-        this.app.get('/eval', (req, res) => {
-            const token = req.query.token as string;
-
-            if (!this.checkToken(token)) {
-                res.render('error', { title: 'ERROR' });
-                return;
-            }
-
-            const evalCommand = commands.get('eval');
-
-            res.render('eval', {
-                token,
-                title: evalCommand?.data.options.name,
-                data: evalCommand
-            });
-        });
-
-        this.app.post('/evalPost', async (req, res) => {
-            const token = req.body.token;
-            const guildId = req.body.guild;
-            const channelId = req.body.channel;
-            const message = req.body.text;
-
-            if (!token || !channelId || !guildId || !message) {
-                return res.sendStatus(400);
-            }
-
-            if (!this.checkToken(token)) {
-                return res.sendStatus(401);
-            }
-
-            const guild = this.client.guilds.cache.get(guildId);
-            const channel = guild?.channels.cache.get(channelId) as TextChannel;
-
-            if (channel) {
-                await channel.sendTyping();
-                await channel.send(message);
-                res.sendStatus(200);
-            } else {
-                res.sendStatus(406);
-            }
-        });
-
-        this.app.get('/guildId/:id', (req, res) => {
-            const id = req.params.id;
-
-            if (id) {
-                const guild = this.client.guilds.cache.get(id);
-                const channels = guild?.channels.cache.filter(channel => channel.type === ChannelType.GuildText).map(channel => channel);
-                res.json({ channels });
-            } else {
-                res.json({ });
-            }
-        })
-
-        this.app.post('/sendMessage', async (req, res) => {
-            const token = req.body.token;
-            const guildId = req.body.guild;
-            const channelId = req.body.channel;
-            const message = req.body.text;
-
-            if (!token || !channelId || !guildId || !message) {
-                return res.sendStatus(400);
-            }
-
-            if (!this.checkToken(token)) {
-                return res.sendStatus(401);
-            }
-
-            const guild = this.client.guilds.cache.get(guildId);
-            const channel = guild?.channels.cache.get(channelId) as TextChannel;
-
-            if (channel) {
-                await channel.sendTyping();
-                await channel.send(message);
-                res.sendStatus(200); 
-            } else {
-                res.sendStatus(406);
-            }
-        });
-    }
-    */
-
 }
