@@ -58,11 +58,11 @@ export default class messageCreateListener extends ListenerStructure {
 
             if (message.content.startsWith(prefix)) {
                 const [name, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
-                const command = this.client.commands.get(name) || this.client.commands.find((command) => command.data.options.aliases ? command.data.options.aliases[language] && command.data.options.aliases[language].includes(name) : undefined);
+                const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases ? command.data.options.aliases[language] && command.data.options.aliases[language].includes(name) : undefined);
 
                 if (!command) {
                     if (message.content === prefix) return;
-                    
+
                     const searchCommand = this.client.commands.find((command) => new RegExp(name, 'i').test(command.data.options.name));
 
                     if (!searchCommand) {
@@ -74,186 +74,187 @@ export default class messageCreateListener extends ListenerStructure {
 
                     return void message.reply({ content: this.client.t('main:errors.message', { index: 2, command, prefix }) })
                         .then((message) => setTimeout(() => message.delete(), 1000 * 15));
-                }
 
-                //===============> Cooldowns <===============//
+                } else {
+                    //===============> Cooldowns <===============//
 
-                if (!this.client.cooldowns.has(command.data.options.name)) {
-                    this.client.cooldowns.set(command.data.options.name, new Collection());
-                }
-                const now = Date.now();
-                const timestamps = this.client.cooldowns.get(command.data.options.name);
-                const cooldownAmount = (command.data.options.config.cooldown || 2) * 1000;
-
-                if (timestamps?.has(message.author.id)) {
-                    const time = timestamps.get(message.author.id);
-
-                    if (time && now < time + cooldownAmount) {
-                        const timeLeft = (time + cooldownAmount - now) / 1000;
-                        return void message.reply({ content: this.client.t('main:cooldown.reply', { time: timeLeft.toFixed(1), command: command.data.options.name }) }).catch(() => undefined);
+                    if (!this.client.cooldowns.has(command.data.options.name)) {
+                        this.client.cooldowns.set(command.data.options.name, new Collection());
                     }
-                }
+                    const now = Date.now();
+                    const timestamps = this.client.cooldowns.get(command.data.options.name);
+                    const cooldownAmount = (command.data.options.config.cooldown || 2) * 1000;
 
-                //============================================//
+                    if (timestamps?.has(message.author.id)) {
+                        const time = timestamps.get(message.author.id);
 
-                const cmdDb = await this.client.getData(command.data.options.name, 'command');
-
-                const mainCmd = new ClientEmbed(this.client)
-                    .setAuthor({ name: this.client.t('main:maintenance:command:embed.title', { command: command.data.options.name.replace(/^\w/, (c) => c.toUpperCase()) }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                    .setDescription(this.client.t('main:maintenance:command:embed.description', { command: command.data.options.name, reason: cmdDb.reason }));
-
-                const mainBot = new ClientEmbed(this.client)
-                    .setAuthor({ name: this.client.t('main:maintenance:client:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                    .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: client.reason }));
-
-                if (!this.client.developers.includes(message.author.id)) {
-                    timestamps?.set(message.author.id, now);
-                    setTimeout(() => timestamps?.delete(message.author.id), cooldownAmount);
-
-                    if (server.cmdblock.status) {
-                        if (!message.member?.permissions.has(PermissionFlagsBits.ManageMessages)) {
-                            if (server.cmdblock.cmds.some((x) => x === command.data.options.name || server.cmdblock.channels.some((x) => x === message.channel.id))) {
-                                return void message.reply({ content: server.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
-                                    .then((sent) => setTimeout(() => sent.delete(), 10000))
-                                    .catch((err) => { this.client.logger.warn(err.stack, messageCreateListener.name); });
-                            }
+                        if (time && now < time + cooldownAmount) {
+                            const timeLeft = (time + cooldownAmount - now) / 1000;
+                            return void message.reply({ content: this.client.t('main:cooldown.reply', { time: timeLeft.toFixed(1), command: command.data.options.name }) }).catch(() => undefined);
                         }
                     }
 
-                    if (cmdDb.maintenance) {
-                        return void message.reply({ embeds: [mainCmd] });
-                    } else if (client.maintenance) {
-                        return void message.reply({ embeds: [mainBot] });
-                    } else if (client.blacklist.some((x) => x == message.author.id)) {
-                        return void message.reply({ content: this.client.t('main:blacklist.user', { user: message.author }) });
+                    //============================================//
+
+                    const cmdDb = await this.client.getData(command.data.options.name, 'command');
+
+                    const mainCmd = new ClientEmbed(this.client)
+                        .setAuthor({ name: this.client.t('main:maintenance:command:embed.title', { command: command.data.options.name.replace(/^\w/, (c) => c.toUpperCase()) }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(this.client.t('main:maintenance:command:embed.description', { command: command.data.options.name, reason: cmdDb.reason }));
+
+                    const mainBot = new ClientEmbed(this.client)
+                        .setAuthor({ name: this.client.t('main:maintenance:client:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: client.reason }));
+
+                    if (!this.client.developers.includes(message.author.id)) {
+                        timestamps?.set(message.author.id, now);
+                        setTimeout(() => timestamps?.delete(message.author.id), cooldownAmount);
+
+                        if (server.cmdblock.status) {
+                            if (!message.member?.permissions.has(PermissionFlagsBits.ManageMessages)) {
+                                if (server.cmdblock.cmds.some((x) => x === command.data.options.name || server.cmdblock.channels.some((x) => x === message.channel.id))) {
+                                    return void message.reply({ content: server.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
+                                        .then((sent) => setTimeout(() => sent.delete(), 10000))
+                                        .catch((err) => { this.client.logger.warn(err.stack, messageCreateListener.name); });
+                                }
+                            }
+                        }
+
+                        if (cmdDb.maintenance) {
+                            return void message.reply({ embeds: [mainCmd] });
+                        } else if (client.maintenance) {
+                            return void message.reply({ embeds: [mainBot] });
+                        } else if (client.blacklist.some((x) => x == message.author.id)) {
+                            return void message.reply({ content: this.client.t('main:blacklist.user', { user: message.author }) });
+                        }
                     }
-                }
 
-                if (command.data.options.config.devOnly && !this.client.developers.some((id) => [id].includes(message.author.id))) {
-                    return void message.reply({ content: this.client.t('main:owner.reply', { client: this.client.user?.username }) });
-                }
-
-                if (command.data.options.config.args && !args.length) {
-                    const embedHelp = new ClientEmbed(this.client)
-                        .setAuthor({ name: prefix + command.data.options.name, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setThumbnail(this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) ?? null);
-
-                    if (command.data.options.description) {
-                        embedHelp.setDescription((command.data.options.description_localizations as object)[language]);
-                    }
-                    if (command.data.options.usage) {
-                        embedHelp.addFields({ name: '❔ ' + this.client.t('main:args:help:embed:fields.title', { index: 0 }), value: command.data.options.usage[language].length ? command.data.options.usage[language].map((usage, index) => `**${index + 1}.** \`${prefix + command.data.options.name} ${usage}\`.` ).join('\n') : `\`${prefix + command.data.options.name}\``});
-                    }
-                    if (command.data.options.aliases) {
-                        embedHelp.addFields({ name: '🔄 ' + this.client.t('main:args:help:embed:fields.title', { index: 1 }), value: `\`${command.data.options.aliases[language].join(', ')}\`` });
+                    if (command.data.options.config.devOnly && !this.client.developers.some((id) => [id].includes(message.author.id))) {
+                        return void message.reply({ content: this.client.t('main:owner.reply', { client: this.client.user?.username }) });
                     }
 
-                    let currentEmbed = embedHelp;
-                    const msg = await message.reply({ embeds: [embedHelp] });
-                    msg.react('❓');
+                    if (command.data.options.config.args && !args.length) {
+                        const embedHelp = new ClientEmbed(this.client)
+                            .setAuthor({ name: prefix + command.data.options.name, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                            .setThumbnail(this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) ?? null);
 
-                    const filter = (reaction: MessageReaction, user: User) => reaction && user.id === message.author.id;
-                    const collector = msg.createReactionCollector({ filter, time: 60000 });
+                        if (command.data.options.description) {
+                            embedHelp.setDescription((command.data.options.description_localizations as object)[language]);
+                        }
+                        if (command.data.options.usage) {
+                            embedHelp.addFields({ name: '❔ ' + this.client.t('main:args:help:embed:fields.title', { index: 0 }), value: command.data.options.usage[language].length ? command.data.options.usage[language].map((usage, index) => `**${index + 1}.** \`${prefix + command.data.options.name} ${usage}\`.`).join('\n') : `\`${prefix + command.data.options.name}\`` });
+                        }
+                        if (command.data.options.aliases) {
+                            embedHelp.addFields({ name: '🔄 ' + this.client.t('main:args:help:embed:fields.title', { index: 1 }), value: `\`${command.data.options.aliases[language].join(', ')}\`` });
+                        }
 
-                    collector.on('end', () => {
-                        msg.reactions.removeAll();
+                        let currentEmbed = embedHelp;
+                        const msg = await message.reply({ embeds: [embedHelp] });
+                        msg.react('❓');
+
+                        const filter = (reaction: MessageReaction, user: User) => reaction && user.id === message.author.id;
+                        const collector = msg.createReactionCollector({ filter, time: 60000 });
+
+                        collector.on('end', () => {
+                            msg.reactions.removeAll();
+                        });
+
+                        collector.on('collect', (reaction: MessageReaction) => {
+                            if (reaction.emoji.name == '❓') {
+                                const embedArgs = new ClientEmbed(this.client)
+                                    .setTitle(this.client.t('main:args:how:embed.title'))
+                                    .addFields(
+                                        {
+                                            name: this.client.t('main:args:how:embed:fields.title', { index: 0 }),
+                                            value: this.client.t('main:args:how:embed:fields.values', { index: 0 })
+                                        },
+                                        {
+                                            name: this.client.t('main:args:how:embed:fields.title', { index: 1 }),
+                                            value: this.client.t('main:args:how:embed:fields.values', { index: 1 })
+                                        });
+
+                                if (currentEmbed == embedHelp) {
+                                    msg.edit({ embeds: [embedArgs] });
+                                    currentEmbed = embedArgs;
+                                } else {
+                                    msg.edit({ embeds: [embedHelp] });
+                                    currentEmbed = embedHelp;
+                                }
+                            }
+                            reaction.users.remove(message.author.id);
+                        });
+                        return;
+                    }
+
+                    const checkPermissions = this.client.services.get('checkPermissions');
+
+                    const memberPermissions = checkPermissions?.serviceExecute({ message, command, language });
+                    if (!memberPermissions) return;
+
+                    const clientPermissions = checkPermissions?.serviceExecute({ message, command, language });
+                    if (!clientPermissions) return;
+
+                    await message.channel.sendTyping();
+
+                    const commandPromise = async (resolve: (value: void) => void, reject: (reason?: any) => void) => {
+                        try {
+                            resolve(await command.commandExecute({ message, args, language, prefix }));
+                        } catch (err) {
+                            reject(err);
+                        }
+                    }
+
+                    const commandExecute = new Promise(commandPromise);
+
+                    commandExecute.catch((err) => {
+                        this.client.logger.error(err.message, command.data.options.name);
+                        this.client.logger.warn(err.stack, command.data.options.name);
+
+                        const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
+
+                        const errorEmbed = new ClientEmbed(this.client)
+                            .setColor(Colors.Red)
+                            .setTitle(`Command: ${command.data.options.name}`)
+                            .setDescription('```js' + '\n' + err.stack + '\n' + '```');
+
+                        errorChannel.send({ embeds: [errorEmbed] });
+                        return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
+                            .then((message) => setTimeout(() => message.delete(), 1000 * 10));
                     });
 
-                    collector.on('collect', (reaction: MessageReaction) => {
-                        if (reaction.emoji.name == '❓') {
-                            const embedArgs = new ClientEmbed(this.client)
-                                .setTitle(this.client.t('main:args:how:embed.title'))
+                    commandExecute.then(() => {
+                        if (![process.env.OWNER_ID].includes(message.author.id) && message.guild) {
+                            const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
+
+                            const whEmbed = new ClientEmbed(this.client)
+                                .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
+                                .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
                                 .addFields(
                                     {
-                                        name: this.client.t('main:args:how:embed:fields.title', { index: 0 }),
-                                        value: this.client.t('main:args:how:embed:fields.values', { index: 0 })
+                                        name: 'Guild:',
+                                        value: `\`${message.guild.name}\` \`(${message.guild.id})\``
                                     },
                                     {
-                                        name: this.client.t('main:args:how:embed:fields.title', { index: 1 }),
-                                        value: this.client.t('main:args:how:embed:fields.values', { index: 1 })
+                                        name: 'Author:',
+                                        value: `\`${message.author.tag}\` \`(${message.author.id})\``
+                                    },
+                                    {
+                                        name: 'Command Type:',
+                                        value: '`Prefix`'
+                                    },
+                                    {
+                                        name: 'What was executed:',
+                                        value: `**\`${prefix}${command.data.options.name} ${args.join(' ')}\`**`
                                     });
 
-                            if (currentEmbed == embedHelp) {
-                                msg.edit({ embeds: [embedArgs] });
-                                currentEmbed = embedArgs;
-                            } else {
-                                msg.edit({ embeds: [embedHelp] });
-                                currentEmbed = embedHelp;
-                            }
+                            webHook.send({ embeds: [whEmbed] });
                         }
-                        reaction.users.remove(message.author.id);
+
+                        const num = cmdDb.usages;
+
+                        cmdDb.updateOne({ $set: { usages: num + 1 } });
                     });
-                    return;
                 }
-
-                const checkPermissions = this.client.services.get('checkPermissions');
-
-                const memberPermissions = checkPermissions?.serviceExecute({ message, command, language });
-                if (!memberPermissions) return;
-
-                const clientPermissions = checkPermissions?.serviceExecute({ message, command, language });
-                if (!clientPermissions) return;
-
-                await message.channel.sendTyping();
-
-                const commandPromise = async (resolve: (value: void) => void, reject: (reason?: any) => void) => {
-                    try {
-                        resolve(await command.commandExecute({ message, args, language, prefix }));
-                    } catch (err) {
-                        reject(err);
-                    }
-                }
-
-                const commandExecute = new Promise(commandPromise);
-
-                commandExecute.catch((err) => {
-                    this.client.logger.error(err.message, command.data.options.name);
-                    this.client.logger.warn(err.stack, command.data.options.name);
-
-                    const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
-
-                    const errorEmbed = new ClientEmbed(this.client)
-                        .setColor(Colors.Red)
-                        .setTitle(`Command: ${command.data.options.name}`)
-                        .setDescription('```js' + '\n' + err.stack + '\n' + '```');
-
-                    errorChannel.send({ embeds: [errorEmbed] });
-                    return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
-                        .then((message) => setTimeout(() => message.delete(), 1000 * 10));
-                });
-
-                commandExecute.then(() => {
-                    if (![process.env.OWNER_ID].includes(message.author.id) && message.guild) {
-                        const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
-    
-                        const whEmbed = new ClientEmbed(this.client)
-                            .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
-                            .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                            .addFields(
-                                {
-                                    name: 'Guild:',
-                                    value: `\`${message.guild.name}\` \`(${message.guild.id})\``
-                                },
-                                {
-                                    name: 'Author:',
-                                    value: `\`${message.author.tag}\` \`(${message.author.id})\``
-                                },
-                                {
-                                    name: 'Command Type:',
-                                    value: '`Prefix`'
-                                },
-                                {
-                                    name: 'What was executed:',
-                                    value: `**\`${prefix}${command.data.options.name} ${args.join(' ')}\`**`
-                                });
-    
-                        webHook.send({ embeds: [whEmbed] });
-                    }
-
-                    const num = cmdDb.usages;
-
-                    cmdDb.updateOne({ $set: { usages: num + 1 }});
-                });
             }
 
             //===============> Módulos <===============//

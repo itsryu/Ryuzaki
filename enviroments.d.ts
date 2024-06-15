@@ -10,7 +10,8 @@ declare global {
 			TOPGG_WH_AUTH: string;
 			STATE: string;
 			LANG_PATH: string;
-			WS_PW: string;
+			SERVER_SECRET: string;
+			PORT: number;
 			MONGO_CONNECTION_URI: string;
 			WEBHOOK_LOG_COMMAND_URL: string;
 			WEBHOOK_LOG_ERROR_URL: string;

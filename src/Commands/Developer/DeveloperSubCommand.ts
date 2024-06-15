@@ -10,7 +10,6 @@ export default class DeveloperSubCommand extends CommandStructure {
     }
 
     // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async commandExecute({ message, args, prefix, language }: { message: Message, args: string[], prefix: string, language: string }) {
         const client = await this.client.getData(this.client.user?.id, 'client');
 
@@ -35,7 +34,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 },
                                 {
                                     name: '🕸️ Tipo:',
-                                    value: '```diff' + '\n' + '- ' + typeof (evaled) + '\n' + '```'
+                                    value: '```diff' + '\n' + '- ' + typeof (result) + '\n' + '```'
                                 });
 
                         pages.push(certo);
@@ -67,7 +66,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                     if (i.customId === '-') current -= 1;
                     if (i.customId === '+') current += 1;
 
-                    return void msg.edit({ content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
+                    return void void msg.edit({ content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
                 });
 
                 break;
@@ -82,25 +81,25 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 const command = this.client.commands.get(name) || this.client.commands.find((command) => command.data.options.aliases[language].includes(name));
 
                                 if (!command) {
-                                    return message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
+                                    return void void message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
                                 } else {
                                     const commandDb = await this.client.getData(command.data.options.name, 'command');
 
                                     if (commandDb.maintenance) {
-                                        return message.reply({ content: `O comando \`${command.data.options.name}\` já se encontra em manutenção.` });
+                                        return void void message.reply({ content: `O comando \`${command.data.options.name}\` já se encontra em manutenção.` });
                                     } else {
                                         await commandDb.updateOne({ $set: { maintenance: true } }, { new: true });
-                                        return message.reply({ content: `O comando \`${command.data.options.name}\` foi adicionado com sucesso da manutenção.` });
+                                        return void message.reply({ content: `O comando \`${command.data.options.name}\` foi adicionado com sucesso da manutenção.` });
                                     }
                                 }
                             }
 
                             case 'client': {
                                 if (client.maintenance) {
-                                    return message.reply({ content: `O \`${this.client.user?.username}\` já se encontra em manutenção.` });
+                                    return void message.reply({ content: `O \`${this.client.user?.username}\` já se encontra em manutenção.` });
                                 } else {
                                     await client.updateOne({ $set: { maintenance: true } }, { new: true });
-                                    return message.reply({ content: `O \`${this.client.user?.username}\` foi adicionado com sucesso em manutenção.` });
+                                    return void message.reply({ content: `O \`${this.client.user?.username}\` foi adicionado com sucesso em manutenção.` });
                                 }
                             }
                         }
@@ -114,25 +113,25 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 const command = this.client.commands.get(name) || this.client.commands.find((command) => command.data.options.aliases[language].includes(name));
 
                                 if (!command) {
-                                    return message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
+                                    return void message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
                                 } else {
                                     const commandDb = await this.client.getData(command.data.options.name, 'command');
 
                                     if (!commandDb.maintenance) {
-                                        return message.reply({ content: `O comando \`${command.data.options.name}\` não se encontra em manutenção.` });
+                                        return void message.reply({ content: `O comando \`${command.data.options.name}\` não se encontra em manutenção.` });
                                     } else {
                                         await commandDb.updateOne({ $set: { maintenance: false } }, { new: true });
-                                        return message.reply({ content: `O comando \`${command.data.options.name}\` foi removido com sucesso da manutenção.` });
+                                        return void message.reply({ content: `O comando \`${command.data.options.name}\` foi removido com sucesso da manutenção.` });
                                     }
                                 }
                             }
 
                             case 'client': {
                                 if (!client.maintenance) {
-                                    return message.reply({ content: `O \`${this.client.user?.username}\` não se encontra em manutenção.` });
+                                    return void message.reply({ content: `O \`${this.client.user?.username}\` não se encontra em manutenção.` });
                                 } else {
                                     await client.updateOne({ $set: { maintenance: false } }, { new: true });
-                                    return message.reply({ content: `O \`${this.client.user?.username}\` foi removido com sucesso da manutenção.` });
+                                    return void message.reply({ content: `O \`${this.client.user?.username}\` foi removido com sucesso da manutenção.` });
                                 }
                             }
                         }
@@ -147,13 +146,13 @@ export default class DeveloperSubCommand extends CommandStructure {
                         const user = await this.client.users.fetch(args[3]).catch(() => undefined);
 
                         if (!user) {
-                            return message.reply({ content: 'Não pude localizar nenhum usuário com as informações fornecidas.' });
+                            return void message.reply({ content: 'Não pude localizar nenhum usuário com as informações fornecidas.' });
                         } else if (client.blacklist.some((id) => user.id === id)) {
-                            return message.reply({ content: `O usuário \`${user.tag}\` já se encontra em minha lista negra.` });
+                            return void message.reply({ content: `O usuário \`${user.tag}\` já se encontra em minha lista negra.` });
                         } else {
                             await client.updateOne({ $push: { blacklist: user.id } }, { new: true });
 
-                            return message.reply({ content: `O usuário \`${user.tag}\` foi adicionado(a) com sucesso na minha lista negra.` });
+                            return void message.reply({ content: `O usuário \`${user.tag}\` foi adicionado(a) com sucesso na minha lista negra.` });
                         }
                     }
 
@@ -161,13 +160,13 @@ export default class DeveloperSubCommand extends CommandStructure {
                         const user = await this.client.users.fetch(args[3]).catch(() => undefined);
 
                         if (!user) {
-                            return message.reply({ content: 'Não pude localizar nenhum usuário com as informações fornecidas.' });
+                            return void message.reply({ content: 'Não pude localizar nenhum usuário com as informações fornecidas.' });
                         } else if (!client.blacklist.some((id) => user.id === id)) {
-                            return message.reply({ content: `O usuário \`${user.tag}\` não se encontra em minha lista negra.` });
+                            return void message.reply({ content: `O usuário \`${user.tag}\` não se encontra em minha lista negra.` });
                         } else {
                             await client.updateOne({ $pull: { blacklist: user.id } }, { new: true });
 
-                            return message.reply({ content: `O usuário \`${user.tag}\` foi removido(a) com sucesso da minha lista negra.` });
+                            return void message.reply({ content: `O usuário \`${user.tag}\` foi removido(a) com sucesso da minha lista negra.` });
                         }
                     }
                 }

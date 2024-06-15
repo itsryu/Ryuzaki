@@ -23,7 +23,7 @@ export default class voteCommand extends CommandStructure {
         } else {
             const voteEmbed = new ClientEmbed(this.client)
                 .setAuthor({ name: 'Discord Bot List', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                .setDescription(this.client.t('utilities:vote:embeds:vote.description', { author: message.author, votes}))
+                .setDescription(this.client.t('utilities:vote:embeds:vote.description', { author: message.author, votes, url: 'https://top.gg/bot/1117629775046004766' }))
                 .setFooter({ text: this.client.t('utilities:vote:embeds:vote.footer') });
 
             return void message.reply({ embeds: [voteEmbed] });

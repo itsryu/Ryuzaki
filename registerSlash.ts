@@ -15,7 +15,7 @@ export default class RegisterSlashCommands {
         const rest = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
 
         //===============> Pegando todos os comandos das pastas <===============//
-        const applications: RawCommandData[] = [];
+        const commands: RawCommandData[] = [];
         const commandFolders = readdirSync(join(__dirname, 'src/Commands'));
         const contextFolders = readdirSync(join(__dirname, 'src/Context'));
 
@@ -29,7 +29,7 @@ export default class RegisterSlashCommands {
                     const { default: contextCommandClass } = await import(`./src/Context/${folder}/${subFolder}/${file}`);
                     const command = new contextCommandClass(this);
 
-                    applications.push(command.data.options);
+                    commands.push(command.data.options);
                 }
             }
         }
@@ -46,15 +46,14 @@ export default class RegisterSlashCommands {
                         command.data.options.default_member_permissions = BigInt(new PermissionsBitField(command.data.options.permissions.member).bitfield).toString();
                     }
 
-                    applications.push(command.data.options);
+                    commands.push(command.data.options);
                 }
             }
         }
 
-        //===============> Atualizações dos comandos de barra <===============//
-
+        //===============> Registrando os comandos <===============//
         try {
-            const data = await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: applications }) as ApplicationCommand[];
+            const data = await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands }) as ApplicationCommand[];
 
             this.client.logger.info(`Updated ${data.length} slash command(s) (/) successfully!`, 'Slash Commands');
         } catch (error) {

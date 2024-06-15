@@ -121,7 +121,7 @@
     "vote": {
         "embeds": {
             "vote": {
-                "description": "{{author}}, you have `{{votes}}` votes on me, earn rewards by voting for me in [Discord Bot List](https://top.gg/bot/1065630315579703318)! By voting for me you help me to have greater visibility and reliability of new users who will use me. You can vote for me at:\n\nhttps://top.gg/bot/1065630315579703318\n\nEvery 40 votes you get a special surprise!",
+                "description": "{{author}}, you have `{{votes}}` votes on me, earn rewards by voting for me in [Discord Bot List]({{url}})! By voting for me you help me to have greater visibility and reliability of new users who will use me. You can vote for me at:\n\n{{url}}\n\nEvery 40 votes you get a special surprise!",
                 "footer": "You can vote every 12 hours"
             },
             "reedemed": {

@@ -1,15 +1,20 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ClientEmbed, CommandStructure, WebSocketStructure } from '../Structures';
+import { AppStructure } from '../Structures';
 import { resolve } from 'node:path';
 import { Server } from 'node:http';
-import express, { Express } from 'express';
-import { TextChannel, Client, ChannelType, Guild, Collection } from 'discord.js';
-import { Webhook } from '@top-gg/sdk';
-import { engine } from 'express-handlebars';
+import express, { Express, Router } from 'express';
+import { Client, } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
+import { InfoMiddleware, CommandMiddleware } from './middlewares/index';
+import { Logger } from '../Utils/util';
+import { Route } from '../Types/HTTPSInterfaces';
+import { HomeController, NotFoundController, HealthCheckController, TopGGController } from './routes/index';
+import { Webhook } from '@top-gg/sdk';
+import { CommandExecuteController } from './routes/CommandExecuteController';
 
-export default class WebSocket extends WebSocketStructure {
+export default class App extends AppStructure {
     private readonly app: Express = express();
+    public readonly logger: Logger = new Logger();
     private server!: Server;
     private token!: string;
 
@@ -20,29 +25,22 @@ export default class WebSocket extends WebSocketStructure {
         this.server;
     }
 
-    async socketExecute(): Promise<void> {
-        this.config();
-        await this.listen();
-        this.registerRoots();
+    async serverExecute(): Promise<void> {
+        this.configServer();
+        await this.listen(process.env.PORT);
     }
 
-    private config(): void {
-        this.app.engine('html', engine({
-            extname: 'html',
-            defaultLayout: 'layout',
-            layoutsDir: resolve(__dirname, '..', '..', '..', 'src', 'Web', 'layouts')
-        }));
-
+    private configServer(): void {
         this.app.set('view engine', 'html');
         this.app.set('views', resolve(__dirname, '..', '..', '..', 'src', 'Web', 'views'));
         this.app.set('views', resolve(__dirname, '..', '..', '..', 'src', 'Web', 'views', 'commands'));
         this.app.use(express.static(resolve(__dirname, '..', '..', '..', 'src', 'Web', 'public')));
         this.app.use(urlencoded({ extended: true }));
         this.app.use(json());
+        this.app.use(this.initRoutes());
     }
 
-    private async listen(): Promise<Server> {
-        const port = process.env.PORT || 3000;
+    private async listen(port: string | number): Promise<Server> {
         const shardIds = this.client.shard?.ids!;
 
         for (const shardId of shardIds) {
@@ -63,9 +61,9 @@ export default class WebSocket extends WebSocketStructure {
                             shards: this.client.shard?.ids
                         });
 
-                        this.client.logger.info('Updated stats on top.gg wesite.', 'Top.gg');
+                        this.client.logger.info('Updated stats on top.gg website.', 'Top.gg');
                     } catch (err) {
-                        this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, WebSocket.name);
+                        this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, App.name);
                     }
                 }, 30 * 60 * 1000);
 
@@ -79,13 +77,65 @@ export default class WebSocket extends WebSocketStructure {
         return this.server;
     }
 
-    private checkToken(token: string): boolean {
-        return (token == this.token);
+    private initRoutes(): Router {
+        const router = Router();
+        const routes = this.loadRoutes();
+
+        routes.forEach((route) => {
+            const { method, path, handler } = route;
+
+            switch (method) {
+                case 'GET': {
+                    router.get(path, new InfoMiddleware(this).run, async (req, res, next) => {
+                        return await handler.run(req, res, next);
+                    });
+
+                    break;
+                }
+                case 'POST': {
+                    router.post(path, new InfoMiddleware(this).run, async (req, res, next) => {
+                        if (path.includes('/dblwebhook')) {
+                            const webhook = new Webhook(process.env.TOPGG_WH_AUTH);
+
+                            webhook.listener(async (vote) => {
+                                return await handler.run(req, res, next, vote, this.client);
+                            });
+                        } else if (path.includes('/command') && req.params.name) {
+                            const commandMiddleware = new CommandMiddleware(this)
+
+                            await commandMiddleware.run(req, res, () => {
+                                return handler.run(req, res, next, this.client);
+                            }, this.client);
+                        } else {
+                            return await handler.run(req, res, next);
+                        }
+                    });
+
+                    break;
+                }
+                default:
+                    break;
+            }
+        });
+
+        router.get('*', new NotFoundController(this).run);
+
+        return router;
     }
 
-    private registerRoots(): void {
-        const webhook = new Webhook(process.env.TOPGG_WH_AUTH);
+    private loadRoutes(): Array<Route> {
+        const routes: Array<Route> = [
+            { method: 'GET', path: '/', handler: new HomeController(this) },
+            { method: 'GET', path: '/health', handler: new HealthCheckController(this) },
+            { method: 'POST', path: '/command/:name', handler: new CommandExecuteController(this) },
+            { method: 'POST', path: '/dblwebhook', handler: new TopGGController(this) }
+        ];
 
+        return routes;
+    }
+
+    /*
+    private registerRoots(): void {
         const guilds: Guild[] = [];
         this.client.guilds.cache.forEach(guild => {
             guilds.push(guild);
@@ -95,29 +145,6 @@ export default class WebSocket extends WebSocketStructure {
         this.client.commands.forEach(command => {
             commands.set(command.data.options.name, command);
         });
-
-        this.app.post('/dblwebhook', webhook.listener(async (vote) => {
-            const user = await this.client.users.fetch(vote.user).catch(() => undefined);
-            const userData = await this.client.getData(user?.id, 'user');
-            const addedMoney = this.client.utils.randomIntFromInterval(2000, 5000);
-            const money = userData.economy.coins;
-            const votes = userData.economy.votes;
-
-            userData.set({
-                'economy.coins': addedMoney + money,
-                'economy.daily': Date.now(),
-                'economy.votes': userData.economy.votes + 1,
-                'economy.vote': Date.now()
-            }).save();
-
-            const votedEmbed = new ClientEmbed(this.client)
-                .setAuthor({ name: this.client.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                .setDescription(this.client.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: this.client.utils.toAbbrev(addedMoney) }));
-
-            user?.send({ embeds: [votedEmbed] })
-                .then((message) => message.react('🥰'))
-                .catch();
-        }));
 
         this.app.get('/say', (req, res) => {
             const token = req.query.token as string;
@@ -218,4 +245,6 @@ export default class WebSocket extends WebSocketStructure {
             }
         });
     }
+    */
+
 }
