@@ -228,19 +228,19 @@ export default class logsCommand extends CommandStructure {
             }
 
             if (interaction.values[0] === 'definir') {
-                const logMessage = await message.channel.send('Mencione ou insira o ID do canal de logs:');
+                const logMessage = await message.channel.send({ content: 'Mencione ou insira o ID do canal de logs:' });
 
                 const filter = (msg: Message) => msg.author.id === message.author.id;
-                const col = await interaction.channel?.awaitMessages({ filter: filter, max: 1 });
+                const messageCollector = await interaction.channel?.awaitMessages({ filter: filter, max: 1 });
 
-                if (col) {
-                    const content = col.first()?.content;
+                if (messageCollector) {
+                    const content = messageCollector.first()?.content;
 
                     if (content) {
-                        const channel = message.guild?.channels.cache.get(content) || col.first()?.mentions.channels.first();
+                        const channel = message.guild?.channels.cache.get(content) ?? messageCollector.first()?.mentions.channels.first();
 
                         if (['cancel', 'cancelar'].includes(content)) {
-                            return void message.channel.send({ content: 'Operação cancelada om sucesso!' })
+                            return void message.channel.send({ content: 'Operação cancelada com sucesso!' })
                                 .then((msg: Message) => setTimeout(() => msg.delete(), 10000));
                         } else if (!channel) {
                             return void message.channel.send({ content: 'O canal inserido não foi encontrado.' })

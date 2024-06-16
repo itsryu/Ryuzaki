@@ -6,7 +6,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { ClientEmbed } from '../../Structures';
 import { Ryuzaki } from '../../RyuzakiClient';
 
-class TopGGController extends RouteStructure {
+class DBLController extends RouteStructure {
     constructor(app: App) {
         super(app);
     }
@@ -32,14 +32,14 @@ class TopGGController extends RouteStructure {
 
             user?.send({ embeds: [votedEmbed] })
                 .then((message) => message.react('🥰'))
-                .catch();
+                .catch(() => false);
         } catch (err) {
-            this.app.logger.error((err as Error).message, TopGGController.name);
-            this.app.logger.warn((err as Error).stack as string, TopGGController.name);
+            this.app.logger.error((err as Error).message, DBLController.name);
+            this.app.logger.warn((err as Error).stack as string, DBLController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
     };
 }
 
-export { TopGGController };
+export { DBLController };

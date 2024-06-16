@@ -7,7 +7,7 @@ import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, CommandMiddleware } from './middlewares/index';
 import { Logger } from '../Utils/util';
 import { Route } from '../Types/HTTPSInterfaces';
-import { HomeController, NotFoundController, HealthCheckController, TopGGController } from './routes/index';
+import { HomeController, NotFoundController, HealthCheckController, DBLController } from './routes/index';
 import { Webhook } from '@top-gg/sdk';
 import { CommandExecuteController } from './routes/CommandExecuteController';
 
@@ -120,7 +120,7 @@ export default class App extends AppStructure {
             { method: 'GET', path: '/', handler: new HomeController(this) },
             { method: 'GET', path: '/health', handler: new HealthCheckController(this) },
             { method: 'POST', path: '/command/:name', handler: new CommandExecuteController(this) },
-            { method: 'POST', path: '/dblwebhook', handler: new TopGGController(this) }
+            { method: 'POST', path: '/dblwebhook', handler: new DBLController(this) }
         ];
 
         return routes;

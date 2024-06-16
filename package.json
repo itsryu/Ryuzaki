@@ -2,8 +2,11 @@
   "name": "ryu",
   "version": "0.1.0",
   "main": "dist/shardClient.js",
-  "repository": "https://github.com/JauumVictor/Ryu.git",
-  "author": "JauumVictor <joaovictor9162@outlook.com>",
+  "repository": "https://github.com/itryu/Ryuzaki.git",
+  "author": {
+    "name": "itsryu",
+    "url": "https://github.com/itsryu"
+  },
   "license": "MIT",
   "engines": {
     "node": "^18 || >=19.0.0",

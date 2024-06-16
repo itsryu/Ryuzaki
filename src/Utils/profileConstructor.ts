@@ -12,6 +12,8 @@ class profileConstructor extends ModuleStructure {
     }
 
     async moduleExecute({ user, data, message }: { user: User, data: UserDocument, message: Message | Interaction }) {
+        //========================// Criando canvas //========================//
+
         const canvas = createCanvas(800, 600);
         const ctx = canvas.getContext('2d');
 
@@ -29,7 +31,6 @@ class profileConstructor extends ModuleStructure {
         //========================// Textos //========================//
 
         // Username:
-
         ctx.textAlign = 'left';
         ctx.font = '35px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
@@ -66,7 +67,6 @@ class profileConstructor extends ModuleStructure {
          }*/
 
         // Medalhas:
-
         type Flags = Record<string, string>;
 
         const flags: Flags = {
@@ -107,7 +107,6 @@ class profileConstructor extends ModuleStructure {
 
 
         //Reputações:
-
         const rep = data.reps;
         const receivedReps = rep.array.filter((rep) => rep.user === user.id).length;
         ctx.textAlign = 'center';
@@ -128,13 +127,11 @@ class profileConstructor extends ModuleStructure {
         ctx.fillText('#' + data.exp.level + ' | ' + this.client.utils.toAbbrev(data.exp.xp) + '/' + this.client.utils.toAbbrev(nextLevel), 580, 585);
 
         // Sobre
-
         ctx.font = '25px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
         this.client.utils.renderEmoji(ctx, data.about ? (data.about.match(/.{1,30}/g) ?? []).join('\n') : 'Altere o seu \'sobre mim\' clicando no botão abaixo.', 170, 535);
 
         // Títulos:
-
         ctx.textAlign = 'left';
         ctx.font = '30px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
