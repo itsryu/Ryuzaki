@@ -1,6 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
 import { AppStructure } from '../Structures';
-import { Server } from 'node:http';
 import express, { Express, Router } from 'express';
 import { Client, } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
@@ -33,7 +32,7 @@ export default class App extends AppStructure {
 
     private async listen(port: string | number) {
         const shardIds = this.client.shard?.ids || [];
-        
+
         for (const shardId of shardIds) {
             const shardClient = await this.client.shard?.broadcastEval(
                 (client, { shardId }) => client.shard?.ids.includes(shardId) ? shardId : null,
