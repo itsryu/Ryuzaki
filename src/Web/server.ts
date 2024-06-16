@@ -86,11 +86,13 @@ export default class App extends AppStructure {
                         if (path.includes('/dblwebhook')) {
                             const webhook = new Webhook(process.env.DBL_WH_AUTH);
 
-                            webhook.listener(async (vote) => await handler.run(req, res, next, vote, this.client));
+                            webhook.listener(async (vote) => {
+                                return handler.run(req, res, next, vote, this.client);
+                            })(req, res, next);
                         } else if (path.includes('/command') && req.params.name) {
                             const commandMiddleware = new CommandMiddleware(this)
 
-                            await commandMiddleware.run(req, res, () => {
+                            commandMiddleware.run(req, res, () => {
                                 return handler.run(req, res, next, this.client);
                             }, this.client);
                         } else {
