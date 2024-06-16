@@ -13,7 +13,7 @@ export default class languageCommand extends CommandStructure {
         const guildLang = args[0];
         const guild = await this.client.getData(message.guild?.id, 'guild');
 
-        const lang = {
+        const languages = {
             'pt-BR': {
                 id: 1,
                 name: 'pt-BR 🇧🇷',
@@ -22,7 +22,7 @@ export default class languageCommand extends CommandStructure {
             'en-US': {
                 id: 2,
                 name: 'en-US 🇺🇸',
-                complete: 100
+                complete: 90
             }
         };
 
@@ -53,9 +53,9 @@ export default class languageCommand extends CommandStructure {
         } else {
             const embed = new ClientEmbed(this.client)
                 .setTitle(this.client.t('config:language.title'))
-                .setDescription(`${Object.entries(lang).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${language}\``);
+                .setDescription(`${Object.entries(languages).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${language}\``);
 
-            const categories = Object.entries(lang).map(([key, value]) => ({ key, ...value }));
+            const categories = Object.entries(languages).map(([key, value]) => ({ key, ...value }));
 
             const menu = new StringSelectMenuBuilder()
                 .setCustomId('languages')
@@ -107,7 +107,7 @@ export default class languageCommand extends CommandStructure {
                         const t = await this.client.getTranslate(message.guild?.id!);
 
                         embed.setTitle(t('config:language.title'));
-                        embed.setDescription(`${Object.entries(lang).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${t('config:language.currently')} \`${i.values[0]}\``);
+                        embed.setDescription(`${Object.entries(languages).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${t('config:language.currently')} \`${i.values[0]}\``);
 
                         menu.setDisabled(true);
                         menu.setPlaceholder(t('config:language:menu.place'));
@@ -127,7 +127,7 @@ export default class languageCommand extends CommandStructure {
                         const t = await this.client.getTranslate(message.guild?.id!);
 
                         embed.setTitle(t('config:language.title'));
-                        embed.setDescription(`${Object.entries(lang).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${t('config:language.currently')} \`${i.values[0]}\``);
+                        embed.setDescription(`${Object.entries(languages).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${t('config:language.currently')} \`${i.values[0]}\``);
 
                         menu.setDisabled(true);
                         menu.setPlaceholder(t('config:language:menu.place'));

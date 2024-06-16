@@ -33,19 +33,23 @@ export default class App extends AppStructure {
     }
 
     private async listen(port: string | number): Promise<Server> {
-        const shardIds = this.client.shard?.ids!;
+        const shardIds = this.client.shard?.ids || [];
+
 
         for (const shardId of shardIds) {
-            const shardClient = await this.client.shard?.broadcastEval((client, { shardId }) => client.shard?.ids.includes(shardId) ? shardId : null, { context: { shardId } });
+            const shardClient = await this.client.shard?.broadcastEval(
+                (client, { shardId }) => client.shard?.ids.includes(shardId) ? shardId : null,
+                { context: { shardId } }
+            );
 
-            if (shardClient?.length) {
-                const shardPort = Number(port) + Number(shardId);
-
+            if (shardClient?.length && shardClient.length > 0) {
                 setInterval(async () => {
-                    const guildsArray = await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size);
-                    const totalGuilds = guildsArray?.reduce((prev: number, count: number) => prev + count, 0);
-
                     try {
+                        const guildsArray = await this.client.shard?.broadcastEval(
+                            (client: Client) => client.guilds.cache.size
+                        );
+                        const totalGuilds = guildsArray?.reduce((prev: number, count: number) => prev + count, 0) || 0;
+
                         await this.client.stats.postStats({
                             serverCount: totalGuilds,
                             shardCount: this.client.shard?.ids.length,
@@ -55,16 +59,19 @@ export default class App extends AppStructure {
 
                         this.client.logger.info('Updated stats on top.gg website.', 'Top.gg');
                     } catch (err) {
-                        this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, App.name);
+                        this.client.logger.error(
+                            'Error while updating stats to top.gg website: ' + (err as Error).message,
+                            App.name
+                        );
                     }
                 }, 30 * 60 * 1000);
-
-                this.server = this.app.listen(process.env.PORT || 3000, () => {
-                    this.client.logger.info(`[WEB Socket] Server started on shard [${shardId}] on port ` + shardPort, 'Server');
-                    this.client.logger.info('[WEB Socket] http://localhost:' + shardPort, 'Server');
-                });
             }
         }
+
+        this.server = this.app.listen(port, () => {
+            this.client.logger.info(`[WEB Socket] Server started on port: ${port}`, 'Server');
+            this.client.logger.info(`[WEB Socket] http://localhost:${port}`, 'Server');
+        });
 
         return this.server;
     }
@@ -89,9 +96,7 @@ export default class App extends AppStructure {
                         if (path.includes('/dblwebhook')) {
                             const webhook = new Webhook(process.env.DBL_WH_AUTH);
 
-                            webhook.listener(async (vote) => {
-                                return await handler.run(req, res, next, vote, this.client);
-                            });
+                            webhook.listener(async (vote) => await handler.run(req, res, next, vote, this.client));
                         } else if (path.includes('/command') && req.params.name) {
                             const commandMiddleware = new CommandMiddleware(this)
 

@@ -42,7 +42,7 @@ class AFKCommandDataConstructor extends CommandData {
                 {
                     name: 'reason',
                     description: 'Describe a reason:',
-                    type: ApplicationCommandOptionType.User,
+                    type: ApplicationCommandOptionType.String,
                     name_localizations: {
                         'pt-BR': 'motivo',
                         'en-US': 'reason'

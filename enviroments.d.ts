@@ -12,7 +12,6 @@ declare global {
 			PREFIX: string;
 			STATE: string;
 			LANG_PATH: string;
-			SERVER_SECRET: string;
 			PORT: number;
 			MONGO_CONNECTION_URI: string;
 			WEBHOOK_LOG_COMMAND_URL: string;

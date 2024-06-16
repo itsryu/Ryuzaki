@@ -5,19 +5,17 @@ import { join } from 'path';
 config();
 
 class Shard extends ShardingManager {
-    logger: Logger;
+    logger: Logger = new Logger();;
 
     constructor() {
         super(join(__dirname, './src/RyuzakiLauncher.js'), {
             mode: 'process',
-            totalShards: 0,
+            totalShards: 1,
             respawn: true,
             execArgv: ['--trace-warnings'],
             shardArgs: ['--ansi', '--color'],
             token: process.env.CLIENT_TOKEN
         });
-
-        this.logger = new Logger();
     }
 
     initialize(): void {
