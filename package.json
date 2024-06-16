@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json --pretty --noEmitOnError",
     "clean-win": "rmdir /s /q dist",
-    "clean-linux": "rm -rf dist",
+    "clean-lin": "rm -rf dist",
     "start": "node dist/shardClient.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

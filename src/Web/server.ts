@@ -14,7 +14,6 @@ import { CommandExecuteController } from './routes/CommandExecuteController';
 export default class App extends AppStructure {
     private readonly app: Express = express();
     public readonly logger: Logger = new Logger();
-    private server!: Server;
 
     constructor(client: Ryuzaki) {
         super(client);
@@ -32,10 +31,9 @@ export default class App extends AppStructure {
         this.app.use(this.initRoutes());
     }
 
-    private async listen(port: string | number): Promise<Server> {
+    private async listen(port: string | number) {
         const shardIds = this.client.shard?.ids || [];
-
-
+        
         for (const shardId of shardIds) {
             const shardClient = await this.client.shard?.broadcastEval(
                 (client, { shardId }) => client.shard?.ids.includes(shardId) ? shardId : null,
@@ -45,9 +43,7 @@ export default class App extends AppStructure {
             if (shardClient?.length && shardClient.length > 0) {
                 setInterval(async () => {
                     try {
-                        const guildsArray = await this.client.shard?.broadcastEval(
-                            (client: Client) => client.guilds.cache.size
-                        );
+                        const guildsArray = await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size);
                         const totalGuilds = guildsArray?.reduce((prev: number, count: number) => prev + count, 0) || 0;
 
                         await this.client.stats.postStats({
@@ -57,23 +53,18 @@ export default class App extends AppStructure {
                             shards: this.client.shard?.ids
                         });
 
-                        this.client.logger.info('Updated stats on top.gg website.', 'Top.gg');
+                        this.client.logger.info('Updated stats on Top.gg website.', 'DBL');
                     } catch (err) {
-                        this.client.logger.error(
-                            'Error while updating stats to top.gg website: ' + (err as Error).message,
-                            App.name
-                        );
+                        this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
                     }
-                }, 30 * 60 * 1000);
+                }, 30 * 60 * 1000); // Updating every 30 minutes;
             }
         }
 
-        this.server = this.app.listen(port, () => {
+        this.app.listen(port, () => {
             this.client.logger.info(`[WEB Socket] Server started on port: ${port}`, 'Server');
             this.client.logger.info(`[WEB Socket] http://localhost:${port}`, 'Server');
         });
-
-        return this.server;
     }
 
     private initRoutes(): Router {
