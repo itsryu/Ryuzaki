@@ -1,7 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
-import { emojis } from '../../Utils/Objects/emojis';
 
 export default class messageUpdateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
