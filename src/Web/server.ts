@@ -87,7 +87,7 @@ export default class App extends AppStructure {
                 case 'POST': {
                     router.post(path, new InfoMiddleware(this).run, async (req, res, next) => {
                         if (path.includes('/dblwebhook')) {
-                            const webhook = new Webhook(process.env.TOPGG_WH_AUTH);
+                            const webhook = new Webhook(process.env.DBL_WH_AUTH);
 
                             webhook.listener(async (vote) => {
                                 return await handler.run(req, res, next, vote, this.client);

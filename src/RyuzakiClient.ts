@@ -11,7 +11,7 @@ import { MongoError } from 'mongodb';
 export class Ryuzaki extends Client {
     public readonly logger: Logger = new Logger();
     public readonly utils: Util = new Util();
-    public readonly stats: Api = new Api(process.env.TOPGG_TOKEN);
+    public readonly stats: Api = new Api(process.env.DBL_WH_AUTH);
     public readonly collection = new Collections<string>();
     public readonly developers: readonly string[] = Object.freeze([process.env.OWNER_ID]);
     public readonly commands = new Collection<string, CommandStructure>();

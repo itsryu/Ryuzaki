@@ -13,7 +13,7 @@
     "npm": "^9 || >=10.0.0"
   },
   "scripts": {
-    "build": "npx tsc --project tsconfig.json --pretty --noEmitOnError",
+    "build": "tsc --project tsconfig.json --pretty --noEmitOnError",
     "clean-win": "rmdir /s /q dist",
     "clean-linux": "rm -rf dist",
     "start": "node dist/shardClient.js",
