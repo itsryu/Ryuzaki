@@ -23,7 +23,7 @@ export default class messageUpdateListener extends ListenerStructure {
                         .addFields(
                             {
                                 name: `Autor:`,
-                                value: `\`${newMessage.author.tag}\` \`(${newMessage.author.id})\``,
+                                value: `${newMessage.author} \`(${newMessage.author.id})\``,
                                 inline: true
                             },
                             {
@@ -37,7 +37,7 @@ export default class messageUpdateListener extends ListenerStructure {
                     }
 
                     if (newMessage.content || newMessage.attachments.size >= 1) {
-                        embed.addFields({ name: 'Mensagem Posterior:', value: !newMessage.content ? newMessage.attachments.first()?.proxyURL ?? 'Não disponível' : `\`${newMessage.content}\`` });
+                        embed.addFields({ name: 'Mensagem Posterior:', value: !newMessage.content ? newMessage.attachments.first()?.proxyURL ?? 'Não disponível' : `[${newMessage.content}](${newMessage.url})` });
                     }
 
                     const channel = newMessage.guild.channels.cache.get(guildData.logs.channel) as TextChannel;

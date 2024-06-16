@@ -23,7 +23,7 @@ export default class MessageDeleteListener extends ListenerStructure {
                         .addFields(
                             {
                                 name: `Autor:`,
-                                value: `\`${message.author.tag}\` \`(${message.author.id})\``,
+                                value: `${message.author} \`(${message.author.id})\``,
                                 inline: true
                             },
                             {
@@ -33,17 +33,12 @@ export default class MessageDeleteListener extends ListenerStructure {
                             });
 
                     if (message.content) {
-                        embed.addFields({ name: 'Contéudo da Mensagem:', value: `\`${message.content}\``, inline: false });
+                        embed.addFields({ name: 'Contéudo da mensagem:', value: `\`${message.content}\``, inline: false });
                     }
 
                     if (message.attachments.size >= 1) {
-                        const URL = '';
-
-                        message.attachments.forEach((attachment) => {
-                            URL.concat(`${attachment.proxyURL}\n`);
-                        });
-
-                        embed.addFields({ name: 'Anexos:', value: URL, inline: false });
+                        const URLs = message.attachments.map(attachment => attachment.proxyURL).join('\n');
+                        embed.addFields({ name: 'Anexos:', value: URLs, inline: false });
                     }
 
                     const channel = message.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
