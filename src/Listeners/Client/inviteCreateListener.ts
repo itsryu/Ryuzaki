@@ -15,9 +15,9 @@ export default class inviteCreateListener extends ListenerStructure {
         try {
             if (invite.guild) {
                 const guild = invite.guild as Guild;
-                const guildDb = await this.client.getData(guild.id, 'guild');
+                const guildData = await this.client.getData(guild.id, 'guild');
 
-                if (guildDb.logs.status && guildDb.logs.invites && guild.members.me?.permissions.has(PermissionFlagsBits.ManageGuild)) {
+                if (guildData.logs.status && guildData.logs.invites && guild.members.me?.permissions.has(PermissionFlagsBits.ManageGuild)) {
                     const invites = await guild.invites.fetch();
 
                     invites.each((inv) => this.codeUses.set(inv.code, inv));

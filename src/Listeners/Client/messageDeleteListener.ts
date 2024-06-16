@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
-import { Events, Message, TextChannel } from 'discord.js';
+import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 
 export default class MessageDeleteListener extends ListenerStructure {
@@ -10,19 +10,17 @@ export default class MessageDeleteListener extends ListenerStructure {
         });
     }
 
-    async eventExecute(message: Message) {
+    async eventExecute(message: Message | PartialMessage) {
         if (!message.author || message.author.bot) return;
 
         try {
-            const guild = message.guild;
+            if (message.guild) {
+                const guildData = await this.client.getData(message.guild.id, 'guild');
 
-            if (guild) {
-                const server = await this.client.getData(guild.id, 'guild');
-
-                if (server.logs.messages) {
+                if (guildData.logs.status && guildData.logs.messages) {
                     const embed = new ClientEmbed(this.client)
                         .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
-                        .setAuthor({ name: guild.name, iconURL: guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
+                        .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
                         .setTitle('Mensagem deletada')
                         .addFields(
                             {
@@ -48,11 +46,8 @@ export default class MessageDeleteListener extends ListenerStructure {
                         embed.addFields({ name: ':scroll: Contéudo da Mensagem:', value: message.attachments.first()?.proxyURL ?? 'Não disponível' });
                     }
 
-                    if (server.logs.status) {
-                        const channel = guild.channels.cache.get(server.logs.channel) as TextChannel;
-
-                        channel.send({ embeds: [embed] });
-                    }
+                    const channel = message.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
+                    channel.send({ embeds: [embed] });
                 }
             }
         } catch (err) {

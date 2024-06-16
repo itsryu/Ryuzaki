@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
-import { Events, Message, TextChannel } from 'discord.js';
+import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 
 export default class messageUpdateListener extends ListenerStructure {
@@ -10,21 +10,19 @@ export default class messageUpdateListener extends ListenerStructure {
         });
     }
 
-    async eventExecute(oldMessage: Message, newMessage: Message) {
-        if (newMessage && newMessage.author.bot) return;
+    async eventExecute(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) {
+        if (newMessage && newMessage.author && newMessage.author.bot) return;
 
         try {
-            const guild = newMessage.guild;
+            if (newMessage.guild && newMessage.author) {
+                const guildData = await this.client.getData(newMessage.guild.id, 'guild');
 
-            if (guild) {
-                const server = await this.client.getData(guild.id, 'guild');
-
-                if (server.logs.messages) {
+                if (guildData.logs.status && guildData.logs.messages) {
                     if (oldMessage.content === newMessage.content) return;
 
                     const embed = new ClientEmbed(this.client)
                         .setThumbnail(newMessage.author.displayAvatarURL({ extension: 'png', size: 4096 }))
-                        .setAuthor({ name: guild.name, iconURL: guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
+                        .setAuthor({ name: newMessage.guild.name, iconURL: newMessage.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
                         .setTitle('Mensagem editada')
                         .addFields(
                             {
@@ -50,10 +48,8 @@ export default class messageUpdateListener extends ListenerStructure {
                         embed.addFields({ name: 'Mensagem Posterior:', value: !newMessage.content ? newMessage.attachments.first()?.proxyURL ?? 'Não disponível' : `\`${newMessage.content}\`` });
                     }
 
-                    if (server.logs.status) {
-                        const channel = guild.channels.cache.get(server.logs.channel) as TextChannel;
-                        channel.send({ embeds: [embed] });
-                    }
+                    const channel = newMessage.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
+                    channel.send({ embeds: [embed] });
                 }
             }
         } catch (err) {
