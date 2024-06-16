@@ -28,8 +28,23 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                     if (guild.logs.status && guild.logs.calls) {
                         const embed = new ClientEmbed(this.client)
                             .setThumbnail(newState.member.displayAvatarURL({ extension: 'png', size: 4096 }))
-                            .setAuthor({ name: newState.guild.name, iconURL: newState.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
-                            .setTitle('Mensagem deletada');
+                            .setAuthor({ name: 'Usuário entrou em canal de voz', iconURL: newState.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
+                            .addFields(
+                                {
+                                    name: 'Usuário:',
+                                    value: `\`${newState.member.user.tag}\` \`(${newState.member.id})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Canal:',
+                                    value: `\`${newState.channel.name}\` \`(${newState.channelId})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Tempo total em ligações:',
+                                    value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
+                                    inline: false
+                                });
 
                         const channel = newState.guild.channels.cache.get(guild.logs.channel) as TextChannel;
                         channel.send({ embeds: [embed] });
@@ -45,9 +60,29 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                     if (guild.logs.status && guild.logs.calls) {
                         const embed = new ClientEmbed(this.client)
                             .setThumbnail(newState.member.displayAvatarURL({ extension: 'png', size: 4096 }))
-                            .setAuthor({ name: newState.guild.name, iconURL: newState.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
-                            .setTitle('Mensagem deletada');
-                            
+                            .setAuthor({ name: 'Usuário saiu de canal de voz', iconURL: newState.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
+                            .addFields(
+                                {
+                                    name: 'Usuário:',
+                                    value: `\`${newState.member.user.tag}\` \`(${newState.member.id})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Canal:',
+                                    value: `\`${oldState.channel.name}\` \`(${oldState.channelId})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Tempo na ligação:',
+                                    value: `\`${this.client.utils.formatDuration(Date.now() - call.lastRegister)}\``,
+                                    inline: false
+                                },
+                                {
+                                    name: 'Tempo total em ligações:',
+                                    value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
+                                    inline: false
+                                });
+
                         const channel = newState.guild.channels.cache.get(guild.logs.channel) as TextChannel;
                         channel.send({ embeds: [embed] });
                     }

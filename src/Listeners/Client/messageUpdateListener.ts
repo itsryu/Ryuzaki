@@ -11,10 +11,8 @@ export default class messageUpdateListener extends ListenerStructure {
     }
 
     async eventExecute(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) {
-        if (newMessage && newMessage.author && newMessage.author.bot) return;
-
         try {
-            if (newMessage.guild && newMessage.author) {
+            if (newMessage.guild && newMessage.author && !newMessage.author.bot) {
                 const guildData = await this.client.getData(newMessage.guild.id, 'guild');
 
                 if (guildData.logs.status && guildData.logs.messages) {
