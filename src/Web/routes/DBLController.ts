@@ -13,8 +13,6 @@ class DBLController extends RouteStructure {
 
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, client: Ryuzaki) => {
         try {
-            console.log(vote, client);
-            
             const user = await client.users.fetch(vote.user).catch(() => undefined);
             const userData = await client.getData(user?.id, 'user');
             const addedMoney = client.utils.randomIntFromInterval(2000, 5000);
