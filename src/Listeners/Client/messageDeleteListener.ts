@@ -20,30 +20,31 @@ export default class MessageDeleteListener extends ListenerStructure {
                 if (guildData.logs.status && guildData.logs.messages) {
                     const embed = new ClientEmbed(this.client)
                         .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
-                        .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
-                        .setTitle('Mensagem deletada')
+                        .setAuthor({ name: `Mensagem deletada - ${message.guild.name}`, iconURL: message.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
                         .addFields(
                             {
-                                name: `${emojis.membro} Autor:`,
-                                value: `\`${message.author.tag}\``,
+                                name: `Autor:`,
+                                value: `\`${message.author.tag}\` \`(${message.author.id})\``,
                                 inline: true
                             },
                             {
-                                name: `${emojis.id} ID:`,
-                                value: `\`${message.author.id}\``,
+                                name: 'Canal:',
+                                value: `${message.channel}`,
                                 inline: true
-                            },
-                            {
-                                name: ':infinity: Canal:',
-                                value: `${message.channel}`
                             });
 
                     if (message.content) {
-                        embed.addFields({ name: ':scroll: Contéudo da Mensagem:', value: `\`${message.content}\`` });
+                        embed.addFields({ name: 'Contéudo da Mensagem:', value: `\`${message.content}\``, inline: false });
                     }
 
                     if (message.attachments.size >= 1) {
-                        embed.addFields({ name: ':scroll: Contéudo da Mensagem:', value: message.attachments.first()?.proxyURL ?? 'Não disponível' });
+                        const URL = '';
+
+                        message.attachments.forEach((attachment) => {
+                            URL.concat(`${attachment.proxyURL}\n`);
+                        });
+
+                        embed.addFields({ name: 'Anexos:', value: URL, inline: false });
                     }
 
                     const channel = message.guild.channels.cache.get(guildData.logs.channel) as TextChannel;

@@ -80,7 +80,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 {
                                     name: 'Tempo total em ligações:',
                                     value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
-                                    inline: false
+                                    inline: true
                                 });
 
                         const channel = newState.guild.channels.cache.get(guild.logs.channel) as TextChannel;
@@ -93,6 +93,41 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                     call.totalCall += (Date.now() - call.lastRegister);
 
                     await user.save();
+
+                    if (guild.logs.status && guild.logs.calls) {
+                        const embed = new ClientEmbed(this.client)
+                            .setThumbnail(newState.member.displayAvatarURL({ extension: 'png', size: 4096 }))
+                            .setAuthor({ name: 'Usuário mudou de canal de voz', iconURL: newState.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
+                            .addFields(
+                                {
+                                    name: 'Usuário:',
+                                    value: `\`${newState.member.user.tag}\` \`(${newState.member.id})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Canal anterior:',
+                                    value: `\`${oldState.channel?.name}\` \`(${oldState.channelId})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Canal atual:',
+                                    value: `\`${newState.channel?.name}\` \`(${newState.channelId})\``,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Tempo na ligação:',
+                                    value: `\`${this.client.utils.formatDuration(Date.now() - call.lastRegister)}\``,
+                                    inline: false
+                                },
+                                {
+                                    name: 'Tempo total em ligações:',
+                                    value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
+                                    inline: true
+                                });
+
+                        const channel = newState.guild.channels.cache.get(guild.logs.channel) as TextChannel;
+                        channel.send({ embeds: [embed] });
+                    }
                 }
 
                 // usuário mutou/desmutou o microfone:

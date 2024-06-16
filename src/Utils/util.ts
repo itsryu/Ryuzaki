@@ -150,10 +150,10 @@ class Util {
         const lastCommaIndex = result.lastIndexOf(', ');
 
         if (lastCommaIndex !== -1) {
-            return result.slice(0, lastCommaIndex) + ' e' + result.slice(lastCommaIndex + 1) + '.';
+            return result.slice(0, lastCommaIndex) + ' e' + result.slice(lastCommaIndex + 1);
         }
 
-        return result + '.';
+        return result;
     }
 }
 

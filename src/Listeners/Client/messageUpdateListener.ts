@@ -20,22 +20,17 @@ export default class messageUpdateListener extends ListenerStructure {
 
                     const embed = new ClientEmbed(this.client)
                         .setThumbnail(newMessage.author.displayAvatarURL({ extension: 'png', size: 4096 }))
-                        .setAuthor({ name: newMessage.guild.name, iconURL: newMessage.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
-                        .setTitle('Mensagem editada')
+                        .setAuthor({ name: `Mensagem editada - ${newMessage.guild.name}`, iconURL: newMessage.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
                         .addFields(
                             {
-                                name: `${emojis.membro} Autor:`,
-                                value: `\`${newMessage.author.tag}\``,
+                                name: `Autor:`,
+                                value: `\`${newMessage.author.tag}\` \`(${newMessage.author.id})\``,
                                 inline: true
                             },
                             {
-                                name: `${emojis.id} ID:`,
-                                value: `\`${newMessage.author.id}\``,
+                                name: 'Canal',
+                                value: `${newMessage.channel}`,
                                 inline: true
-                            },
-                            {
-                                name: ':infinity: Canal',
-                                value: `${newMessage.channel}`
                             });
 
                     if (oldMessage.content || oldMessage.attachments.size >= 1) {
