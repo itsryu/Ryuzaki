@@ -5,6 +5,7 @@ import { renderEmoji } from './Plugins/renderEmoji';
 import { setTimeout as sleep } from 'timers/promises';
 import { ServiceStructure } from '../Structures/';
 import { SKRSContext2D } from '@napi-rs/canvas';
+import Day from 'dayjs';
 
 enum LogLevel {
     DEBUG = 'debug',
@@ -14,44 +15,44 @@ enum LogLevel {
 }
 
 class Util {
-    getTime(timestamp: number | Date, language: string): string {
+    public getTime(timestamp: number | Date, language: string): string {
         const date = new Date(timestamp || Date.now());
         return new Date(date).toLocaleString(language, { timeZone: 'America/Sao_Paulo' });
     }
 
-    sleep(ms: number) {
+    public sleep(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    GetMention(id: string): RegExp {
+    public GetMention(id: string): RegExp {
         return new RegExp(`^<@!?${id}>( |)$`);
     }
 
-    toAbbrev(num: number) {
+    public toAbbrev(num: number) {
         return abbrev(num);
     }
 
-    notAbbrev(string: string) {
+    public notAbbrev(string: string) {
         return convertAbbrev(string);
     }
 
-    seconds_since_epoch(d: number) {
+    public seconds_since_epoch(d: number) {
         return Math.floor(d / 1000);
     }
 
-    renderEmoji(ctx: SKRSContext2D, string: string, x: number, y: number) {
+    public renderEmoji(ctx: SKRSContext2D, string: string, x: number, y: number) {
         return renderEmoji(ctx, string, x, y);
     }
 
-    randomIntFromInterval(min: number, max: number) {
+    public randomIntFromInterval(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    zeroFill(num: number) {
+    public zeroFill(num: number) {
         return ('0' + num).slice(-2);
     }
 
-    counter(num: number): string {
+    public counter(num: number): string {
         const numbers: Record<number, string> = {
             0: '0️⃣',
             1: '1️⃣',
@@ -72,25 +73,25 @@ class Util {
     }
 
 
-    trim(str: string, max: number) {
+    public trim(str: string, max: number) {
         return str.length > max ? `${str.slice(0, max - 3)}...` : str;
     }
 
-    validate(color: string): boolean {
+    public validate(color: string): boolean {
         return /^[0-9A-F]{3}([0-9A-F]{3})?([0-9A-F]{2})?$/i.test(color.replace('#', ''));
     }
 
-    bytesToSize(input: number, precision?: number): string {
+    public bytesToSize(input: number, precision?: number): string {
         const index = Math.floor(Math.log(input) / Math.log(1024));
         const unit = ['', 'K', 'M', 'G', 'T', 'P'];
         return (index >= unit.length ? input + 'B' : `${(input / 1024 ** index).toFixed(precision ?? 2)} ${unit[index]}B`);
     }
 
-    clean(string: unknown): string {
+    public clean(string: unknown): string {
         return typeof string === 'string' ? string.replace(/[`@]/g, c => `${c}\u200B`) : String(string);
     }
 
-    button(num = 1, first = false, second = false) {
+    public button(num = 1, first = false, second = false) {
         return new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
                 new ButtonBuilder()
@@ -123,12 +124,36 @@ class Util {
         }
     }
 
-    checkDays(date: Date) {
+    public checkDays(date: Date) {
         const now = new Date();
         const diff = now.getTime() - date.getTime();
         const days = Math.floor(diff / 86400000);
 
         return days + (days == 1 ? ' dia' : ' dias') + ' atrás';
+    }
+
+    public formatDuration(ms: number): string {
+        const timeDuration = Day.duration(ms);
+
+        const components: [number, string][] = [
+            [timeDuration.days(), 'dia'],
+            [timeDuration.hours(), 'hora'],
+            [timeDuration.minutes(), 'minuto'],
+            [timeDuration.seconds(), 'segundo'],
+        ];
+
+        const result = components
+            .filter(([value]) => value > 0)
+            .map(([value, label]) => `${value} ${label}${value > 1 ? 's' : ''}`)
+            .join(', ');
+
+        const lastCommaIndex = result.lastIndexOf(', ');
+
+        if (lastCommaIndex !== -1) {
+            return result.slice(0, lastCommaIndex) + ' e' + result.slice(lastCommaIndex + 1) + '.';
+        }
+
+        return result + '.';
     }
 }
 

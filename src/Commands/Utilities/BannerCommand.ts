@@ -3,7 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BannerCommandData } from '../../Data/Commands/Utilities/BannerCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-export default class bannerCommand extends CommandStructure {
+export default class BannerCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, BannerCommandData);
     }

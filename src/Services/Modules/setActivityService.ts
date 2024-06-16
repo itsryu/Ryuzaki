@@ -15,8 +15,7 @@ export default class setActivityService extends ServiceStructure {
                 `My name is ${this.client.user?.username}!`,
                 'Use /ryu to know more about me!',
                 'Use /help to know what i can do!',
-                `${this.client.shard?.count} clusters`,
-                'Pray for Ukraine 🇺🇦.'
+                `${this.client.shard?.count} clusters`
             ];
 
             const typeArray = [0];

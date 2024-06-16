@@ -9,7 +9,7 @@ interface SpamMap {
     timer: NodeJS.Timeout;
 }
 
-export default class spamModule extends ModuleStructure {
+export default class SpamModule extends ModuleStructure {
     private map = new Map<string, SpamMap>();
 
     constructor(client: Ryuzaki) {
@@ -43,7 +43,6 @@ export default class spamModule extends ModuleStructure {
                                 if (newCount === limit) {
                                     this.map.delete(message.author.id);
 
-                                    // Faz algo:
                                     if (!antispam.channels.includes(message.channel.id)) {
                                         const embed = new ClientEmbed(this.client)
                                             .setDescription(`Você está enviando muitas mensagens simultaneamente, você foi mutado e será desmutado em **${ms(time)}**.`);
@@ -72,8 +71,8 @@ export default class spamModule extends ModuleStructure {
                         this.map.set(message.author.id, { msgCount: 1, lastMessage: message, timer: setTimeout(() => this.map.delete(message.author.id), time) });
                     }
                 } catch (err) {
-                    this.client.logger.error((err as Error).message, spamModule.name);
-                    this.client.logger.warn((err as Error).stack!, spamModule.name);
+                    this.client.logger.error((err as Error).message, SpamModule.name);
+                    this.client.logger.warn((err as Error).stack!, SpamModule.name);
                 }
             }
         }

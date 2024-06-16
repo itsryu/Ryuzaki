@@ -1,3 +1,5 @@
+import { ColorResolvable } from "discord.js";
+
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
@@ -6,7 +8,7 @@ declare global {
 			TOPGG_WH_AUTH: string;
 			CLIENT_ID: string;
 			OWNER_ID: string;
-			EMBED_COLOR: string;
+			EMBED_COLOR: ColorResolvable;
 			PREFIX: string;
 			STATE: string;
 			LANG_PATH: string;

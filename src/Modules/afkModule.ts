@@ -2,7 +2,7 @@ import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure } from '../Structures/';
 import { Message } from 'discord.js';
 
-export default class afkModule extends ModuleStructure {
+export default class AFKModule extends ModuleStructure {
     constructor(client: Ryuzaki) {
         super(client);
     }
@@ -11,20 +11,20 @@ export default class afkModule extends ModuleStructure {
         try {
             await this.mentionedAFK(message);
         } catch (err) {
-            this.client.logger.error((err as Error).message, afkModule.name);
-            this.client.logger.warn((err as Error).stack!, afkModule.name);
+            this.client.logger.error((err as Error).message, AFKModule.name);
+            this.client.logger.warn((err as Error).stack!, AFKModule.name);
         }
     }
 
     async mentionedAFK(message: Message) {
-        const user = message.mentions?.users.first();
+        const user = message.mentions?.users.first() ?? message.mentions?.repliedUser;
 
         if (user) {
-            const userDb = await this.client.getData(user.id, 'user');
-            const { AFK } = userDb;
+            const userData = await this.client.getData(user.id, 'user');
+            const { AFK } = userData;
 
             if (AFK.away) {
-                return void message.reply({ content: `✋・${message.author}, o usuário **${user.username}** está AFK` + AFK.reason ? `\nMotivo: \`${AFK.reason}\`` : '.' });
+                return void message.reply({ content: `✋・${message.author}, o usuário \`${user.username}\` está AFK` + (AFK.reason ? `\n📝・Motivo: \`${AFK.reason}\`` : '.') });
             }
         } else {
             await this.authorAFK(message);
@@ -32,16 +32,17 @@ export default class afkModule extends ModuleStructure {
     }
 
     async authorAFK(message: Message) {
-        const userDb = await this.client.getData(message.author.id, 'user');
-        const { AFK } = userDb;
+        const userData = await this.client.getData(message.author.id, 'user');
+        const { AFK } = userData;
 
         if (AFK.away) {
-            await userDb.updateOne({ _id: message.author.id }, {
-                $set: { 'AFK.away': false, 'AFK.reason': null },
-                new: true
-            });
+            await userData.set({
+                'AFK.away': false,
+                'AFK.reason': null,
+                'AFK.lastNickname': AFK.lastNickname ?? null
+            }).save();
 
-            message.member?.setNickname(userDb.AFK.lastNickname ?? message.author.username).catch(() => undefined);
+            message.member?.setNickname(userData.AFK.lastNickname ?? message.author.username).catch(() => undefined);
             return void message.reply({ content: `🤗・${message.author}, você não está mais AFK!` });
         }
     }

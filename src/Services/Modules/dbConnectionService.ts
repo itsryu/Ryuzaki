@@ -12,7 +12,9 @@ export default class DatabaseConnectionService extends ServiceStructure {
 
     async serviceExecute() {
         try {
-            await connect(process.env.MONGO_CONNECTION_URI, { autoIndex: false });
+            await connect(process.env.MONGO_CONNECTION_URI, { autoIndex: false, serverApi: { version: '1', strict: true, deprecationErrors: true } });
+            await connection.db.admin().command({ ping: 1 });
+            this.client.logger.info('Pinged your deployment. You successfully connected to MongoDB!', 'Database');
 
             connection.on('error', (err) => {
                 this.client.logger.error(err.stack, 'Database');

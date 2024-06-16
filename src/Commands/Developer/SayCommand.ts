@@ -3,7 +3,7 @@ import { SayCommandData } from '../../Data/Commands/Developer/SayCommandData';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
 
-export default class sayCommand extends CommandStructure {
+export default class SayCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, SayCommandData);
     }

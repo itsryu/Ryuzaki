@@ -34,7 +34,8 @@ export default class xpModule extends ModuleStructure {
                         }).save();
 
                         if (server.exp.status) {
-                            return void message.reply({ content: `Você acaba de subir para o nível **${level}**.` }).then(message => message.react('⬆️'));
+                            return void message.reply({ content: `Você acaba de subir para o nível **${level}**.` })
+                                .then(message => message.react('⬆️'));
                         }
                     }
                 } catch (err) {

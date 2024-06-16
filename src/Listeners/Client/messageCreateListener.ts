@@ -35,7 +35,7 @@ export default class messageCreateListener extends ListenerStructure {
                 const row = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
                         new ButtonBuilder()
-                            .setURL('https://github.com/JauumVictor/Ryuzaki')
+                            .setURL('https://github.com/itsryu/Ryuzaki')
                             .setStyle(ButtonStyle.Link)
                             .setEmoji(emojis.github)
                             .setLabel(this.client.t('main:mentions:button.github')),
@@ -45,7 +45,7 @@ export default class messageCreateListener extends ListenerStructure {
                             .setEmoji(emojis.pin)
                             .setLabel(this.client.t('main:mentions:button.add')),
                         new ButtonBuilder()
-                            .setURL('https://discord.gg/Y3aS5VwcNV')
+                            .setURL('https://discord.gg/R23XkNvRH2')
                             .setStyle(ButtonStyle.Link)
                             .setEmoji(emojis.partner)
                             .setLabel(this.client.t('main:mentions:button.support'))

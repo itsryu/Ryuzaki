@@ -134,10 +134,6 @@ const userSchema = new Schema<UserDocument>({
         lastRegister: {
             type: Schema.Types.Number,
             default: 0
-        },
-        status: {
-            type: Schema.Types.Boolean,
-            default: true
         }
     },
     AFK: {

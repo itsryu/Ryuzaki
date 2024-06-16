@@ -3,7 +3,7 @@ import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, Message, TextChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 
-export default class messageDeleteListener extends ListenerStructure {
+export default class MessageDeleteListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.MessageDelete
@@ -56,8 +56,8 @@ export default class messageDeleteListener extends ListenerStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, messageDeleteListener.name);
-            this.client.logger.warn((err as Error).stack!, messageDeleteListener.name);
+            this.client.logger.error((err as Error).message, MessageDeleteListener.name);
+            this.client.logger.warn((err as Error).stack!, MessageDeleteListener.name);
         }
     }
 }

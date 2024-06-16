@@ -16,7 +16,6 @@ export default class readyListener extends ListenerStructure {
 
             const { default: vipModule } = await import('../../Modules/vipModule');
             new vipModule(this.client).moduleExecute();
-            
 
             //===============> Finalizações <===============//
 

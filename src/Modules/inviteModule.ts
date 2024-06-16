@@ -2,7 +2,7 @@ import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure } from '../Structures/';
 import { ChannelType, Message, PermissionFlagsBits } from 'discord.js';
 
-export default class inviteModule extends ModuleStructure {
+export default class InviteModule extends ModuleStructure {
     constructor(client: Ryuzaki) {
         super(client);
     }
@@ -33,8 +33,8 @@ export default class inviteModule extends ModuleStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, inviteModule.name);
-            this.client.logger.warn((err as Error).stack!, inviteModule.name);
+            this.client.logger.error((err as Error).message, InviteModule.name);
+            this.client.logger.warn((err as Error).stack!, InviteModule.name);
         }
     }
 }

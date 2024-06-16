@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
-import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType } from 'discord.js';
+import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction } from 'discord.js';
 
 export default class interactionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -138,8 +138,8 @@ export default class interactionCreateListener extends ListenerStructure {
                             author: interaction.user,
                             reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch(console.error),
                             edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch(console.error),
-                            delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
-                        });
+                            delete: async (message?: MessageResolvable) => await interaction.deleteReply(message)
+                        }) as ChatInputCommandInteraction;
 
                         //===============> Checando permissões dos membros e do cliente:
 

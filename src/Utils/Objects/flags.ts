@@ -143,7 +143,11 @@ const flagTexts: FlagText = {
     [flagKeys.MuteMembers]: {
         [Language.PT_BR]: 'Conectar',
         [Language.EN_US]: 'Mute'
-    }
+    },
+    [flagKeys.ManageNicknames]: {
+        [Language.PT_BR]: 'Gerenciar apelidos',
+        [Language.EN_US]: 'Manage Nicknames'
+    },
 };
 
 export type { FlagKey };

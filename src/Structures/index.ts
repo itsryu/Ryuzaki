@@ -5,4 +5,4 @@ export * from '../Structures/ServiceStructure';
 export * from '../Structures/ModuleStructures';
 export * from '../Structures/RawListenerStructure';
 export * from '../Structures/ContextCommandStructure';
-export * from '../Structures/WebSocketStructure';
+export * from './AppStructure';
