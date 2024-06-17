@@ -4,6 +4,8 @@ declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			CLIENT_TOKEN: string;
+			USER_TOKEN: string;
+			DISCORD_API: string;
 			DBL_TOKEN: string;
 			DBL_WH_AUTH: string;
 			CLIENT_ID: string;
@@ -13,6 +15,8 @@ declare global {
 			STATE: string;
 			LANG_PATH: string;
 			PORT: number;
+			LOCAL_URL: string;
+			DOMAIN_URL: string;
 			MONGO_CONNECTION_URI: string;
 			WEBHOOK_LOG_COMMAND_URL: string;
 			WEBHOOK_LOG_ERROR_URL: string;

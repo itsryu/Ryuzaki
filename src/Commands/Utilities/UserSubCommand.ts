@@ -96,10 +96,16 @@ export default class UserSubCommand extends CommandStructure {
                 const user = message.mentions?.users.first() ?? await this.client.users.fetch(args[1]).catch(() => undefined) ?? message.author;
                 const member = message.guild?.members.cache.get(user.id) ?? await message.guild?.members.fetch(user.id).catch(() => undefined);
                 const userData = await this.client.getData(user.id, 'user');
+                const URL = process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : process.env.DOMAIN_URL;
                 const pages: ClientEmbed[] = [];
                 let current = 0;
 
                 const flags = await this.getUserFlags(user, language);
+                const data = await fetch(URL + '/discord/user/' + user.id)
+                    .then((res) => res.json())
+                    .catch(() => { });
+
+                console.log(data);
 
                 if (member) {
                     // É um membro do servidor:
@@ -122,12 +128,14 @@ export default class UserSubCommand extends CommandStructure {
                             {
                                 name: '📱 Dispositivo:',
                                 value: this.getMemberDevice(member),
-                                inline: true
+                                inline: false
                             }
                         );
 
-                    if (member.roles.cache.size >= 1) {
+                    if (member.roles.cache.size > 1) {
                         const roles = member.roles.cache.filter((role) => role.id !== message.guild?.id).map((role) => role).join(' ');
+                        console.log(roles);
+
                         menuEmbed.addFields({ name: '🔰 Cargos:', value: roles, inline: false });
                     }
 
@@ -143,12 +151,12 @@ export default class UserSubCommand extends CommandStructure {
                         .setFields(
                             {
                                 name: '🛡️ Permissões:',
-                                value: permissions.length >= 1 ? permissions.map((permission) => permission).join('\n') : '`Nenhuma`',
+                                value: permissions.length >= 1 ? permissions.map((permission) => `\`${permission}\``).join('\n') : '`Nenhuma`',
                                 inline: true
                             },
                             {
                                 name: '🚩 Flags:',
-                                value: flags.length >= 1 ? flags.map((flag) => flag).join('\n') : '`Nenhuma`',
+                                value: flags.length >= 1 ? flags.map((flag) => `\`${flag}\``).join('\n') : '`Nenhuma`',
                                 inline: true
                             }
                         );
@@ -161,7 +169,6 @@ export default class UserSubCommand extends CommandStructure {
                     pages.push(embed);
                 } else {
                     // Não é um membro do servidor:
-
                     const menuEmbed = new ClientEmbed(this.client)
                         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                         .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
@@ -190,7 +197,7 @@ export default class UserSubCommand extends CommandStructure {
                         .setFields(
                             {
                                 name: '🚩 Flags:',
-                                value: flags.length >= 1 ? flags.map((flag) => flag).join('\n') : '`Nenhuma`',
+                                value: flags.length >= 1 ? flags.map((flag) => `\`${flag}\``).join('\n') : '`Nenhuma`',
                                 inline: true
                             }
                         );

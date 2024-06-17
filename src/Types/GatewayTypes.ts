@@ -1,147 +1,67 @@
-export type Snowflake = string | number
-export type PresenceStatus = 'online' | 'dnd' | 'idle' | 'invisible' | 'offline'
-
-enum Operation {
-    Event,
-    Dispatch = 0,
-    Heartbeat = 1,
-    Identify = 2,
-    PresenceUpdate = 3,
-    VoiceStateUpdate = 4,
-    Resume = 6,
-    Reconnect = 7,
-    RequestGuildMembers = 8,
-    InvalidSession = 9,
-    Hello = 10,
-    HeartbeatACK = 11,
-}
-
-enum EventType {
-    PRESENCE_UPDATE = 'PRESENCE_UPDATE',
-    READY = 'READY',
-    GUILD_MEMBERS_CHUNK = 'GUILD_MEMBERS_CHUNK',
-}
-
-interface User {
+interface ConnectedAccount {
+    type: string;
+    id: string;
+    name: string;
+    verified: boolean;
+    metadata?: {
+      game_count?: string;
+      item_count_dota2?: string;
+      item_count_tf2?: string;
+      verified?: string;
+      followers_count?: string;
+      statuses_count?: string;
+      created_at?: string;
+    };
+  }
+  
+  interface User {
     id: string;
     username: string;
-    discriminator: string;
+    global_name: string;
     avatar: string;
-    avatar_decoration: null | any;
+    avatar_decoration_data: any;
+    discriminator: string;
     public_flags: number;
-    bot: boolean;
-    display_name: null | string;
-}
-
-interface ActivityTimestamps {
-    start?: number
-    end?: number
-}
-
-enum ActivityTypes {
-    Playing,
-    Streaming,
-    Listening,
-    Watching,
-    Custom,
-    Competing,
-}
-
-enum ActivityFlags {
-    Instance = 1 << 0,
-    Join = 1 << 1,
-    Spectate = 1 << 2,
-    JoinRequest = 1 << 3,
-    Sync = 1 << 4,
-    Play = 1 << 5,
-    PartyPrivacyFriends = 1 << 6,
-    PartyPrivacyVoiceChannel = 1 << 7,
-    Embedded = 1 << 8,
-}
-
-interface ActivitySecrets {
-    join?: string
-    spectate?: string
-    match?: string
-}
-
-interface ActivityParty {
-    id?: string
-    size?: [number, number]
-}
-
-interface ActivityAssets {
-    large_image?: string
-    large_text?: string
-    small_image?: string
-    small_text?: string
-}
-
-interface Emoji {
-    name: string
-    id?: Snowflake
-    animated?: boolean
-}
-
-interface Button {
-    label: string
-    url: string
-}
-
-interface Activity {
-    name: string
-    type: ActivityTypes
-    id: string
-    url?: string
-    created_at: string
-    timestamps?: ActivityTimestamps
-    application_id?: Snowflake
-    details?: string
-    state?: string
-    emoji?: Emoji
-    party?: ActivityParty
-    assets?: ActivityAssets
-    secrets?: ActivitySecrets
-    instance?: boolean
-    flags?: ActivityFlags
-    buttons?: Button[]
-    session_id?: string
-    sync_id?: string
-}
-
-interface ClientStatus {
-    mobile?: PresenceStatus
-    desktop?: PresenceStatus
-}
-
-interface Presence {
-    user: User
-    status: PresenceStatus
-    guild_id: Snowflake
-    activities: Activity[]
-    client_status: ClientStatus
-}
-
-interface SocketEvent {
-    op: Operation
-    t?: EventType
-    d: Presence | any
-}
-
-export {
-    Activity,
-    ActivityAssets,
-    ActivityFlags,
-    ActivityParty,
-    ActivitySecrets,
-    ActivityTimestamps,
-    ActivityTypes,
-    Button,
-    ClientStatus,
-    Emoji,
-    EventType,
-    Operation,
-    Presence,
-    SocketEvent,
-    User
-};
+    flags: number;
+    banner: string;
+    banner_color: string;
+    accent_color: number;
+    bio: string;
+  }
+  
+  interface UserProfile {
+    bio: string;
+    accent_color: number;
+    pronouns: string;
+    profile_effect: any;
+    banner: string;
+    theme_colors: number[];
+    popout_animation_particle_type: any; 
+    emoji: any; 
+  }
+  
+  interface UserBadges {
+    id: string;
+    description: string;
+    icon: string;
+    link: string;
+  }
+  
+  interface MutualGuild {
+    id: string;
+    nick: string | null;
+  }
+  
+  export interface DiscordUser {
+    user: User;
+    connected_accounts: ConnectedAccount[];
+    premium_since: string;
+    premium_type: number;
+    premium_guild_since: string;
+    profile_themes_experiment_bucket: number;
+    user_profile: UserProfile;
+    badges: UserBadges[];
+    guild_badges: any[];
+    mutual_guilds: MutualGuild[];
+    legacy_username: string;
+  }
