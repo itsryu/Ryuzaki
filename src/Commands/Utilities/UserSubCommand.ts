@@ -2,9 +2,18 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { UserSubCommandData } from '../../Data/Commands/Utilities/UserSubCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
-import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
+import { PermissionFlagKey, PermissionsFlagsText, UserBadges, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
 import { Languages } from '../../Types/ClientTypes';
 import { Util } from '../../Utils/util';
+import { DiscordUser } from '../../Types/GatewayTypes';
+import axios from 'axios';
+
+interface UserBoostBadge {
+    atualBadge?: string | null;
+    atualBadgeTime?: number;
+    nextBadge?: string;
+    nextBadgeTime?: number;
+};
 
 export default class UserSubCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -96,24 +105,28 @@ export default class UserSubCommand extends CommandStructure {
                 const user = message.mentions?.users.first() ?? await this.client.users.fetch(args[1]).catch(() => undefined) ?? message.author;
                 const member = message.guild?.members.cache.get(user.id) ?? await message.guild?.members.fetch(user.id).catch(() => undefined);
                 const userData = await this.client.getData(user.id, 'user');
-                const URL = process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : process.env.DOMAIN_URL;
                 const pages: ClientEmbed[] = [];
                 let current = 0;
 
-                const flags = await this.getUserFlags(user, language);
-                const data = await fetch(URL + '/discord/user/' + user.id)
-                    .then((res) => res.json())
+                const data: DiscordUser = await axios.get((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + '/discord/user/' + user.id, {
+                    headers: {
+                        'Authorization': 'Bearer ' + process.env.AUTH_KEY,
+                    }
+                })
+                    .then((res) => res.data)
                     .catch(() => { });
 
-                console.log(data);
+                const flags = this.getUserFlags(user, language);
+                const badges = this.getUserBadges(data);
+                const boostBadge = this.getUserBoostBadge(data);
 
                 if (member) {
-                    // É um membro do servidor:
                     const permissions = this.getMemberPermissions(member, language);
 
                     const menuEmbed = new ClientEmbed(this.client)
                         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                         .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
                         .setFields(
                             {
                                 name: `Nickname:`,
@@ -132,16 +145,19 @@ export default class UserSubCommand extends CommandStructure {
                             }
                         );
 
-                    if (member.roles.cache.size > 1) {
-                        const roles = member.roles.cache.filter((role) => role.id !== message.guild?.id).map((role) => role).join(' ');
-                        console.log(roles);
-
-                        menuEmbed.addFields({ name: '🔰 Cargos:', value: roles, inline: false });
+                    if (boostBadge && boostBadge.atualBadge && boostBadge.atualBadgeTime) {
+                        menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
+                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true })
                     }
 
                     if (userData.call.totalCall > 0) {
-                        const time = Util.formatDuration(userData.call.totalCall);
-                        menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: true });
+                        const time = Util.formatDuration(userData.call.totalCall, language);
+                        menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
+                    }
+
+                    if (member.roles.cache.size > 1) {
+                        const roles = member.roles.cache.filter((role) => role.id !== message.guild?.id).map((role) => role).join(' ');
+                        menuEmbed.addFields({ name: '🔰 Cargos:', value: roles, inline: false });
                     }
 
                     pages.push(menuEmbed);
@@ -168,13 +184,13 @@ export default class UserSubCommand extends CommandStructure {
 
                     pages.push(embed);
                 } else {
-                    // Não é um membro do servidor:
                     const menuEmbed = new ClientEmbed(this.client)
                         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                         .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
                         .setFields(
                             {
-                                name: `Username:`,
+                                name: `Nickname:`,
                                 value: `\`${user.tag}\` \`(${user.id}\`)`,
                                 inline: true
                             },
@@ -185,9 +201,14 @@ export default class UserSubCommand extends CommandStructure {
                             }
                         );
 
+                    if (boostBadge && boostBadge.atualBadge && boostBadge.atualBadgeTime) {
+                        menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
+                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true })
+                    }
+
                     if (userData.call.totalCall > 0) {
-                        const time = Util.formatDuration(userData.call.totalCall);
-                        menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: true });
+                        const time = Util.formatDuration(userData.call.totalCall, language);
+                        menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
                     }
 
                     pages.push(menuEmbed);
@@ -224,17 +245,15 @@ export default class UserSubCommand extends CommandStructure {
 
                     return void void msg.edit({ content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
                 });
-
-                return void message.reply('.');
             }
         }
     }
 
-    private async getUserFlags(user: User, language: Languages): Promise<string[]> {
-        const flags = await user.fetchFlags();
+    private getUserFlags(user: User, language: Languages): string[] {
+        const flags = user.flags
 
         return Object.entries(UserFlagsText)
-            .filter(([flag]) => flags.toArray().includes(flag as UserFlagKey))
+            .filter(([flag]) => flags && flags.toArray().includes(flag as UserFlagKey))
             .map(([, text]) => text[language]);
     }
 
@@ -246,7 +265,15 @@ export default class UserSubCommand extends CommandStructure {
             .map(([, text]) => text[language]);
     }
 
-    public getMemberDevice(member: GuildMember): string {
+    private getUserBadges(user: DiscordUser) {
+        const badges = user.badges;
+
+        return Object.entries(UserBadges)
+            .map(([badge, emoji]) => badges.map((b) => b.id).includes(badge as UserFlagKey) ? emoji : null)
+            .filter(emoji => emoji !== null);
+    }
+
+    private getMemberDevice(member: GuildMember): string {
         return member.presence?.clientStatus?.desktop
             ? '\`Desktop\`'
             : member.presence?.clientStatus?.mobile
@@ -254,5 +281,92 @@ export default class UserSubCommand extends CommandStructure {
                 : member.presence?.clientStatus?.web
                     ? '\`Web\`'
                     : '\`Offline\`';
+    }
+
+    private getUserBoostBadge(user: DiscordUser): UserBoostBadge | undefined {
+        const atualBoostDate = user.premium_guild_since;
+
+        if (atualBoostDate) {
+            const atualBoostTimeMs = new Date(atualBoostDate).getTime();
+            const calculatedAtualBoostTime = Date.now() - atualBoostTimeMs;
+
+            switch (true) {
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 30): {
+                    return {
+                        atualBadge: '<:1Month:1252302212559015986>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:2Months:1252302325918335109>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 30)
+                    };
+                }
+
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 60): {
+                    return {
+                        atualBadge: '<:2Months:1252302325918335109>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:3Months:1252302405572362466>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 60)
+                    };
+                }
+
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 90): {
+                    return {
+                        atualBadge: '<:3Months:1252302405572362466>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:6Months:1252346325136314489>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 90)
+                    };
+                }
+
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 270): {
+                    return {
+                        atualBadge: '<:6Months:1252346325136314489>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:9Months:1252346547996196937>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 180)
+                    };
+                }
+
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 365): {
+                    return {
+                        atualBadge: '<:9Months:1252346547996196937>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:12Months:1252346695547752478>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 270)
+                    };
+                }
+
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 547): {
+                    return {
+                        atualBadge: '<:12Months:1252346695547752478>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:18Months:1252346969355980820>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 365)
+                    };
+                }
+
+                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * 730): {
+                    return {
+                        atualBadge: '<:18Months:1252346969355980820>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: '<:24Months:1252347148381589574>',
+                        nextBadgeTime: calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * 547)
+                    };
+                }
+
+                case calculatedAtualBoostTime > (1000 * 60 * 60 * 24 * 730): {
+                    return {
+                        atualBadge: '<:24Months:1252347148381589574>',
+                        atualBadgeTime: calculatedAtualBoostTime,
+                    };
+                }
+
+                default: {
+                    return {}
+                }
+            }
+        } else {
+            return undefined;
+        }
     }
 }

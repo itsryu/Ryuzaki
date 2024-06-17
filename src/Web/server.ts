@@ -3,7 +3,7 @@ import { AppStructure } from '../Structures';
 import express, { Express, Router } from 'express';
 import { Client, } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
-import { InfoMiddleware, CommandMiddleware } from './middlewares/index';
+import { InfoMiddleware, CommandMiddleware, AuthMiddleware } from './middlewares/index';
 import { Logger } from '../Utils/util';
 import { Route } from '../Types/HTTPSInterfaces';
 import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController, CommandExecuteController } from './routes/index';
@@ -74,7 +74,7 @@ export default class App extends AppStructure {
 
             switch (method) {
                 case 'GET': {
-                    router.get(path, new InfoMiddleware(this).run, async (req, res, next) => {
+                    router.get(path, new InfoMiddleware(this).run, new AuthMiddleware(this).run ,async (req, res, next) => {
                         return await handler.run(req, res, next);
                     });
 
@@ -83,7 +83,7 @@ export default class App extends AppStructure {
                 case 'POST': {
                     router.post(path, new InfoMiddleware(this).run, async (req, res, next) => {
                         if (path.includes('/dblwebhook')) {
-                            const webhook = new Webhook(process.env.DBL_WH_AUTH);
+                            const webhook = new Webhook(process.env.AUTH_KEY);
 
                             webhook.listener(async (vote) => {
                                 return handler.run(req, res, next, vote, this.client);

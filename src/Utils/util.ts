@@ -6,6 +6,8 @@ import { setTimeout as sleep } from 'timers/promises';
 import { ServiceStructure } from '../Structures/';
 import { SKRSContext2D } from '@napi-rs/canvas';
 import { duration } from 'dayjs';
+import { Language } from './Objects/flags';
+import { Languages } from '../Types/ClientTypes';
 
 enum LogLevel {
     DEBUG = 'debug',
@@ -132,19 +134,33 @@ class Util {
         return days + (days == 1 ? ' dia' : ' dias') + ' atrás';
     }
 
-    public static formatDuration(ms: number): string {
+    public static formatDuration(ms: number, language: Languages): string {
         const timeDuration = duration(ms);
 
-        const components: [number, string][] = [
-            [timeDuration.days(), 'dia'],
-            [timeDuration.hours(), 'hora'],
-            [timeDuration.minutes(), 'minuto'],
-            [timeDuration.seconds(), 'segundo'],
-        ];
+        const arrays: Record<Language, [number, string[]][]> = { 
+            'pt-BR': [
+                [timeDuration.years(), ['ano', 'anos']],
+                [timeDuration.months(), ['mês', 'meses']],
+                [timeDuration.days(), ['dia', 'dias']],
+                [timeDuration.hours(), ['hora', 'horas']],
+                [timeDuration.minutes(), ['minuto', 'minutos']],
+                [timeDuration.seconds(), ['segundo', 'segundos']],
+            ],
+            'en-US': [
+                [timeDuration.years(), ['year', 'years']],
+                [timeDuration.months(), ['month', 'months']],
+                [timeDuration.days(), ['day', 'days']],
+                [timeDuration.hours(), ['hour', 'hours']],
+                [timeDuration.minutes(), ['minute', 'minutes']],
+                [timeDuration.seconds(), ['second', 'seconds']],
+            ]
+        };
+
+        const components = arrays[language];
 
         const result = components
             .filter(([value]) => value > 0)
-            .map(([value, label]) => `${value} ${label}${value > 1 ? 's' : ''}`)
+            .map(([value, label]) => `${value} ${label[value === 1 ? 0 : 1]}`)
             .join(', ');
 
         const lastCommaIndex = result.lastIndexOf(', ');

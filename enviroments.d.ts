@@ -7,7 +7,7 @@ declare global {
 			USER_TOKEN: string;
 			DISCORD_API: string;
 			DBL_TOKEN: string;
-			DBL_WH_AUTH: string;
+			AUTH_KEY: string;
 			CLIENT_ID: string;
 			OWNER_ID: string;
 			EMBED_COLOR: ColorResolvable;

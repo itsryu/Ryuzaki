@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { TextChannel, VoiceState } from 'discord.js';
 import { Util } from '../../Utils/util';
+import { Languages } from '../../Types/ClientTypes';
 
 export default class VoiceStateUpdateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -18,6 +19,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                 const user = await this.client.getData(newState.member.user.id, 'user');
                 const guild = await this.client.getData(newState.guild.id, 'guild');
                 const call = user.call;
+                const language = guild.lang as Languages;
 
                 // usuário entrou na chamada:
                 if (!oldState.channel && newState.channel) {
@@ -43,7 +45,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 },
                                 {
                                     name: 'Tempo total em ligações:',
-                                    value: Util.formatDuration(call.totalCall) != '' ? `\`${Util.formatDuration(call.totalCall)}\`` : '\`0 segundos\`',
+                                    value: Util.formatDuration(call.totalCall, language) != '' ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '\`0 segundos\`',
                                     inline: false
                                 });
 
@@ -75,12 +77,12 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 },
                                 {
                                     name: 'Tempo na ligação:',
-                                    value: `\`${Util.formatDuration(Date.now() - call.lastRegister)}\``,
+                                    value: `\`${Util.formatDuration(Date.now() - call.lastRegister, language)}\``,
                                     inline: false
                                 },
                                 {
                                     name: 'Tempo total em ligações:',
-                                    value: Util.formatDuration(call.totalCall) != '' ? `\`${Util.formatDuration(call.totalCall)}\`` : '\`0 segundos\`',
+                                    value: Util.formatDuration(call.totalCall, language) != '' ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '\`0 segundos\`',
                                     inline: true
                                 });
 
@@ -117,12 +119,12 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 },
                                 {
                                     name: 'Tempo na ligação:',
-                                    value: `\`${Util.formatDuration(Date.now() - call.lastRegister)}\``,
+                                    value: `\`${Util.formatDuration(Date.now() - call.lastRegister, language)}\``,
                                     inline: false
                                 },
                                 {
                                     name: 'Tempo total em ligações:',
-                                    value: Util.formatDuration(call.totalCall) != '' ? `\`${Util.formatDuration(call.totalCall)}\`` : '\`0 segundos\`',
+                                    value: call.totalCall > 0 ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '\`0 segundos\`',
                                     inline: true
                                 });
 

@@ -1,4 +1,5 @@
 type FlagText = Record<string, Record<string, string>>;
+type FlagBadge = Record<string, string>
 
 export enum Language {
     pt_BR = 'pt-BR',
@@ -73,6 +74,15 @@ enum UserFlagsKeys {
     Quarantined = 'Quarantined',
     Collaborator = 'Collaborator',
     RestrictedCollaborator = 'RestrictedCollaborator'
+}
+
+enum UserBadgeKeys {
+    Premium = 'premium',
+    ActiveDeveloper = 'active_developer',
+    HypeSquadOnlineHouse1 = 'hypesquad_house_1',
+    HypeSquadOnlineHouse2 = 'hypesquad_house_2',
+    HypeSquadOnlineHouse3 = 'hypesquad_house_3',
+    EarlySupporter = 'early_supporter',
 }
 
 const PermissionsFlagsText: FlagText = {
@@ -174,6 +184,15 @@ const PermissionsFlagsText: FlagText = {
     },
 };
 
+const UserBadges: FlagBadge = {
+    [UserBadgeKeys.Premium]: '<:Nitro:1252301588098191524>',
+    [UserBadgeKeys.ActiveDeveloper]: '<:ActiveDeveloper:1252318425544528043>',
+    [UserBadgeKeys.HypeSquadOnlineHouse1]: '<:HypesquadHouseOfBravery:1252316120031952918>',
+    [UserBadgeKeys.HypeSquadOnlineHouse2]: '<:HypesquadHouseOfBrilliance:1252316108992675911>',
+    [UserBadgeKeys.HypeSquadOnlineHouse3]: '<:HypesquadHouseOfBalance:1252316132506079404>',
+    [UserBadgeKeys.EarlySupporter]: '<:EarlySupporter:1252315485870227518>'
+}
+
 const UserFlagsText: FlagText = {
     [UserFlagsKeys.BugHunterLevel1]: {
         [Language.pt_BR]: 'Caçador de Bugs Nível 1',
@@ -271,6 +290,7 @@ const UserFlagsText: FlagText = {
 
 type PermissionFlagKey = keyof typeof PermissionsFlagsKeys;
 type UserFlagKey = keyof typeof UserFlagsKeys;
+type UserBadgeKey = keyof typeof UserBadges;
 
-export type { PermissionFlagKey, UserFlagKey };
-export { PermissionsFlagsText, UserFlagsText };
+export type { PermissionFlagKey, UserFlagKey, UserBadgeKey };
+export { PermissionsFlagsText, UserFlagsText, UserBadges };

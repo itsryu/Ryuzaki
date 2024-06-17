@@ -51,7 +51,6 @@ class DiscordUserController extends RouteStructure {
                 } else {
                     resolve(null);
                 }
-
             } catch (err) {
                 resolve(null);
             }
