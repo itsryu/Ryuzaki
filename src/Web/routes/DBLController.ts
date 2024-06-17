@@ -20,9 +20,8 @@ class DBLController extends RouteStructure {
             const votes = userData.economy.votes;
 
             userData.set({
-                'economy.coins': addedMoney + money,
-                'economy.daily': Date.now(),
-                'economy.votes': userData.economy.votes + 1,
+                'economy.coins': money + addedMoney,
+                'economy.votes': votes + 1,
                 'economy.vote': Date.now()
             }).save();
 

@@ -56,7 +56,7 @@ export default class marryCommand extends CommandStructure {
                     await msg.react('💍');
                     await msg.react('❌');
 
-                    const filter = (r: MessageReaction, u: User) => r.message.id === msg.id && u.id === user.id;
+                    const filter = (reaction: MessageReaction, user: User) => reaction.message.id === msg.id && user.id === user.id;
                     const collector = msg.createReactionCollector({ filter, time: 60000, max: 1 });
 
                     collector.on('end', async (collected) => {

@@ -127,7 +127,23 @@ class UserSubCommandDataConstructor extends CommandData {
                     description_localizations: {
                         'pt-BR': 'Exibe informações do usuário',
                         'en-US': 'Displays user informations'
-                    }
+                    },
+                    options: [
+                        {
+                            name: 'user',
+                            description: 'Shows the user\'s informations:',
+                            type: ApplicationCommandOptionType.User,
+                            name_localizations: {
+                                'pt-BR': 'usuário',
+                                'en-US': 'user'
+                            },
+                            description_localizations: {
+                                'pt-BR': 'Exibe as informações do usuário:',
+                                'en-US': 'Shows the user\'s informations:'
+                            },
+                            required: false
+                        }
+                    ]
                 }
             ]
         });

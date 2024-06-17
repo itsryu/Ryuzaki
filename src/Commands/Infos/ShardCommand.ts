@@ -43,7 +43,7 @@ export default class shardCommand extends CommandStructure {
             media = pingG / shardCount;
 
         table.addRow('______', '______', '______', '______', '______', '______');
-        table.addRow('TOTAL', '-', '~' + Math.round(media) + 'ms', this.client.utils.bytesToSize(ramTotal, 2), botGuilds.toLocaleString(language), botUsers.toLocaleString(language));
+        table.addRow('MEDIA', '-', '~' + Math.round(media) + 'ms', this.client.utils.bytesToSize(ramTotal, 2), botGuilds.toLocaleString(language), botUsers.toLocaleString(language));
 
         message.reply({ content: `\`\`\`prolog\n${table.toString()}\`\`\`` });
 

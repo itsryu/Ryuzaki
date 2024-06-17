@@ -14,7 +14,8 @@
     },
     "ping": {
         "response": "💓 **Reply ping:**",
-        "host": "🛰️ **Host ping**:"
+        "host": "🛰️ **Host ping**:",
+        "database": "📡 **Database ping:**"
     },
     "clock": {
         "title": "⌚ Clock!"

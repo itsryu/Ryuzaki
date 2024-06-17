@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { TextChannel, VoiceState } from 'discord.js';
+import { Util } from '../../Utils/util';
 
 export default class VoiceStateUpdateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -37,12 +38,12 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 },
                                 {
                                     name: 'Canal:',
-                                    value: `\`${newState.channel.name}\` \`(${newState.channelId})\``,
+                                    value: `${newState.channel} \`(${newState.channelId})\``,
                                     inline: true
                                 },
                                 {
                                     name: 'Tempo total em ligações:',
-                                    value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
+                                    value: Util.formatDuration(call.totalCall) != '' ? `\`${Util.formatDuration(call.totalCall)}\`` : '\`0 segundos\`',
                                     inline: false
                                 });
 
@@ -69,17 +70,17 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 },
                                 {
                                     name: 'Canal:',
-                                    value: `\`${oldState.channel.name}\` \`(${oldState.channelId})\``,
+                                    value: `${oldState.channel} \`(${oldState.channelId})\``,
                                     inline: true
                                 },
                                 {
                                     name: 'Tempo na ligação:',
-                                    value: `\`${this.client.utils.formatDuration(Date.now() - call.lastRegister)}\``,
+                                    value: `\`${Util.formatDuration(Date.now() - call.lastRegister)}\``,
                                     inline: false
                                 },
                                 {
                                     name: 'Tempo total em ligações:',
-                                    value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
+                                    value: Util.formatDuration(call.totalCall) != '' ? `\`${Util.formatDuration(call.totalCall)}\`` : '\`0 segundos\`',
                                     inline: true
                                 });
 
@@ -106,22 +107,22 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                 },
                                 {
                                     name: 'Canal anterior:',
-                                    value: `\`${oldState.channel?.name}\` \`(${oldState.channelId})\``,
+                                    value: `${oldState.channel} \`(${oldState.channelId})\``,
                                     inline: true
                                 },
                                 {
                                     name: 'Canal atual:',
-                                    value: `\`${newState.channel?.name}\` \`(${newState.channelId})\``,
+                                    value: `${newState.channel} \`(${newState.channelId})\``,
                                     inline: true
                                 },
                                 {
                                     name: 'Tempo na ligação:',
-                                    value: `\`${this.client.utils.formatDuration(Date.now() - call.lastRegister)}\``,
+                                    value: `\`${Util.formatDuration(Date.now() - call.lastRegister)}\``,
                                     inline: false
                                 },
                                 {
                                     name: 'Tempo total em ligações:',
-                                    value: `\`${this.client.utils.formatDuration(call.totalCall)}\``,
+                                    value: Util.formatDuration(call.totalCall) != '' ? `\`${Util.formatDuration(call.totalCall)}\`` : '\`0 segundos\`',
                                     inline: true
                                 });
 

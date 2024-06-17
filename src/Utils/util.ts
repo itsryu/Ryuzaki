@@ -5,7 +5,7 @@ import { renderEmoji } from './Plugins/renderEmoji';
 import { setTimeout as sleep } from 'timers/promises';
 import { ServiceStructure } from '../Structures/';
 import { SKRSContext2D } from '@napi-rs/canvas';
-import Day from 'dayjs';
+import { duration } from 'dayjs';
 
 enum LogLevel {
     DEBUG = 'debug',
@@ -98,7 +98,7 @@ class Util {
                     .setCustomId('-')
                     .setLabel('👈')
                     .setDisabled(first)
-                    .setStyle(ButtonStyle.Success),
+                    .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('page')
                     .setLabel(`Pag: ${num}`)
@@ -108,7 +108,7 @@ class Util {
                     .setCustomId('+')
                     .setLabel('👉')
                     .setDisabled(second)
-                    .setStyle(ButtonStyle.Success)
+                    .setStyle(ButtonStyle.Secondary)
             );
     }
 
@@ -132,8 +132,8 @@ class Util {
         return days + (days == 1 ? ' dia' : ' dias') + ' atrás';
     }
 
-    public formatDuration(ms: number): string {
-        const timeDuration = Day.duration(ms);
+    public static formatDuration(ms: number): string {
+        const timeDuration = duration(ms);
 
         const components: [number, string][] = [
             [timeDuration.days(), 'dia'],

@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../RyuzakiClient';
 import { PermissionResolvable, ApplicationCommandType, Message, ChatInputCommandInteraction } from 'discord.js';
 import { type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { Languages } from '../Types/ClientTypes';
 
 interface RawCommandData extends RESTPostAPIChatInputApplicationCommandsJSONBody {
     name: string;
@@ -41,7 +42,7 @@ abstract class CommandData {
 interface CommandExecuteParams {
     message?: Message | ChatInputCommandInteraction;
     args?: string[];
-    language?: string;
+    language?: Languages;
     prefix?: string;
 }
 

@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { HelpCommandData } from '../../Data/Commands/Infos/HelpCommandData';
-import { FlagKey, flagTexts } from '../../Utils/Objects/flags';
+import { PermissionFlagKey, PermissionsFlagsText } from '../../Utils/Objects/flags';
 import { Languages } from '../../Types/ClientTypes';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
 
@@ -30,12 +30,12 @@ export default class helpCommand extends CommandStructure {
             const memberPermArray: string[] = [];
             const clientPermArray: string[] = [];
 
-            for (const flag in flagTexts) {
-                if (memberPermissions.includes(flag as FlagKey)) {
-                    memberPermArray.push(flagTexts[flag][language]);
+            for (const flag in PermissionsFlagsText) {
+                if (memberPermissions.includes(flag as PermissionFlagKey)) {
+                    memberPermArray.push(PermissionsFlagsText[flag][language]);
                 }
-                if (clientPermissions.includes(flag as FlagKey)) {
-                    clientPermArray.push(flagTexts[flag][language]);
+                if (clientPermissions.includes(flag as PermissionFlagKey)) {
+                    clientPermArray.push(PermissionsFlagsText[flag][language]);
                 }
             }
 

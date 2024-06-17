@@ -19,14 +19,13 @@ function abbrev(num = 0): string {
     return num.toString();
 }
 
-
 function convertAbbrev(string: string | number = ''): number {
     if (!string) return 0;
-  
+
     const [numberStr, unit] = `${string}`.match(/^(\d*\.?\d+)([a-zA-Z]*)$/) ?? [`${string}`, ''];
     const zeros: Record<string, number> = { K: 1e3, k: 1e3, M: 1e6, m: 1e6 };
     const multiplier = zeros[unit] ?? 1;
-  
+
     return Number(numberStr) * multiplier;
 }
 

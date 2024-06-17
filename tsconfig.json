@@ -30,7 +30,7 @@
         "skipLibCheck": true
     },
     "include": [
-        "./__test__/**/*.ts",
+        "__test__/**/*.ts",
         "./__tests__/*.ts",
         "./src/**/*.ts",
         "./Lib/*.d.ts",

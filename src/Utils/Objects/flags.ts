@@ -1,11 +1,11 @@
 type FlagText = Record<string, Record<string, string>>;
 
-enum Language {
-    PT_BR = 'pt-BR',
-    EN_US = 'en-US',
+export enum Language {
+    pt_BR = 'pt-BR',
+    en_US = 'en-US',
 }
 
-enum flagKeys {
+enum PermissionsFlagsKeys {
     CreateInstantInvite = 'CreateInstantInvite',
     KickMembers = 'KickMembers',
     BanMembers = 'BanMembers',
@@ -49,106 +49,228 @@ enum flagKeys {
     ModerateMembers = 'ModerateMembers'
 }
 
-type FlagKey = keyof typeof flagKeys;
+enum UserFlagsKeys {
+    Staff = 'Staff',
+    Partner = 'Partner',
+    Hypesquad = 'Hypesquad',
+    BugHunterLevel1 = 'BugHunterLevel1',
+    MFASMS = 'MFASMS',
+    PremiumPromoDismissed = 'PremiumPromoDismissed',
+    HypeSquadOnlineHouse1 = 'HypeSquadOnlineHouse1',
+    HypeSquadOnlineHouse2 = 'HypeSquadOnlineHouse2',
+    HypeSquadOnlineHouse3 = 'HypeSquadOnlineHouse3',
+    PremiumEarlySupporter = 'PremiumEarlySupporter',
+    TeamPseudoUser = 'TeamPseudoUser',
+    HasUnreadUrgentMessages = 'HasUnreadUrgentMessages',
+    BugHunterLevel2 = 'BugHunterLevel2',
+    VerifiedBot = 'VerifiedBot',
+    VerifiedDeveloper = 'VerifiedDeveloper',
+    CertifiedModerator = 'CertifiedModerator',
+    BotHTTPInteractions = 'BotHTTPInteractions',
+    Spammer = 'Spammer',
+    DisablePremium = 'DisablePremium',
+    ActiveDeveloper = 'ActiveDeveloper',
+    Quarantined = 'Quarantined',
+    Collaborator = 'Collaborator',
+    RestrictedCollaborator = 'RestrictedCollaborator'
+}
 
-const flagTexts: FlagText = {
-    [flagKeys.CreateInstantInvite]: {
-        [Language.PT_BR]: 'Criar convite',
-        [Language.EN_US]: 'Create Invite'
+const PermissionsFlagsText: FlagText = {
+    [PermissionsFlagsKeys.CreateInstantInvite]: {
+        [Language.pt_BR]: 'Criar convite',
+        [Language.en_US]: 'Create Invite'
     },
-    [flagKeys.KickMembers]: {
-        [Language.PT_BR]: 'Expulsar membros',
-        [Language.EN_US]: 'Kick Members'
+    [PermissionsFlagsKeys.KickMembers]: {
+        [Language.pt_BR]: 'Expulsar membros',
+        [Language.en_US]: 'Kick Members'
     },
-    [flagKeys.BanMembers]: {
-        [Language.PT_BR]: 'Banir Membros',
-        [Language.EN_US]: 'Ban Members'
+    [PermissionsFlagsKeys.BanMembers]: {
+        [Language.pt_BR]: 'Banir Membros',
+        [Language.en_US]: 'Ban Members'
     },
-    [flagKeys.Administrator]: {
-        [Language.PT_BR]: 'Administrador',
-        [Language.EN_US]: 'Administrator'
+    [PermissionsFlagsKeys.Administrator]: {
+        [Language.pt_BR]: 'Administrador',
+        [Language.en_US]: 'Administrator'
     },
-    [flagKeys.ManageChannels]: {
-        [Language.PT_BR]: 'Gerenciar canais',
-        [Language.EN_US]: 'Manage Channels'
+    [PermissionsFlagsKeys.ManageChannels]: {
+        [Language.pt_BR]: 'Gerenciar canais',
+        [Language.en_US]: 'Manage Channels'
     },
-    [flagKeys.ManageGuild]: {
-        [Language.PT_BR]: 'Gerenciar servidor',
-        [Language.EN_US]: 'Manage Server'
+    [PermissionsFlagsKeys.ManageGuild]: {
+        [Language.pt_BR]: 'Gerenciar servidor',
+        [Language.en_US]: 'Manage Server'
     },
-    [flagKeys.AddReactions]: {
-        [Language.PT_BR]: 'Adicionar reações',
-        [Language.EN_US]: 'Add Reactions'
+    [PermissionsFlagsKeys.AddReactions]: {
+        [Language.pt_BR]: 'Adicionar reações',
+        [Language.en_US]: 'Add Reactions'
     },
-    [flagKeys.ViewAuditLog]: {
-        [Language.PT_BR]: 'Ver registro de auditoria',
-        [Language.EN_US]: 'View Audit Log'
+    [PermissionsFlagsKeys.ViewAuditLog]: {
+        [Language.pt_BR]: 'Ver registro de auditoria',
+        [Language.en_US]: 'View Audit Log'
     },
-    [flagKeys.PrioritySpeaker]: {
-        [Language.PT_BR]: 'Voz prioritária',
-        [Language.EN_US]: 'Priority Speaker'
+    [PermissionsFlagsKeys.PrioritySpeaker]: {
+        [Language.pt_BR]: 'Voz prioritária',
+        [Language.en_US]: 'Priority Speaker'
     },
-    [flagKeys.Stream]: {
-        [Language.PT_BR]: 'Transmitir',
-        [Language.EN_US]: 'Stream'
+    [PermissionsFlagsKeys.Stream]: {
+        [Language.pt_BR]: 'Transmitir',
+        [Language.en_US]: 'Stream'
     },
-    [flagKeys.ViewChannel]: {
-        [Language.PT_BR]: 'Ver canal',
-        [Language.EN_US]: 'View Channel'
+    [PermissionsFlagsKeys.ViewChannel]: {
+        [Language.pt_BR]: 'Ver canal',
+        [Language.en_US]: 'View Channel'
     },
-    [flagKeys.SendMessages]: {
-        [Language.PT_BR]: 'Enviar mensagens',
-        [Language.EN_US]: 'Send Messages'
+    [PermissionsFlagsKeys.SendMessages]: {
+        [Language.pt_BR]: 'Enviar mensagens',
+        [Language.en_US]: 'Send Messages'
     },
-    [flagKeys.SendTTSMessages]: {
-        [Language.PT_BR]: 'Enviar mensagens de TTS',
-        [Language.EN_US]: 'Send TTS Messages'
+    [PermissionsFlagsKeys.SendTTSMessages]: {
+        [Language.pt_BR]: 'Enviar mensagens de TTS',
+        [Language.en_US]: 'Send TTS Messages'
     },
-    [flagKeys.ManageMessages]: {
-        [Language.PT_BR]: 'Gerenciar mensagens',
-        [Language.EN_US]: 'Manage Messages'
+    [PermissionsFlagsKeys.ManageMessages]: {
+        [Language.pt_BR]: 'Gerenciar mensagens',
+        [Language.en_US]: 'Manage Messages'
     },
-    [flagKeys.EmbedLinks]: {
-        [Language.PT_BR]: 'Inserir links',
-        [Language.EN_US]: 'Embed Links'
+    [PermissionsFlagsKeys.EmbedLinks]: {
+        [Language.pt_BR]: 'Inserir links',
+        [Language.en_US]: 'Embed Links'
     },
-    [flagKeys.AttachFiles]: {
-        [Language.PT_BR]: 'Enviar arquivos',
-        [Language.EN_US]: 'Attach Files'
+    [PermissionsFlagsKeys.AttachFiles]: {
+        [Language.pt_BR]: 'Enviar arquivos',
+        [Language.en_US]: 'Attach Files'
     },
-    [flagKeys.ReadMessageHistory]: {
-        [Language.PT_BR]: 'Ver histórico de mensagens',
-        [Language.EN_US]: 'Read Message History'
+    [PermissionsFlagsKeys.ReadMessageHistory]: {
+        [Language.pt_BR]: 'Ver histórico de mensagens',
+        [Language.en_US]: 'Read Message History'
     },
-    [flagKeys.MentionEveryone]: {
-        [Language.PT_BR]: 'Mencionar todos',
-        [Language.EN_US]: 'Mention Everyone'
+    [PermissionsFlagsKeys.MentionEveryone]: {
+        [Language.pt_BR]: 'Mencionar todos',
+        [Language.en_US]: 'Mention Everyone'
     },
-    [flagKeys.UseExternalEmojis]: {
-        [Language.PT_BR]: 'Usar emojis externos',
-        [Language.EN_US]: 'Use External Emojis'
+    [PermissionsFlagsKeys.UseExternalEmojis]: {
+        [Language.pt_BR]: 'Usar emojis externos',
+        [Language.en_US]: 'Use External Emojis'
     },
-    [flagKeys.ViewGuildInsights]: {
-        [Language.PT_BR]: 'Ver estatísticas do servidor',
-        [Language.EN_US]: 'View Guild Insights'
+    [PermissionsFlagsKeys.ViewGuildInsights]: {
+        [Language.pt_BR]: 'Ver estatísticas do servidor',
+        [Language.en_US]: 'View Guild Insights'
     },
-    [flagKeys.Connect]: {
-        [Language.PT_BR]: 'Conectar',
-        [Language.EN_US]: 'Connect'
+    [PermissionsFlagsKeys.Connect]: {
+        [Language.pt_BR]: 'Conectar',
+        [Language.en_US]: 'Connect'
     },
-    [flagKeys.Speak]: {
-        [Language.PT_BR]: 'Falar',
-        [Language.EN_US]: 'Speak'
+    [PermissionsFlagsKeys.Speak]: {
+        [Language.pt_BR]: 'Falar',
+        [Language.en_US]: 'Speak'
     },
-    [flagKeys.MuteMembers]: {
-        [Language.PT_BR]: 'Conectar',
-        [Language.EN_US]: 'Mute'
+    [PermissionsFlagsKeys.MuteMembers]: {
+        [Language.pt_BR]: 'Conectar',
+        [Language.en_US]: 'Mute'
     },
-    [flagKeys.ManageNicknames]: {
-        [Language.PT_BR]: 'Gerenciar apelidos',
-        [Language.EN_US]: 'Manage Nicknames'
+    [PermissionsFlagsKeys.ManageNicknames]: {
+        [Language.pt_BR]: 'Gerenciar apelidos',
+        [Language.en_US]: 'Manage Nicknames'
     },
 };
 
-export type { FlagKey };
-export { flagTexts };
+const UserFlagsText: FlagText = {
+    [UserFlagsKeys.BugHunterLevel1]: {
+        [Language.pt_BR]: 'Caçador de Bugs Nível 1',
+        [Language.en_US]: 'Bug Hunter Level 1'
+    },
+    [UserFlagsKeys.HypeSquadOnlineHouse1]: {
+        [Language.pt_BR]: 'House of Bravery',
+        [Language.en_US]: 'House of Bravery'
+    },
+    [UserFlagsKeys.HypeSquadOnlineHouse2]: {
+        [Language.pt_BR]: 'House of Brilliance',
+        [Language.en_US]: 'House of Brilliance'
+    },
+    [UserFlagsKeys.HypeSquadOnlineHouse3]: {
+        [Language.pt_BR]: 'House of Balance',
+        [Language.en_US]: 'House of Balance'
+    },
+    [UserFlagsKeys.PremiumEarlySupporter]: {
+        [Language.pt_BR]: 'Apoiador Inicial',
+        [Language.en_US]: 'Early Supporter'
+    },
+    [UserFlagsKeys.TeamPseudoUser]: {
+        [Language.pt_BR]: 'Usuário da Equipe',
+        [Language.en_US]: 'Team User'
+    },
+    [UserFlagsKeys.BugHunterLevel2]: {
+        [Language.pt_BR]: 'Caçador de Bugs Nível 2',
+        [Language.en_US]: 'Bug Hunter Level 2'
+    },
+    [UserFlagsKeys.VerifiedBot]: {
+        [Language.pt_BR]: 'Bot Verificado',
+        [Language.en_US]: 'Verified Bot'
+    },
+    [UserFlagsKeys.VerifiedDeveloper]: {
+        [Language.pt_BR]: 'Desenvolvedor de Bot Verificado',
+        [Language.en_US]: 'Verified Bot Developer'
+    },
+    [UserFlagsKeys.Staff]: {
+        [Language.pt_BR]: 'Funcionário do Discord',
+        [Language.en_US]: 'Discord Employee'
+    },
+    [UserFlagsKeys.Partner]: {
+        [Language.pt_BR]: 'Dono de servidor parceiro',
+        [Language.en_US]: 'Partnered Server Owner'
+    },
+    [UserFlagsKeys.Hypesquad]: {
+        [Language.pt_BR]: 'Membro do HypeSquad',
+        [Language.en_US]: 'HypeSquad Events Member'
+    },
+    [UserFlagsKeys.MFASMS]: {
+        [Language.pt_BR]: 'MFA SMS',
+        [Language.en_US]: 'MFA SMS'
+    },
+    [UserFlagsKeys.PremiumPromoDismissed]: {
+        [Language.pt_BR]: 'Promoção Premium Ignorada',
+        [Language.en_US]: 'Premium Promo Dismissed'
+    },
+    [UserFlagsKeys.HasUnreadUrgentMessages]: {
+        [Language.pt_BR]: 'Mensagens Urgentes Não Lidas',
+        [Language.en_US]: 'Has Unread Urgent Messages'
+    },
+    [UserFlagsKeys.Spammer]: {
+        [Language.pt_BR]: 'Spammer',
+        [Language.en_US]: 'Spammer'
+    },
+    [UserFlagsKeys.ActiveDeveloper]: {
+        [Language.pt_BR]: 'Desenvolvedor Ativo',
+        [Language.en_US]: 'Active Developer'
+    },
+    [UserFlagsKeys.Quarantined]: {
+        [Language.pt_BR]: 'Quarentena',
+        [Language.en_US]: 'Quarantined'
+    },
+    [UserFlagsKeys.Collaborator]: {
+        [Language.pt_BR]: 'Colaborador',
+        [Language.en_US]: 'Collaborator'
+    },
+    [UserFlagsKeys.RestrictedCollaborator]: {
+        [Language.pt_BR]: 'Colaborador Restrito',
+        [Language.en_US]: 'Restricted Collaborator'
+    },
+    [UserFlagsKeys.CertifiedModerator]: {
+        [Language.pt_BR]: 'Moderador Certificado',
+        [Language.en_US]: 'Certified Moderator'
+    },
+    [UserFlagsKeys.BotHTTPInteractions]: {
+        [Language.pt_BR]: 'Interações HTTP de Bot',
+        [Language.en_US]: 'Bot HTTP Interactions'
+    },
+    [UserFlagsKeys.DisablePremium]: {
+        [Language.pt_BR]: 'Desativar Premium',
+        [Language.en_US]: 'Disable Premium'
+    }
+}
+
+type PermissionFlagKey = keyof typeof PermissionsFlagsKeys;
+type UserFlagKey = keyof typeof UserFlagsKeys;
+
+export type { PermissionFlagKey, UserFlagKey };
+export { PermissionsFlagsText, UserFlagsText };

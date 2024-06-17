@@ -4,10 +4,9 @@ const jestConfig: JestConfigWithTsJest = {
   // [...]
   preset: 'ts-jest',
   extensionsToTreatAsEsm: ['.ts'],
-  rootDir: '.',
+  rootDir: './',
   testEnvironment: 'node',
   testMatch: [
-    '<rootDir>/__test__/**/*.test.ts',
     '<rootDir>/__test__/*.test.ts',
   ]
 }

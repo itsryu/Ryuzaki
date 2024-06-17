@@ -70,7 +70,7 @@
                     ],
                     "values": [
                         "`<arg>` - Required argument\n`[argumento]` - Optional argument",
-                        "`text` - Any text.\n`user` - Mention or ID of an user."
+                        "`text` - Any text.\n`number` - An integer number.\n`user` - Mention or ID of an user."
                     ]
                 }
             }

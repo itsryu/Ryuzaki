@@ -14,7 +14,8 @@
     },
     "ping": {
         "response": "💓 **Ping de resposta:**",
-        "host": "🛰️ **Ping da host**:"
+        "host": "🛰️ **Ping da host**:",
+        "database": "📡 **Ping do banco de dados:**"
     },
     "clock": {
         "title": "⌚ Relógio!"

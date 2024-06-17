@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../../RyuzakiClient';
-import { flagTexts, FlagKey } from '../../Utils/Objects/flags';
+import { PermissionsFlagsText, PermissionFlagKey } from '../../Utils/Objects/flags';
 import { ServiceStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { Message, PermissionsBitField } from 'discord.js';
 
@@ -33,11 +33,9 @@ export default class checkPermissionsService extends ServiceStructure {
             new PermissionsBitField(command.data.options.permissions.client) :
             new PermissionsBitField(command.data.options.permissions.member);
 
-        const array: string[] = [];
-
-        for (const flag in flagTexts) {
-            if (permissions.toArray().includes(flag as FlagKey)) array.push(flagTexts[flag][language]);
-        }
+        const array = Object.entries(PermissionsFlagsText)
+            .filter(([flag]) => permissions.toArray().includes(flag as PermissionFlagKey))
+            .map(([, text]) => text[language]);
 
         const embed = new ClientEmbed(this.client)
             .setAuthor({ name: this.client.t('main:permissions.title'), iconURL: isBotPermission ? this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) : message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
