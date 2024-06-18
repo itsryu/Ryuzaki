@@ -6,7 +6,6 @@ import { PermissionFlagKey, PermissionsFlagsText, UserBadges, UserFlagKey, UserF
 import { Languages } from '../../Types/ClientTypes';
 import { Util } from '../../Utils/util';
 import { DiscordUser } from '../../Types/GatewayTypes';
-import axios from 'axios';
 
 interface UserBoostBadge {
     atualBadge?: string | null;
@@ -108,15 +107,16 @@ export default class UserSubCommand extends CommandStructure {
                 const pages: ClientEmbed[] = [];
                 let current = 0;
 
-                const data: DiscordUser = await axios.get((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + '/discord/user/' + user.id, {
+                const data = await fetch((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + '/discord/user/' + user.id, {
                     headers: {
                         'Authorization': 'Bearer ' + process.env.AUTH_KEY,
                     }
                 })
-                    .then((res) => res.data)
-                    .catch(() => { });
+                    .then((res) => res.json())
+                    .catch(() => undefined) as DiscordUser | undefined;
 
                 const flags = this.getUserFlags(user, language);
+
                 const badges = this.getUserBadges(data);
                 const boostBadge = this.getUserBoostBadge(data);
 
@@ -249,12 +249,16 @@ export default class UserSubCommand extends CommandStructure {
         }
     }
 
-    private getUserFlags(user: User, language: Languages): string[] {
+    private getUserFlags(user: User, language: Languages) {
         const flags = user.flags
 
-        return Object.entries(UserFlagsText)
-            .filter(([flag]) => flags && flags.toArray().includes(flag as UserFlagKey))
-            .map(([, text]) => text[language]);
+        if (flags) {
+            return Object.entries(UserFlagsText)
+                .filter(([flag]) => flags && flags.toArray().includes(flag as UserFlagKey))
+                .map(([, text]) => text[language]);
+        } else {
+            return [];
+        }
     }
 
     private getMemberPermissions(member: GuildMember, language: Languages): string[] {
@@ -265,12 +269,16 @@ export default class UserSubCommand extends CommandStructure {
             .map(([, text]) => text[language]);
     }
 
-    private getUserBadges(user: DiscordUser) {
-        const badges = user.badges;
+    private getUserBadges(user: DiscordUser | undefined) {
+        const badges = user?.badges;
 
-        return Object.entries(UserBadges)
-            .map(([badge, emoji]) => badges.map((b) => b.id).includes(badge as UserFlagKey) ? emoji : null)
-            .filter(emoji => emoji !== null);
+        if (badges) {
+            return Object.entries(UserBadges)
+                .map(([badge, emoji]) => badges.map((b) => b.id).includes(badge as UserFlagKey) ? emoji : null)
+                .filter(emoji => emoji !== null);
+        } else {
+            return [];
+        }
     }
 
     private getMemberDevice(member: GuildMember): string {
@@ -283,8 +291,8 @@ export default class UserSubCommand extends CommandStructure {
                     : '\`Offline\`';
     }
 
-    private getUserBoostBadge(user: DiscordUser): UserBoostBadge | undefined {
-        const atualBoostDate = user.premium_guild_since;
+    private getUserBoostBadge(user: DiscordUser | undefined): UserBoostBadge | undefined {
+        const atualBoostDate = user?.premium_guild_since;
 
         if (atualBoostDate) {
             const atualBoostTimeMs = new Date(atualBoostDate).getTime();

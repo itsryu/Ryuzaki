@@ -60,7 +60,7 @@ interface ConnectedAccount {
     premium_guild_since: string;
     profile_themes_experiment_bucket: number;
     user_profile: UserProfile;
-    badges: UserBadges[];
+    badges: UserBadges[] | null;
     guild_badges: any[];
     mutual_guilds: MutualGuild[];
     legacy_username: string;
