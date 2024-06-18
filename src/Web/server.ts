@@ -8,6 +8,7 @@ import { Logger } from '../Utils/util';
 import { Route } from '../Types/HTTPSInterfaces';
 import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController, CommandExecuteController } from './routes/index';
 import { Webhook } from '@top-gg/sdk';
+import cors from 'cors';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
@@ -23,9 +24,9 @@ export default class App extends AppStructure {
     }
 
     private configServer(): void {
-        this.app.set('view engine', 'html');
-        this.app.use(urlencoded({ extended: true }));
+        this.app.use(cors());
         this.app.use(json());
+        this.app.use(urlencoded({ extended: true }));
         this.app.use(this.initRoutes());
     }
 
