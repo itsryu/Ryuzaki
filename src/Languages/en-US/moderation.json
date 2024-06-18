@@ -53,5 +53,43 @@
                 "label": "No"
             }
         }
+    },
+    "kick": {
+        "errors": {
+            "noMember": "You must `provide a valid user` before I can `kick` him from the server.",
+            "clientPerms": "This user has roles equal to or above mine, I cannot apply a punishment.",
+            "memberPerms": "This user has roles equal to or above yours, you cannot apply a punishment.",
+            "sameMember": "You cannot use this command on yourself, provide another user.",
+            "sameClient": "I can't use this command on myself... But I'm sorry to hear that you want to. 😕"
+            },
+        "embeds": {
+            "button": {
+                "title": "Kick",
+                "description": "{{author}}, do you really want to kick {{member}} for the reason: `{{reason}}`?"
+            },
+            "kicked": {
+                "title": "You have been kicked! 😔",
+                "description": "Hello `{{member}}`, unfortunately you have been kicked from the `{{guild}}` server, for the following reason: `{{reason}}`. \nIf you think there's been a mistake, contact the staffer who kicked you: `{{author}}`."
+            },
+            "kick": {
+                "fields": [
+                    "{{emoji}} Action:",
+                    "{{emoji}} Member:",
+                    "👮 Staffer:",
+                    "📜 Reason(s):"
+                ],
+                "values": [
+                    "`Kicks`"
+                ]
+            }
+        },
+        "buttons": {
+            "yesButton": {
+                "label": "Yes"
+            },
+            "noButton": {
+                "label": "No"
+            }
+        }
     }
 }

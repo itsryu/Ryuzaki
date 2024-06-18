@@ -245,25 +245,6 @@ class DeveloperSubCommandDataConstructor extends CommandData {
                             ]
                         }
                     ]
-                },
-                {
-                    name: 'reload',
-                    description: 'Reboot the client',
-                    type: ApplicationCommandOptionType.String,
-                    description_localizations: {
-                        'pt-BR': 'Reinicia o cliente',
-                        'en-US': 'Reboot the client'
-                    },
-                    choices: [
-                        {
-                            name: 'client',
-                            value: 'client',
-                            name_localizations: {
-                                'pt-BR': 'cliente',
-                                'en-US': 'client'
-                            }
-                        }
-                    ]
                 }
             ]
         });

@@ -53,5 +53,47 @@
                 "label": "Não"
             }
         }
+    },
+    "kick": {
+        "errors": {
+            "noMember": "Você deve `fornecer um usuário válido` para que eu possa `expulsá-lo` do servidor.",
+            "clientPerms": "Este usuário possui cargos iguais ou acima do meu, não posso aplicar uma punição.",
+            "memberPerms": "Este usuário possuí cargos iguais ou acima do seu, você nao pode aplicar uma punição.",
+            "sameMember": "Você não pode usar este comando em si próprio, forneça outro usuário.",
+            "sameClient": "Eu não posso usar este comando em mim mesmo... Mas fico triste em saber que você queira isso. 😕",
+            "kicked": "Este membro já se encontra expulso deste servidor.",
+            "noReason": "Nenhum motivo especificado",
+            "failed": "😭・Não pude expulsar este membro, me desculpe.",
+            "rejected": "❌・Expulsão de `{{member}}` foi cancelada."
+        },
+        "embeds": {
+            "button": {
+                "title": "Expulsão",
+                "description": "{{author}}, você realmente deseja expulsar o(a) {{member}} pelo motivo: `{{reason}}`?"
+            },
+            "kicked": {
+                "title": "Você foi expulso(a)! 😔",
+                "description": "Olá, `{{member}}`, infelizmente você foi expulso(a) do servidor `{{guild}}`, pelo seguinte motivo: `{{reason}}`. \nSe você acha que ocorreu um engano, entre em contato com o staffer que te expulsou: `{{author}}`."
+            },
+            "kick": {
+                "fields": [
+                    "{{emoji}} Ação:",
+                    "{{emoji}} Membro:",
+                    "👮 Staffer:",
+                    "📜 Motivo(s):"
+                ],
+                "values": [
+                    "`Expulsar`"
+                ]
+            }
+        },
+        "buttons": {
+            "yesButton": {
+                "label": "Sim"
+            },
+            "noButton": {
+                "label": "Não"
+            }
+        }
     }
 }

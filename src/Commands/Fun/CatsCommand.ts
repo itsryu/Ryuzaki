@@ -3,7 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { CatsCommandData } from '../../Data/Commands/Fun/CatsCommandData';
 import { Message } from 'discord.js';
 
-export default class catCommand extends CommandStructure {
+export default class CatsCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, CatsCommandData);
     }

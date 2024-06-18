@@ -172,30 +172,6 @@ export default class DeveloperSubCommand extends CommandStructure {
                 }
                 break;
             }
-
-            case 'reload': {
-                switch (args[1]) {
-                    case 'client': {
-                        const initialTime = 5;
-                        let time = initialTime;
-
-                        const msg = await message.reply(`Estarei reiniciando em ${time}s...`);
-                        this.client.logger.warn(`Reiniciando em ${time}s`, 'REBOOTING');
-
-                        const clock = setInterval(async () => {
-                            time--;
-                            this.client.logger.warn(`Reiniciando em ${time}s...`, 'REBOOTING');
-                            await msg.edit(`Estarei reiniciando em ${time}s...`);
-
-                            if (time === 0) {
-                                clearInterval(clock);
-                                process.kill(process.pid, 'SIGINT');
-                            }
-                        }, 1000);
-                    }
-                }
-                break;
-            }
         }
     }
 }
