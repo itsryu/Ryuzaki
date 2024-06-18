@@ -15,7 +15,8 @@
             "filter_currently": "Este idioma já está definido atualmente.",
             "success": "Idioma alterado com sucesso.",
             "cancel": "Essa operação foi cancelada com sucesso.",
-            "none": "O argumento fornecido não é uma linguagem válida."
+            "none": "O argumento fornecido não é uma linguagem válida.",
+            "unavailable": "Este idioma ainda não está disponível."
         }
     },
 

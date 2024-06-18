@@ -4,7 +4,12 @@ import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInt
 import { LanguageCommandData } from '../../Data/Commands/Settings/LanguageCommandData';
 import { Languages } from '../../Types/ClientTypes';
 
-export default class languageCommand extends CommandStructure {
+interface LanguageProps {
+    name: string;
+    complete: number;
+}
+
+export default class LanguageCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, LanguageCommandData);
     }
@@ -13,47 +18,36 @@ export default class languageCommand extends CommandStructure {
         const guildLang = args[0];
         const guild = await this.client.getData(message.guild?.id, 'guild');
 
-        const languages = {
+        const languages: Record<Languages, LanguageProps> = {
             'pt-BR': {
-                id: 1,
                 name: 'pt-BR 🇧🇷',
                 complete: 100
             },
             'en-US': {
-                id: 2,
                 name: 'en-US 🇺🇸',
-                complete: 90
+                complete: 85
+            },
+            'es-ES': {
+                name: 'es-ES 🇪🇸',
+                complete: 0
             }
         };
 
         if (guildLang) {
-            switch (guildLang) {
-                case 'pt-BR': {
-                    if (guildLang === guild.lang) {
-                        return void message.reply(this.client.t('config:language:responses.filter_currently'));
-                    } else {
-                        await guild.updateOne({ $set: { lang: guildLang } }, { new: true });
+            if (guildLang === guild.lang) {
+                return void message.reply(this.client.t('config:language:responses.filter_currently'));
+            } else if (Object.entries(languages).some(([key, lang]) => lang.complete === 0 && key === guildLang)) {
+                return void message.channel.send(this.client.t('config:language:responses.unavailable'));
+            } else {
+                await guild.updateOne({ $set: { lang: guildLang } }, { new: true });
+                this.client.t = await this.client.getTranslate(message.guild?.id!);
 
-                        return void message.reply({ content: this.client.t('config:language.responses:success') });
-                    }
-                }
-                case 'en-US': {
-                    if (guildLang === guild.lang) {
-                        return void message.reply(this.client.t('config:language:responses.filter_currently'));
-                    } else {
-                        await guild.updateOne({ $set: { lang: guildLang } }, { new: true });
-
-                        return void message.reply({ content: this.client.t('config:language.responses:success') });
-                    }
-                }
-                default: {
-                    return void message.reply({ content: this.client.t('config:language.responses.none') });
-                }
+                return void message.reply({ content: this.client.t('config:language.responses:success') });
             }
         } else {
             const embed = new ClientEmbed(this.client)
                 .setTitle(this.client.t('config:language.title'))
-                .setDescription(`${Object.entries(languages).map(([, lang]) => `${lang.name}`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${language}\``);
+                .setDescription(`${Object.entries(languages).map(([, lang]) => `${lang.name} - ${lang.complete}%`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${language}\``);
 
             const categories = Object.entries(languages).map(([key, value]) => ({ key, ...value }));
 
@@ -75,7 +69,7 @@ export default class languageCommand extends CommandStructure {
                         label: x.name.split(' ')[0],
                         description: this.client.t('config:language:menu.description', { index: 1, language: x.name.split(' ')[0] }),
                         emoji: x.name.split(' ')[1],
-                        value: x.key
+                        value: x.key,
                     }]
                 );
             });
@@ -97,44 +91,24 @@ export default class languageCommand extends CommandStructure {
                     message.channel.send({ content: this.client.t('config:language:responses.cancel') });
                 }
 
-                if (i.values[0] === 'pt-BR') {
-                    const id = i.values[0];
+                const id = i.values[0] as Languages;
 
-                    if (id === guild.lang) {
-                        return void message.channel.send(this.client.t('config:language:responses.filter_currently'));
-                    } else {
-                        await guild.updateOne({ $set: { lang: id } }, { new: true });
-                        const t = await this.client.getTranslate(message.guild?.id!);
+                if (id === guild.lang) {
+                    return void message.channel.send(this.client.t('config:language:responses.filter_currently'));
+                } else if (Object.entries(languages).some(([key, lang]) => lang.complete === 0 && key === id)) {
+                    return void message.channel.send(this.client.t('config:language:responses.unavailable'));
+                } else {
+                    await guild.updateOne({ $set: { lang: id } }, { new: true });
+                    this.client.t = await this.client.getTranslate(message.guild?.id!);
 
-                        embed.setTitle(t('config:language.title'));
-                        embed.setDescription(`${Object.entries(languages).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${t('config:language.currently')} \`${i.values[0]}\``);
+                    embed.setTitle(this.client.t('config:language.title'));
+                    embed.setDescription(`${Object.entries(languages).map(([, lang]) => `${lang.name} - ${lang.complete}%`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${i.values[0]}\``);
 
-                        menu.setDisabled(true);
-                        menu.setPlaceholder(t('config:language:menu.place'));
+                    menu.setDisabled(true);
+                    menu.setPlaceholder(this.client.t('config:language:menu.place'));
 
-                        msg.edit({ embeds: [embed], components: [row] });
-                        message.channel.send({ content: t('config:language:responses.success') });
-                    }
-                }
-
-                if (i.values[0] === 'en-US') {
-                    const id = i.values[0];
-
-                    if (id === guild.lang) {
-                        return void message.channel.send(this.client.t('config:language:responses.filter_currently'));
-                    } else {
-                        await guild.updateOne({ $set: { lang: id } }, { new: true });
-                        const t = await this.client.getTranslate(message.guild?.id!);
-
-                        embed.setTitle(t('config:language.title'));
-                        embed.setDescription(`${Object.entries(languages).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${t('config:language.currently')} \`${i.values[0]}\``);
-
-                        menu.setDisabled(true);
-                        menu.setPlaceholder(t('config:language:menu.place'));
-
-                        msg.edit({ embeds: [embed], components: [row] });
-                        message.channel.send({ content: t('config:language:responses.success') });
-                    }
+                    msg.edit({ embeds: [embed], components: [row] });
+                    message.channel.send({ content: this.client.t('config:language:responses.success') });
                 }
             });
         }

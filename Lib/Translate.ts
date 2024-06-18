@@ -61,7 +61,7 @@ export class Translate {
             return localeObj ? localeObj[key] : undefined;
         }, this.languages);
 
-        const formattedLocale = finalLocale ? this.format(finalLocale, options) : 'Translation not available.';
+        const formattedLocale = finalLocale ? this.format(finalLocale, options) : 'Translation not available';
         return formattedLocale;
     }
 

@@ -15,7 +15,8 @@
             "filter_currently": "This language is currently set.",
             "success": "Language successfully changed.",
             "cancel": "This operation was successfully canceled",
-            "none": "The provided argument is not a valid language."
+            "none": "The provided argument is not a valid language.",
+            "unavailable": "This language is not yet available."
         }
     },
 

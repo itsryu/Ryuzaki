@@ -68,6 +68,14 @@ class LanguageCommandDataConstructor extends CommandData {
                                 'pt-BR': 'Inglês (U.S)',
                                 'en-US': 'English (U.S)'
                             }
+                        },
+                        {
+                            name: 'Spanish (Spain)',
+                            value: 'es-ES',
+                            name_localizations: {
+                                'pt-BR': 'Espanhol (Espanha)',
+                                'en-US': 'Spanish (Spain)'
+                            }
                         }
                     ]
                 }
