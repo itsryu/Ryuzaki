@@ -46,7 +46,7 @@ class DiscordUserController extends RouteStructure {
                 resolve(response.data);
             } catch (err) {
                 if ((err as AxiosError).response) {
-                    this.app.logger.error(`Error while fetching user profile: ${(err as AxiosError).response?.status} ${(err as AxiosError).response?.statusText} - ${(err as AxiosError).response?.data}`, 'Gateway Message');
+                    this.app.logger.error(`Error while fetching user profile: ${(err as AxiosError).response?.status} ${(err as AxiosError).response?.statusText} - ${JSON.stringify((err as AxiosError).response?.data)}`, 'Gateway Message');
                 } else if ((err as AxiosError).request) {
                     this.app.logger.error('Error while fetching user profile: No response received', 'Gateway Message');
                 } else {
