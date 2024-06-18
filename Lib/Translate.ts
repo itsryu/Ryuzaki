@@ -30,7 +30,7 @@ export class Translate {
                 // node 20: .split('/').slice(-2);
 
                 const [language, ns] = process.platform === 'win32' ? file.split('\\').slice(-2) : file.split('/').slice(-2);
-                
+
                 if (!this.languages[language]) {
                     this.languages[language] = {};
                 }

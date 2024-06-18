@@ -116,7 +116,6 @@ export default class UserSubCommand extends CommandStructure {
                     .catch(() => undefined) as DiscordUser | undefined;
 
                 const flags = this.getUserFlags(user, language);
-
                 const badges = this.getUserBadges(data);
                 const boostBadge = this.getUserBoostBadge(data);
 
@@ -126,7 +125,6 @@ export default class UserSubCommand extends CommandStructure {
                     const menuEmbed = new ClientEmbed(this.client)
                         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                         .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
-                        .setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
                         .setFields(
                             {
                                 name: `Nickname:`,
@@ -144,6 +142,10 @@ export default class UserSubCommand extends CommandStructure {
                                 inline: false
                             }
                         );
+
+                    if (badges.length >= 1) {
+                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
+                    }
 
                     if (boostBadge && boostBadge.atualBadge && boostBadge.atualBadgeTime) {
                         menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
@@ -200,6 +202,10 @@ export default class UserSubCommand extends CommandStructure {
                                 inline: true
                             }
                         );
+
+                    if (badges.length >= 1) {
+                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
+                    }
 
                     if (boostBadge && boostBadge.atualBadge && boostBadge.atualBadgeTime) {
                         menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
