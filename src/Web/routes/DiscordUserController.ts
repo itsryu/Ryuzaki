@@ -4,7 +4,6 @@ import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
 import { NextFunction } from 'express-serve-static-core';
 import { Snowflake } from 'discord-api-types/v10';
 import { DiscordUser } from '../../Types/GatewayTypes';
-import axios, { AxiosError } from 'axios';
 
 class DiscordUserController extends RouteStructure {
     constructor(app: App) {
@@ -37,22 +36,16 @@ class DiscordUserController extends RouteStructure {
     private getUser = async (id: Snowflake): Promise<DiscordUser | null> => {
         const fetchUser = async (resolve: any) => {
             try {
-                const response = await axios.get(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
+                const response = await fetch(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
                     headers: {
                         Authorization: process.env.USER_TOKEN
                     }
                 });
 
-                resolve(response.data);
+                resolve(response.json());
             } catch (err) {
-                if ((err as AxiosError).response) {
-                    this.app.logger.error(`Error while fetching user profile: ${(err as AxiosError).response?.status} ${(err as AxiosError).response?.statusText} - ${JSON.stringify((err as AxiosError).response?.data)}`, 'Gateway Message');
-                } else if ((err as AxiosError).request) {
-                    this.app.logger.error('Error while fetching user profile: No response received', 'Gateway Message');
-                } else {
-                    this.app.logger.error(`Error while fetching user profile: ${(err as AxiosError).message}`, 'Gateway Message');
-                }
-
+                this.app.logger.error((err as Error).message, DiscordUserController.name);
+                this.app.logger.warn((err as Error).stack as string, DiscordUserController.name);
                 
                 resolve(null);
             }
