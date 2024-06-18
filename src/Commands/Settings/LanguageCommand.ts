@@ -53,7 +53,7 @@ export default class languageCommand extends CommandStructure {
         } else {
             const embed = new ClientEmbed(this.client)
                 .setTitle(this.client.t('config:language.title'))
-                .setDescription(`${Object.entries(languages).map(([, lang], index) => `**${index + 1}** - ${lang.name}`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${language}\``);
+                .setDescription(`${Object.entries(languages).map(([, lang]) => `${lang.name}`).join('\n')}\n\n${this.client.t('config:language.currently')} \`${language}\``);
 
             const categories = Object.entries(languages).map(([key, value]) => ({ key, ...value }));
 
@@ -64,7 +64,7 @@ export default class languageCommand extends CommandStructure {
                     {
                         label: this.client.t('config:language:menu.label'),
                         description: this.client.t('config:language:menu.description', { index: 0 }),
-                        emoji: '⬅️',
+                        emoji: '❌',
                         value: 'cancel'
                     }
                 ]);

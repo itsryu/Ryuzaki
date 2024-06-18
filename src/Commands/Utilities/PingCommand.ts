@@ -38,6 +38,6 @@ export default class pingCommand extends CommandStructure {
         await connection.db.admin().command({ ping: 1 });
         const stop = process.hrtime(start);
 
-        return Math.round((stop[0] * 1e9 + stop[1]) / 1e6) + 'ms';
+        return Math.round((stop[0] * 1e9 + stop[1]) / 1e6);
     }
 }

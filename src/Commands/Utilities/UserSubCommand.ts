@@ -249,7 +249,7 @@ export default class UserSubCommand extends CommandStructure {
                     if (i.customId === '-') current -= 1;
                     if (i.customId === '+') current += 1;
 
-                    return void void msg.edit({ content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
+                    return void void msg.edit({ embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
                 });
             }
         }
