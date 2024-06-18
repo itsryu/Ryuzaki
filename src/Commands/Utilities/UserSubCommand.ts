@@ -152,7 +152,7 @@ export default class UserSubCommand extends CommandStructure {
                         menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true })
                     }
 
-                    if (userData.call.totalCall > 0) {
+                    if (userData && userData.call.totalCall > 0) {
                         const time = Util.formatDuration(userData.call.totalCall, language);
                         menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
                     }
@@ -179,9 +179,9 @@ export default class UserSubCommand extends CommandStructure {
                             }
                         );
 
-                    if (userData.marry.has) {
+                    if (userData && userData.marry.has) {
                         const soul = await this.client.users.fetch(userData.marry.user).catch(() => undefined);
-                        embed.addFields({ name: '💍 Casado(a):', value: `\`Casado(a) com ${soul?.tag}.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
+                        embed.addFields({ name: '💍 Casado(a):', value: `Casado(a) com \`${soul?.tag}\`.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
                     }
 
                     pages.push(embed);
@@ -212,7 +212,7 @@ export default class UserSubCommand extends CommandStructure {
                         menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true })
                     }
 
-                    if (userData.call.totalCall > 0) {
+                    if (userData && userData.call.totalCall > 0) {
                         const time = Util.formatDuration(userData.call.totalCall, language);
                         menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
                     }
@@ -229,9 +229,9 @@ export default class UserSubCommand extends CommandStructure {
                             }
                         );
 
-                    if (userData.marry.has) {
+                    if (userData && userData.marry.has) {
                         const soul = await this.client.users.fetch(userData.marry.user).catch(() => undefined);
-                        embed.addFields({ name: '💍 Casado(a):', value: `\`Casado(a) com ${soul?.tag}.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
+                        embed.addFields({ name: '💍 Casado(a):', value: `Casado(a) com \`${soul?.tag}\`.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
                     }
 
                     pages.push(embed);

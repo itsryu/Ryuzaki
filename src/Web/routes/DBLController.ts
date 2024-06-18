@@ -16,22 +16,31 @@ class DBLController extends RouteStructure {
             const user = await client.users.fetch(vote.user).catch(() => undefined);
             const userData = await client.getData(user?.id, 'user');
             const addedMoney = client.utils.randomIntFromInterval(2000, 5000);
-            const money = userData.economy.coins;
-            const votes = userData.economy.votes;
 
-            userData.set({
-                'economy.coins': money + addedMoney,
-                'economy.votes': votes + 1,
-                'economy.vote': Date.now()
-            }).save();
+            if (!userData) {
+                return res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
+            } else {
+                const money = userData.economy.coins;
+                const votes = userData.economy.votes;
 
-            const votedEmbed = new ClientEmbed(client)
-                .setAuthor({ name: client.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                .setDescription(client.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: client.utils.toAbbrev(addedMoney) }));
+                await userData.set({
+                    'economy.coins': money + addedMoney,
+                    'economy.votes': votes + 1,
+                    'economy.vote': Date.now()
+                }).save();
 
-            user?.send({ embeds: [votedEmbed] })
-                .then((message) => message.react('🥰'))
-                .catch(() => false);
+                if (userData.economy.votes % 40 === 0) {
+                    // TODO: Criar surpresa especial: 
+                } else {
+                    const votedEmbed = new ClientEmbed(client)
+                        .setAuthor({ name: client.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(client.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: client.utils.toAbbrev(addedMoney) }));
+
+                    user?.send({ embeds: [votedEmbed] })
+                        .then((message) => message.react('🥰'))
+                        .catch(() => false);
+                }
+            }
         } catch (err) {
             this.app.logger.error((err as Error).message, DBLController.name);
             this.app.logger.warn((err as Error).stack as string, DBLController.name);

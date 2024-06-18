@@ -21,10 +21,13 @@ export default class AFKModule extends ModuleStructure {
 
         if (user) {
             const userData = await this.client.getData(user.id, 'user');
-            const { AFK } = userData;
 
-            if (AFK.away) {
-                return void message.reply({ content: `✋・${message.author}, o usuário \`${user.username}\` está AFK` + (AFK.reason ? `\n📝・Motivo: \`${AFK.reason}\`` : '.') });
+            if (userData) {
+                const { AFK } = userData;
+
+                if (AFK.away) {
+                    return void message.reply({ content: `✋・${message.author}, o usuário \`${user.username}\` está AFK` + (AFK.reason ? `\n📝・Motivo: \`${AFK.reason}\`` : '.') });
+                }
             }
         } else {
             await this.authorAFK(message);
@@ -33,17 +36,20 @@ export default class AFKModule extends ModuleStructure {
 
     async authorAFK(message: Message) {
         const userData = await this.client.getData(message.author.id, 'user');
-        const { AFK } = userData;
 
-        if (AFK.away) {
-            await userData.set({
-                'AFK.away': false,
-                'AFK.reason': null,
-                'AFK.lastNickname': AFK.lastNickname ?? null
-            }).save();
+        if (userData) {
+            const { AFK } = userData;
 
-            message.member?.setNickname(userData.AFK.lastNickname ?? message.author.username).catch(() => undefined);
-            return void message.reply({ content: `🤗・${message.author}, você não está mais AFK!` });
+            if (AFK.away) {
+                await userData.set({
+                    'AFK.away': false,
+                    'AFK.reason': null,
+                    'AFK.lastNickname': AFK.lastNickname ?? null
+                }).save();
+
+                message.member?.setNickname(userData.AFK.lastNickname ?? message.author.username).catch(() => undefined);
+                return void message.reply({ content: `🤗・${message.author}, você não está mais AFK!` });
+            }
         }
     }
 }

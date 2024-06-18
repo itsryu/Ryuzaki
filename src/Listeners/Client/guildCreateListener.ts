@@ -42,7 +42,7 @@ export default class guildCreateListener extends ListenerStructure {
                         inline: true
                     });
 
-            guildData.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } });
+            guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } });
 
             if (!guild.members.me?.permissions.has(PermissionFlagsBits.ManageGuild)) {
                 const channels = await guild.channels.fetch();

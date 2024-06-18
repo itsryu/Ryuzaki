@@ -14,7 +14,9 @@ export default class PayCommand extends CommandStructure {
         const amount = args[1];
         const userData = await this.client.getData(message.author.id, 'user');
 
-        if (!member) {
+        if (!userData) {
+            return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+        } else if (!member) {
             return void message.reply({ content: 'Você deve `mencionar um usuário ou inserir o ID` para enviar uma determinada quantia de dinheiro.' });
         } else if (member.user.bot) {
             return void message.reply({ content: 'Você não pode enviar dinheiro para um BOT.' });
@@ -34,36 +36,40 @@ export default class PayCommand extends CommandStructure {
             } else {
                 const target = await this.client.getData(member.id, 'user');
 
-                const msg = await message.reply({ content: `Você deseja enviar **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) para o(a) ${member}?!` });
-                await msg.react('✅');
-                await msg.react('❌');
+                if (!target) {
+                    return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+                } else {
+                    const msg = await message.reply({ content: `Você deseja enviar **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) para o(a) ${member}?!` });
+                    await msg.react('✅');
+                    await msg.react('❌');
 
-                const filter = (reaction: MessageReaction, user: User) => reaction.message.id === msg.id && user.id === message.author.id;
-                const collector = msg.createReactionCollector({ filter, time: 60000, max: 1 });
+                    const filter = (reaction: MessageReaction, user: User) => reaction.message.id === msg.id && user.id === message.author.id;
+                    const collector = msg.createReactionCollector({ filter, time: 60000, max: 1 });
 
-                collector.on('end', () => {
-                    msg.reactions.removeAll();
-                });
+                    collector.on('end', () => {
+                        msg.reactions.removeAll();
+                    });
 
-                collector.on('collect', async (reaction) => {
-                    if (reaction.emoji.name === '✅') {
-                        userData.set({
-                            'economy.bank': userData.economy.bank - money
-                        });
-                        await userData.save();
+                    collector.on('collect', async (reaction) => {
+                        if (reaction.emoji.name === '✅') {
+                            userData.set({
+                                'economy.bank': userData.economy.bank - money
+                            });
+                            await userData.save();
 
-                        target.set({
-                            'economy.bank': target.economy.bank + money
-                        });
-                        await target.save();
+                            target.set({
+                                'economy.bank': target.economy.bank + money
+                            });
+                            await target.save();
 
-                        return void msg.edit({ content: `Você enviou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) com sucesso para o(a) ${member}.` });
-                    }
+                            return void msg.edit({ content: `Você enviou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) com sucesso para o(a) ${member}.` });
+                        }
 
-                    if (reaction.emoji.name === '❌') {
-                        return void msg.edit({ content: `${message.author}, envio de dinheiro cancelado.` });
-                    }
-                });
+                        if (reaction.emoji.name === '❌') {
+                            return void msg.edit({ content: `${message.author}, envio de dinheiro cancelado.` });
+                        }
+                    });
+                }
             }
         }
     }

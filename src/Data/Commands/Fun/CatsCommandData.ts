@@ -35,6 +35,7 @@ class CatsCommandDataConstructor extends CommandData {
                 cooldown: 5,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: false
             }

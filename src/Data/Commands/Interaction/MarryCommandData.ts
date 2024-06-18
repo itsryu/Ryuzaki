@@ -35,6 +35,7 @@ class MarryCommandDataConstructor extends CommandData {
                 cooldown: 30,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: true,
                 args: false
             },

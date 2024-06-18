@@ -35,6 +35,7 @@ class CalculatorCommandDataConstructor extends CommandData {
                 cooldown: 60 * 2,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: false
             }

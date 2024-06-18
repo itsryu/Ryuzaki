@@ -31,6 +31,7 @@ class RyuCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: false
             }

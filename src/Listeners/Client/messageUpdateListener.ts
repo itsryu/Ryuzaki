@@ -14,7 +14,7 @@ export default class messageUpdateListener extends ListenerStructure {
             if (newMessage.guild && newMessage.author && !newMessage.author.bot) {
                 const guildData = await this.client.getData(newMessage.guild.id, 'guild');
 
-                if (guildData.logs.status && guildData.logs.messages) {
+                if (guildData && guildData.logs.status && guildData.logs.messages) {
                     if (oldMessage.content === newMessage.content) return;
 
                     const embed = new ClientEmbed(this.client)

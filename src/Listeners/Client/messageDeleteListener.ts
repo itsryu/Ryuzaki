@@ -16,7 +16,7 @@ export default class MessageDeleteListener extends ListenerStructure {
             if (message.guild) {
                 const guildData = await this.client.getData(message.guild.id, 'guild');
 
-                if (guildData.logs.status && guildData.logs.messages) {
+                if (guildData && guildData.logs.status && guildData.logs.messages) {
                     const embed = new ClientEmbed(this.client)
                         .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
                         .setAuthor({ name: `Mensagem deletada - ${message.guild.name}`, iconURL: message.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })

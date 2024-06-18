@@ -39,10 +39,12 @@ export default class VipModule extends ModuleStructure {
                 if (user) {
                     const userData = await this.client.getData(user.id, 'user');
 
-                    await userData.set({ 'vip.date': 0, 'vip.hasVip': false }).save();
+                    if (userData) {
+                        await userData.set({ 'vip.date': 0, 'vip.hasVip': false }).save();
 
-                    user.send({ content: `${user}, o seu VIP foi removido.` }).catch(() => undefined);
-                    this.client.logger.info(`Retirado o VIP de ${user.tag}`, 'VIP');
+                        user.send({ content: `${user}, o seu VIP foi removido.` }).catch(() => undefined);
+                        this.client.logger.info(`Retirado o VIP de ${user.tag}`, 'VIP');
+                    }
                 }
             }
             vipSize--;

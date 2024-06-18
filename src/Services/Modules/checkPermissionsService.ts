@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { PermissionsFlagsText, PermissionFlagKey } from '../../Utils/Objects/flags';
 import { ServiceStructure, ClientEmbed, CommandStructure } from '../../Structures';
-import { Message, PermissionsBitField } from 'discord.js';
+import { ChannelType, Message, PermissionsBitField } from 'discord.js';
 
 export default class checkPermissionsService extends ServiceStructure {
     constructor(client: Ryuzaki) {
@@ -13,15 +13,15 @@ export default class checkPermissionsService extends ServiceStructure {
 
     serviceExecute({ message, command, language }: { message: Message, command: CommandStructure, language: string }) {
         try {
-            if (command.data.options.permissions.client.length > 0 && !message.guild?.members.me?.permissions.has(command.data.options.permissions.client)) {
+            if (message.channel.type === ChannelType.DM) {
+                return true;
+            } else if (command.data.options.permissions.client.length > 0 && !message.guild?.members.me?.permissions.has(command.data.options.permissions.client)) {
                 return this.sendPermissionError(message, language, command, true);
-            }
-
-            if (command.data.options.permissions.member.length > 0 && !message.member?.permissions.has(command.data.options.permissions.member)) {
+            } else if (command.data.options.permissions.member.length > 0 && !message.member?.permissions.has(command.data.options.permissions.member)) {
                 return this.sendPermissionError(message, language, command, false);
+            } else {
+                return true;
             }
-
-            return true;
         } catch (err) {
             this.client.logger.error((err as Error).message, checkPermissionsService.name);
             this.client.logger.warn((err as Error).stack!, checkPermissionsService.name);

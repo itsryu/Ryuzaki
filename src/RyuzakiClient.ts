@@ -93,12 +93,22 @@ export class Ryuzaki extends Client {
 
     public async getLanguage(id: string): Promise<Languages> {
         const guild = this.guilds.cache.get(id);
-        const guildData = await this.getData(guild?.id, 'guild');
-        const languages: Languages[] = ['pt-BR', 'en-US'];
+        const user = guild ? null : await this.users.fetch(id).catch(() => undefined);
 
-        guildData.updateOne({ $set: { lang: languages.some((lang) => lang === guild?.preferredLocale) ? guild?.preferredLocale : 'en-US' } }, { new: true });
+        if (guild) {
+            const guildData = await this.getData(guild?.id, 'guild');
+            const languages: Languages[] = ['pt-BR', 'en-US', 'es-ES'];
 
-        return guildData.lang as Languages;
+            guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild?.preferredLocale) ? guild?.preferredLocale : 'en-US' } }, { new: true });
+
+            return guildData?.lang as Languages;
+        } else {
+            const userData = await this.getData(user?.id, 'user');
+
+            userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
+
+            return userData?.lang as Languages;
+        }
     }
 
     public async getTranslate(id: string) {
@@ -112,64 +122,88 @@ export class Ryuzaki extends Client {
     public async getData<T extends DataType>(
         id: string | undefined,
         type: T
-    ): Promise<DataDocument<T>> {
+    ): Promise<DataDocument<T> | undefined> {
         switch (type) {
             case 'user': {
-                let data = await this.database.users.findOne({ _id: id });
+                const user = await this.users.fetch(id!).catch(() => undefined);
 
-                try {
-                    if (!data) {
-                        data = await this.database.users.create({ _id: id });
-                    }
+                if (user) {
+                    let data = await this.database.users.findOne({ _id: user.id });
 
-                    return data as any;
-                } catch (err) {
-                    if ((err as MongoError).code === 11000) {
-                        this.logger.error(err as string, 'getData');
-                    } else {
-                        this.logger.error((err as Error).stack!, 'getData');
+                    try {
+                        if (!data) {
+                            data = await this.database.users.create({ _id: user.id });
+                        }
+
+                        return data as any;
+                    } catch (err) {
+                        if ((err as MongoError).code === 11000) {
+                            this.logger.error(err as string, 'getData');
+                        } else {
+                            this.logger.error((err as Error).stack!, 'getData');
+                        }
                     }
+                } else {
+                    return undefined;
                 }
             }
             case 'guild': {
-                try {
-                    let data = await this.database.guilds.findOne({ _id: id });
+                const guild = this.guilds.cache.get(id!);
 
-                    if (!data) {
-                        data = await this.database.guilds.create({ _id: id });
+                if (guild) {
+                    try {
+                        let data = await this.database.guilds.findOne({ _id: guild.id });
+
+                        if (!data) {
+                            data = await this.database.guilds.create({ _id: guild.id });
+                        }
+
+                        return data as any;
+                    } catch (err) {
+                        this.logger.error((err as Error).stack!, 'getData');
                     }
-
-                    return data as any;
-                } catch (err) {
-                    this.logger.error((err as Error).stack!, 'getData');
+                } else {
+                    return undefined;
                 }
             }
             case 'client': {
-                try {
-                    let data = await this.database.client.findOne({ _id: id });
+                const client = this.user;
 
-                    if (!data) {
-                        data = await this.database.client.create({ _id: id });
+                if (client?.id === id!) {
+                    try {
+                        let data = await this.database.client.findOne({ _id: id });
+
+                        if (!data) {
+                            data = await this.database.client.create({ _id: id });
+                        }
+
+                        return data as any;
+                    } catch (err) {
+                        this.logger.error((err as Error).stack!, 'getData');
                     }
-
-                    return data as any;
-                } catch (err) {
-                    this.logger.error((err as Error).stack!, 'getData');
+                } else {
+                    return undefined;
                 }
             }
             case 'command': {
-                try {
-                    let data = await this.database.commands.findOne({ _id: id });
+                const command = this.commands.get(id!);
 
-                    if (!data) {
-                        data = await this.database.commands.create({ _id: id });
+                if (command) {
+                    try {
+                        let data = await this.database.commands.findOne({ _id: id });
 
-                        console.log(`The command: (${data._id}) had his documentation create successfully!`);
+                        if (!data) {
+                            data = await this.database.commands.create({ _id: id });
+
+                            console.log(`The command: (${data._id}) had his documentation create successfully!`);
+                        }
+
+                        return data as any;
+                    } catch (err) {
+                        this.logger.error((err as Error).stack!, 'getData');
                     }
-
-                    return data as any;
-                } catch (err) {
-                    this.logger.error((err as Error).stack!, 'getData');
+                } else {
+                    return undefined;
                 }
             }
             default: {

@@ -120,6 +120,8 @@ interface GuildDocument extends Document {
 
 interface UserDocument extends Document {
     _id: string,
+    prefix: string,
+    lang: string,
     about: string,
     profile: {
         layout: number,

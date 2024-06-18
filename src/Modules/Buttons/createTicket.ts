@@ -10,101 +10,104 @@ export default class createTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction) {
         try {
             if (interaction.guild) {
-                const user = await this.client.getData(interaction.user.id, 'user');
-                const guild = await this.client.getData(interaction.guild.id, 'guild');
+                const userData = await this.client.getData(interaction.user.id, 'user');
+                const guildData = await this.client.getData(interaction.guild.id, 'guild');
 
-                if (user.ticket.have) {
+                if (!userData || !guildData) {
+                    return void interaction.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+                } else if (userData.ticket.have) {
                     return void interaction.reply({ content: `${interaction.user}, você já possui um **ticket** aberto.`, ephemeral: true });
-                } else if (!guild.ticket.staff) {
+                } else if (!guildData.ticket.staff) {
                     return void interaction.reply({ content: 'Não é possível utilizar este comando pois não há um cargo de ticket definido neste servidor.', ephemeral: true });
-                } else if (!guild.ticket.category) {
+                } else if (!guildData.ticket.category) {
                     return void interaction.reply({ content: 'Não é possível utilizar este comando pois não há uma categoria de ticket definida neste servidor.', ephemeral: true });
-                }
-
-                const categoryID = interaction.customId.split('-')[1];
-                const tch = interaction.guild.channels.cache.get(guild.ticket.category);
-
-                if (!tch) {
-                    return void interaction.reply({ content: 'Há uma categoria de ticket definida neste servidor porém ela não existe mais, peça para algum administrador atualiza-la no BOT.' });
                 } else {
-                    interaction.reply({ content: `${interaction.user}, estou criando seu ticket, aguarde um momento..`, ephemeral: true });
+                    const categoryID = interaction.customId.split('-')[1];
+                    const tch = interaction.guild.channels.cache.get(guildData.ticket.category);
 
-                    const channel = await interaction.guild.channels.create({
-                        name: `${guild.ticket.size + 1}-${interaction.user.tag}`,
-                        type: ChannelType.GuildText,
-                        parent: tch.id,
-                        permissionOverwrites: [
-                            {
-                                id: interaction.user.id,
-                                allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.SendMessages]
-                            },
-                            {
-                                id: interaction.guild.id,
-                                deny: [PermissionFlagsBits.ViewChannel]
-                            },
-                            {
-                                id: guild.ticket.staff,
-                                allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.SendMessages]
-                            }
-                        ]
-                    });
-                    const roleStaff = interaction.guild.roles.cache.get(guild.ticket.staff);
-                    const criado = new ClientEmbed(this.client)
-                        .setThumbnail(interaction.user.displayAvatarURL({ extension: 'png', size: 4096 }))
-                        .setDescription(`${interaction.user}, aqui está seu **ticket**. Espere pelo atendimento da nossa equipe.`)
-                        .setFields(
-                            {
-                                name: 'Obs:',
-                                value: `・Este ticket é privado apenas **para você** e a **equipe do servidor** (${roleStaff}), fique a vontade para tratar de assuntos que **outros membros** não possam saber.\n・Quando você quiser **fechar** este ticket, basta clicar no botão abaixo.`
-                            });
+                    if (!tch) {
+                        return void interaction.reply({ content: 'Há uma categoria de ticket definida neste servidor porém ela não existe mais, peça para algum administrador atualiza-la no BOT.' });
+                    } else {
+                        interaction.reply({ content: `${interaction.user}, estou criando seu ticket, aguarde um momento..`, ephemeral: true });
 
-                    const close = new ButtonBuilder()
-                        .setCustomId('close')
-                        .setEmoji('💢')
-                        .setLabel('Clique para fechar')
-                        .setStyle(ButtonStyle.Danger);
+                        const channel = await interaction.guild.channels.create({
+                            name: `${guildData.ticket.size + 1}-${interaction.user.tag}`,
+                            type: ChannelType.GuildText,
+                            parent: tch.id,
+                            permissionOverwrites: [
+                                {
+                                    id: interaction.user.id,
+                                    allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.SendMessages]
+                                },
+                                {
+                                    id: interaction.guild.id,
+                                    deny: [PermissionFlagsBits.ViewChannel]
+                                },
+                                {
+                                    id: guildData.ticket.staff,
+                                    allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.SendMessages]
+                                }
+                            ]
+                        });
+                        const roleStaff = interaction.guild.roles.cache.get(guildData.ticket.staff);
+                        const criado = new ClientEmbed(this.client)
+                            .setThumbnail(interaction.user.displayAvatarURL({ extension: 'png', size: 4096 }))
+                            .setDescription(`${interaction.user}, aqui está seu **ticket**. Espere pelo atendimento da nossa equipe.`)
+                            .setFields(
+                                {
+                                    name: 'Obs:',
+                                    value: `・Este ticket é privado apenas **para você** e a **equipe do servidor** (${roleStaff}), fique a vontade para tratar de assuntos que **outros membros** não possam saber.\n・Quando você quiser **fechar** este ticket, basta clicar no botão abaixo.`
+                                });
 
-                    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(close);
+                        const close = new ButtonBuilder()
+                            .setCustomId('close')
+                            .setEmoji('💢')
+                            .setLabel('Clique para fechar')
+                            .setStyle(ButtonStyle.Danger);
 
-                    channel.send({ content: `${interaction.user} ${roleStaff}`, embeds: [criado], components: [row] });
+                        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(close);
 
-                    user.set({
-                        'ticket.have': true,
-                        'ticket.channel': channel.id,
-                        'ticket.created': Date.now()
-                    });
-                    user.save();
+                        channel.send({ content: `${interaction.user} ${roleStaff}`, embeds: [criado], components: [row] });
 
-                    guild.set('ticket.size', guild.ticket.size + 1);
-                    guild.save();
+                        userData.set({
+                            'ticket.have': true,
+                            'ticket.channel': channel.id,
+                            'ticket.created': Date.now()
+                        });
+                        await userData.save();
 
-                    const opened = new ClientEmbed(this.client)
-                        .setTitle('Um novo ticket foi aberto')
-                        .setURL(`https://discord.com/channels/${interaction.guild.id}/${channel.id}`)
-                        .setDescription(`Um novo ticket foi aberto por ${interaction.user}.`);
+                        guildData.set('ticket.size', guildData.ticket.size + 1);
+                        guildData.save();
 
-                    const button = new ButtonBuilder()
-                        .setLabel('Ir para o canal')
-                        .setEmoji('📤')
-                        .setURL(`https://discord.com/channels/${interaction.guild.id}/${channel.id}`)
-                        .setStyle(ButtonStyle.Secondary);
+                        const opened = new ClientEmbed(this.client)
+                            .setTitle('Um novo ticket foi aberto')
+                            .setURL(`https://discord.com/channels/${interaction.guild.id}/${channel.id}`)
+                            .setDescription(`Um novo ticket foi aberto por ${interaction.user}.`);
 
-                    const to = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+                        const button = new ButtonBuilder()
+                            .setLabel('Ir para o canal')
+                            .setEmoji('📤')
+                            .setURL(`https://discord.com/channels/${interaction.guild.id}/${channel.id}`)
+                            .setStyle(ButtonStyle.Secondary);
 
-                    if (guild.logs.status && guild.logs.moderation) {
-                        const channel = interaction.guild.channels.cache.get(guild.logs.channel) as TextChannel;
-                        channel.send({ embeds: [opened], components: [to] }).catch(() => undefined);
+                        const to = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+
+                        if (guildData.logs.status && guildData.logs.moderation) {
+                            const channel = interaction.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
+                            channel.send({ embeds: [opened], components: [to] }).catch(() => undefined);
+                        }
+
+                        interaction.followUp({ content: `${interaction.user}, o seu ticket foi criado com sucesso no canal: ${channel}`, ephemeral: true });
                     }
 
-                    interaction.followUp({ content: `${interaction.user}, o seu ticket foi criado com sucesso no canal: ${channel}`, ephemeral: true });
-                }
+                    guildData.set({
+                        'ticket.msg': categoryID,
+                        'ticket.channel': interaction.channel?.id,
+                        'ticket.guild': interaction.guild.id
+                    });
 
-                guild.set({
-                    'ticket.msg': categoryID,
-                    'ticket.channel': interaction.channel?.id,
-                    'ticket.guild': interaction.guild.id
-                });
-                guild.save();
+                    await guildData.save();
+                }
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, createTicketButton.name);

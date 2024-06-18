@@ -13,7 +13,9 @@ export default class marryCommand extends CommandStructure {
         const user = message.mentions?.users.first() ?? await this.client.users.fetch(args[0]).catch(() => { });
         const userData = await this.client.getData(message.author.id, 'user');
 
-        if (!args.length) {
+        if (!userData) {
+            return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+        } else if (!args.length) {
             const singleEmbed = new ClientEmbed(this.client)
                 .setTitle(this.client.t('interaction:marry:embeds:single.title', { emoji: emojis.ring }))
                 .setDescription(this.client.t('interaction:marry:embeds:single.description', { author: message.author }))
@@ -38,7 +40,9 @@ export default class marryCommand extends CommandStructure {
             } else {
                 const targetData = await this.client.getData(user.id, 'user');
 
-                if (userData.marry.has) {
+                if (!targetData) {
+                    return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+                } else if (userData.marry.has) {
                     return void message.reply({ content: this.client.t('interaction:marry:errors.userAlreadyMarried') });
                 } else if (targetData.marry.has) {
                     return void message.reply({ content: this.client.t('interaction:marry:errors.targetAlreadyMarried') });

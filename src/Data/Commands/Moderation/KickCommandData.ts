@@ -35,6 +35,7 @@ class KickCommandDataConstructor extends CommandData {
                 cooldown: 0,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: true,
                 args: true
             },

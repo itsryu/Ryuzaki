@@ -12,10 +12,10 @@ export default class guildMemberRemoveListener extends ListenerStructure {
     async eventExecute(member: GuildMember) {
         try {
             const guild = member.guild;
-            const server = await this.client.getData(guild.id, 'guild');
+            const guildData = await this.client.getData(guild.id, 'guild');
 
-            if (server.serverstats.status) {
-                const st = server.serverstats;
+            if (guildData && guildData.serverstats.status) {
+                const st = guildData.serverstats;
                 const ch = st.channels;
 
                 if (ch.total != null) {
@@ -37,8 +37,8 @@ export default class guildMemberRemoveListener extends ListenerStructure {
                 }
             }
 
-            if (server.counter.status) {
-                (this.client.channels.cache.get(server.counter.channel) as TextChannel).setTopic(server.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
+            if (guildData && guildData.counter.status) {
+                (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
 
         } catch (err) {

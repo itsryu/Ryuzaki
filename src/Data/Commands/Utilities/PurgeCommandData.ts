@@ -5,15 +5,15 @@ class PurgeCommandDataConstructor extends CommandData {
     constructor() {
         super({
             name: 'purge',
-            description: 'Clears [1-100] messages from the user where the command was executed.',
+            description: 'Purges [1-100] messages from the user where the command was executed.',
             type: ApplicationCommandType.ChatInput,
             name_localizations: {
-                'pt-BR': 'limpar',
-                'en-US': 'clear'
+                'pt-BR': 'purgar',
+                'en-US': 'purge'
             },
             description_localizations: {
-                'pt-BR': 'Limpa [1-100] mensagens do usuário onde o comando foi executado.',
-                'en-US': 'Clears [1-100] messages from the user where the command was executed.'
+                'pt-BR': 'Purga [1-100] mensagens do usuário onde o comando foi executado.',
+                'en-US': 'Purges [1-100] messages from the user where the command was executed.'
             },
             category: {
                 'pt-BR': '🛠️ Moderação',
@@ -35,6 +35,7 @@ class PurgeCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: true,
                 args: true
             },

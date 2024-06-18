@@ -35,6 +35,7 @@ class PrefixCommandDataConstructor extends CommandData {
                 cooldown: 60,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: false
             }

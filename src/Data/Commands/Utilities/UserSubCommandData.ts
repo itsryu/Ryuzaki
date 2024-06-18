@@ -33,8 +33,9 @@ class UserSubCommandDataConstructor extends CommandData {
             },
             config: {
                 cooldown: 10,
-                devOnly: true,
+                devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: true
             },

@@ -14,6 +14,7 @@ class BannerContextCommandDataConstructor extends ContextCommandData {
                 cooldown: 10,
                 devOnly: false,
                 interactionOnly: true,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: false
             }

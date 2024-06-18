@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
-import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction } from 'discord.js';
+import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType } from 'discord.js';
 
 export default class interactionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -11,23 +11,24 @@ export default class interactionCreateListener extends ListenerStructure {
 
     async eventExecute(interaction: Interaction) {
         try {
-            if (interaction.user.bot || !interaction.guild) return;
+            if (interaction.user.bot) return;
 
             const client = await this.client.getData(this.client.user?.id, 'client');
-            const server = await this.client.getData(interaction.guild.id, 'guild');
+            const server = await this.client.getData(interaction.guild?.id, 'guild');
+            const user = await this.client.getData(interaction.user.id, 'user');
 
             //===============> Módulo de tradução <===============//
 
-            const language = await this.client.getLanguage(interaction.guild.id);
-            await this.client.getTranslate(interaction.guild.id);
+            const language = await this.client.getLanguage(interaction.guild ? interaction.guild.id : interaction.user.id);
+            await this.client.getTranslate(interaction.guild ? interaction.guild.id : interaction.user.id);
 
-            const prefix = server.prefix ?? process.env.PREFIX;
+            const prefix = server ? server.prefix : user ? user.prefix : process.env.PREFIX;
             const args: string[] = [];
 
             //===============> Comandos <===============//
 
             if (interaction.isCommand() || interaction.isContextMenuCommand()) {
-                if (!(interaction.channel as TextChannel).permissionsFor(interaction.guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
+                if (interaction.guild && !(interaction.channel as TextChannel).permissionsFor(interaction.guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
                     return void interaction.reply({ content: this.client.t('main:permissions.alert', { index: 3, member: interaction.member }), ephemeral: true });
                 }
 
@@ -91,7 +92,7 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         //===============> Registrando comandos no banco de dados:
 
-                        const cmdDb = await this.client.getData(command.data.options.name, 'command');
+                        const commandData = await this.client.getData(command.data.options.name, 'command');
 
                         //===============> Manutenção do bot e comandos do bot:
 
@@ -107,7 +108,7 @@ export default class interactionCreateListener extends ListenerStructure {
                             timestamps?.set(interaction.user.id, now);
                             setTimeout(() => timestamps?.delete(interaction.user.id), cooldownAmount);
 
-                            if (server.cmdblock.status) {
+                            if (server?.cmdblock.status) {
                                 if (!(interaction.member?.permissions as Readonly<PermissionsBitField>).has(PermissionFlagsBits.ManageMessages)) {
                                     if (server.cmdblock.cmds.some((x) => x === command.data.options.name) || server.cmdblock.channels.some((x) => x === interaction.channel?.id)) {
                                         return void interaction.reply({ content: server.cmdblock.msg.replace(/{member}/g, `<@${interaction.user.id}>`).replace(/{channel}/g, `<#${interaction.channel?.id}`).replace(/{cmd}/g, command.data.options.name), ephemeral: true });
@@ -115,11 +116,11 @@ export default class interactionCreateListener extends ListenerStructure {
                                 }
                             }
 
-                            if (cmdDb.maintenance) {
+                            if (commandData?.maintenance) {
                                 return void interaction.reply({ embeds: [mainCmd], ephemeral: true });
-                            } else if (client.maintenance) {
+                            } else if (client?.maintenance) {
                                 return void interaction.reply({ embeds: [mainBot], ephemeral: true });
-                            } else if (client.blacklist.some((x) => x == interaction.user.id)) {
+                            } else if (client?.blacklist.some((x) => x == interaction.user.id)) {
                                 return void interaction.reply({ content: this.client.t('main:blacklist.user', { user: interaction.user }), ephemeral: true });
                             }
                         }
@@ -128,6 +129,12 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         if (command.data.options.config.devOnly && !this.client.developers.some((id) => [id].includes(interaction.user.id))) {
                             return void interaction.reply({ content: this.client.t('main:owner.reply', { client: this.client.user?.username }), ephemeral: true });
+                        }
+
+                        //===============> Comandos de DM:
+
+                        if (interaction.channel?.type === ChannelType.DM && !command.data.options.config.isDMAllowed) {
+                            return void interaction.reply({ content: `${interaction.user}, este comando não pode ser executado em sua DM, tente executa-lo em um servidor.` });
                         }
 
                         //===============> Execução dos comandos:
@@ -182,11 +189,11 @@ export default class interactionCreateListener extends ListenerStructure {
                         interactionExecute.then(() => {
                             if (![process.env.OWNER_ID].includes(interaction.user.id) && interaction.guild) {
                                 const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
-    
+
                                 const keyByValue = (enumObject: object, value: number): string | undefined => {
                                     return Object.keys(enumObject).find(key => enumObject[key] === value);
                                 };
-    
+
                                 const whEmbed = new ClientEmbed(this.client)
                                     .setThumbnail(interaction.user.displayAvatarURL({ extension: 'png', size: 4096 }))
                                     .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
@@ -207,13 +214,12 @@ export default class interactionCreateListener extends ListenerStructure {
                                             name: 'What was executed:',
                                             value: `**\`/${command.data.options.name}\`**`
                                         });
-    
+
                                 webHook.send({ embeds: [whEmbed] });
                             }
 
-                            const num = cmdDb.usages;
-
-                            cmdDb.updateOne({ $set: { usages: num + 1 }});
+                            const num = commandData?.usages || 0;
+                            commandData?.updateOne({ $set: { usages: num + 1 } });
                         });
                     } catch (err) {
                         this.client.logger.error((err as Error).message, interactionCreateListener.name);

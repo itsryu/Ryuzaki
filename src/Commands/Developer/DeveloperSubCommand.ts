@@ -11,8 +11,6 @@ export default class DeveloperSubCommand extends CommandStructure {
 
     // @ts-ignore
     async commandExecute({ message, args, prefix, language }: { message: Message, args: string[], prefix: string, language: string }) {
-        const client = await this.client.getData(this.client.user?.id, 'client');
-
         switch (args[0]) {
             case 'eval': {
                 let current = 0;
@@ -83,22 +81,28 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 if (!command) {
                                     return void void message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
                                 } else {
-                                    const commandDb = await this.client.getData(command.data.options.name, 'command');
+                                    const commandData = await this.client.getData(command.data.options.name, 'command');
 
-                                    if (commandDb.maintenance) {
+                                    if (!commandData) {
+                                        return void message.reply({ content: `Erro ao obter os dados do comando \`${command.data.options.name}\`. Tente novamente mais tarde.` });
+                                    } else if (commandData.maintenance) {
                                         return void void message.reply({ content: `O comando \`${command.data.options.name}\` já se encontra em manutenção.` });
                                     } else {
-                                        await commandDb.updateOne({ $set: { maintenance: true } }, { new: true });
+                                        await commandData.updateOne({ $set: { maintenance: true } }, { new: true });
                                         return void message.reply({ content: `O comando \`${command.data.options.name}\` foi adicionado com sucesso da manutenção.` });
                                     }
                                 }
                             }
 
                             case 'client': {
-                                if (client.maintenance) {
+                                const clientData = await this.client.getData(this.client.user?.id, 'client');
+
+                                if (!clientData) {
+                                    return void message.reply({ content: `Erro ao obter os dados do \`${this.client.user?.username}\`. Tente novamente mais tarde.` });
+                                } else if (clientData.maintenance) {
                                     return void message.reply({ content: `O \`${this.client.user?.username}\` já se encontra em manutenção.` });
                                 } else {
-                                    await client.updateOne({ $set: { maintenance: true } }, { new: true });
+                                    await clientData.updateOne({ $set: { maintenance: true } }, { new: true });
                                     return void message.reply({ content: `O \`${this.client.user?.username}\` foi adicionado com sucesso em manutenção.` });
                                 }
                             }
@@ -115,22 +119,28 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 if (!command) {
                                     return void message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
                                 } else {
-                                    const commandDb = await this.client.getData(command.data.options.name, 'command');
+                                    const commandData = await this.client.getData(command.data.options.name, 'command');
 
-                                    if (!commandDb.maintenance) {
+                                    if (!commandData) {
+                                        return void message.reply({ content: `Erro ao obter os dados do comando \`${command.data.options.name}\`. Tente novamente mais tarde.` });
+                                    } else if (!commandData.maintenance) {
                                         return void message.reply({ content: `O comando \`${command.data.options.name}\` não se encontra em manutenção.` });
                                     } else {
-                                        await commandDb.updateOne({ $set: { maintenance: false } }, { new: true });
+                                        await commandData.updateOne({ $set: { maintenance: false } }, { new: true });
                                         return void message.reply({ content: `O comando \`${command.data.options.name}\` foi removido com sucesso da manutenção.` });
                                     }
                                 }
                             }
 
                             case 'client': {
-                                if (!client.maintenance) {
+                                const clientData = await this.client.getData(this.client.user?.id, 'client');
+
+                                if (!clientData) {
+                                    return void message.reply({ content: `Erro ao obter os dados do \`${this.client.user?.username}\`. Tente novamente mais tarde.` });
+                                } else if (!clientData.maintenance) {
                                     return void message.reply({ content: `O \`${this.client.user?.username}\` não se encontra em manutenção.` });
                                 } else {
-                                    await client.updateOne({ $set: { maintenance: false } }, { new: true });
+                                    await clientData.updateOne({ $set: { maintenance: false } }, { new: true });
                                     return void message.reply({ content: `O \`${this.client.user?.username}\` foi removido com sucesso da manutenção.` });
                                 }
                             }
@@ -144,13 +154,16 @@ export default class DeveloperSubCommand extends CommandStructure {
                 switch (args[1]) {
                     case 'add': {
                         const user = await this.client.users.fetch(args[3]).catch(() => undefined);
+                        const clientData = await this.client.getData(this.client.user?.id, 'client');
 
                         if (!user) {
                             return void message.reply({ content: 'Não pude localizar nenhum usuário com as informações fornecidas.' });
-                        } else if (client.blacklist.some((id) => user.id === id)) {
+                        } else if (!clientData) {
+                            return void message.reply({ content: `Erro ao obter os dados do \`${this.client.user?.username}\`. Tente novamente mais tarde.` });
+                        } else if (clientData.blacklist.some((id) => user.id === id)) {
                             return void message.reply({ content: `O usuário \`${user.tag}\` já se encontra em minha lista negra.` });
                         } else {
-                            await client.updateOne({ $push: { blacklist: user.id } }, { new: true });
+                            await clientData.updateOne({ $push: { blacklist: user.id } }, { new: true });
 
                             return void message.reply({ content: `O usuário \`${user.tag}\` foi adicionado(a) com sucesso na minha lista negra.` });
                         }
@@ -158,13 +171,16 @@ export default class DeveloperSubCommand extends CommandStructure {
 
                     case 'remove': {
                         const user = await this.client.users.fetch(args[3]).catch(() => undefined);
+                        const clientData = await this.client.getData(this.client.user?.id, 'client');
 
                         if (!user) {
                             return void message.reply({ content: 'Não pude localizar nenhum usuário com as informações fornecidas.' });
-                        } else if (!client.blacklist.some((id) => user.id === id)) {
+                        } else if (!clientData) {
+                            return void message.reply({ content: `Erro ao obter os dados do \`${this.client.user?.username}\`. Tente novamente mais tarde.` });
+                        } else if (!clientData.blacklist.some((id) => user.id === id)) {
                             return void message.reply({ content: `O usuário \`${user.tag}\` não se encontra em minha lista negra.` });
                         } else {
-                            await client.updateOne({ $pull: { blacklist: user.id } }, { new: true });
+                            await clientData.updateOne({ $pull: { blacklist: user.id } }, { new: true });
 
                             return void message.reply({ content: `O usuário \`${user.tag}\` foi removido(a) com sucesso da minha lista negra.` });
                         }

@@ -35,6 +35,7 @@ class DeveloperSubCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: true,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: true
             },

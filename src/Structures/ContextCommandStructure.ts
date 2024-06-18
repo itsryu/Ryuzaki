@@ -12,6 +12,7 @@ interface RawContextCommandData extends RESTPostAPIContextMenuApplicationCommand
         cooldown: number,
         devOnly: boolean,
         interactionOnly: boolean,
+        isDMAllowed: boolean,
         registerSlash: boolean,
         args: boolean
     };

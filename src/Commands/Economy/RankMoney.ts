@@ -22,10 +22,16 @@ export default class RankMoneyCommand extends CommandStructure {
             if (user) {
                 const userData = await this.client.getData(user.id, 'user');
 
-                return {
-                    user: user,
-                    coins: userData.economy.coins + userData.economy.bank
-                };
+                if (userData) {
+                    return {
+                        user: user,
+                        coins: userData.economy.coins + userData.economy.bank
+                    };
+                } else {
+                    return undefined;
+                }
+            } else {
+                return undefined;
             }
         }));
 

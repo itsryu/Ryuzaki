@@ -25,7 +25,7 @@ export default class clearCommand extends CommandStructure {
                         .then(messages => {
                             const cleanedEmbed = this.cleanedEmbed(message, messages);
 
-                            if (guildData.logs.status && guildData.logs.moderation) {
+                            if (guildData && guildData.logs.status && guildData.logs.moderation) {
                                 const channel = message.guild?.channels.cache.get(guildData.logs.channel) as GuildTextBasedChannel;
                                 if (channel) channel.send({ embeds: [cleanedEmbed] });
                             }
@@ -42,7 +42,7 @@ export default class clearCommand extends CommandStructure {
                         .then(messages => {
                             const cleanedEmbed = this.cleanedEmbed(message, messages);
 
-                            if (guildData.logs.status && guildData.logs.moderation) {
+                            if (guildData && guildData.logs.status && guildData.logs.moderation) {
                                 const channel = message.guild?.channels.cache.get(guildData.logs.channel) as GuildTextBasedChannel;
                                 if (channel) channel.send({ embeds: [cleanedEmbed] });
                             }
@@ -59,7 +59,7 @@ export default class clearCommand extends CommandStructure {
                         .then(messages => {
                             const cleanedEmbed = this.cleanedEmbed(message, messages);
 
-                            if (guildData.logs.status && guildData.logs.moderation) {
+                            if (guildData && guildData.logs.status && guildData.logs.moderation) {
                                 const channel = message.guild?.channels.cache.get(guildData.logs.channel) as GuildTextBasedChannel;
                                 if (channel) channel.send({ embeds: [cleanedEmbed] });
                             }
@@ -74,7 +74,7 @@ export default class clearCommand extends CommandStructure {
                         .then(messages => {
                             const cleanedEmbed = this.cleanedEmbed(message, messages);
 
-                            if (guildData.logs.status && guildData.logs.moderation) {
+                            if (guildData && guildData.logs.status && guildData.logs.moderation) {
                                 const channel = message.guild?.channels.cache.get(guildData.logs.channel) as GuildTextBasedChannel;
                                 if (channel) channel.send({ embeds: [cleanedEmbed] });
                             }

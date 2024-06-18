@@ -35,6 +35,7 @@ class TestCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: true,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: false,
                 args: false
             }

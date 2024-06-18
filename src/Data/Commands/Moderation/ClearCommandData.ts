@@ -35,6 +35,7 @@ class ClearCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: true,
                 args: true
             },

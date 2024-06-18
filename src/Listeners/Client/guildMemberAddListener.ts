@@ -13,9 +13,9 @@ export default class guildMemberAddListener extends ListenerStructure {
     async eventExecute(member: GuildMember) {
         try {
             const guild = member.guild;
-            const guildDb = await this.client.getData(guild.id, 'guild');
+            const guildData = await this.client.getData(guild.id, 'guild');
 
-            if (guildDb.antifake.status) {
+            if (guildData && guildData.antifake.status) {
                 const kick = new ClientEmbed(this.client)
                     .setThumbnail(member.user.displayAvatarURL({ extension: 'png', size: 4096 }))
                     .addFields(
@@ -45,14 +45,14 @@ export default class guildMemberAddListener extends ListenerStructure {
                 const kickado = new ClientEmbed(this.client)
                     .setThumbnail(member.user.displayAvatarURL({ extension: 'png', size: 4096 }))
                     .setTitle('Você foi expulso(a)! 😔')
-                    .setDescription(`Olá, \`${member.user.username}\`, infelizmente você foi expulso(a) do servidor \`${guild.name}\` pelo \`sistema anti-fake\`, a sua conta foi criada faz ***\`${Day(new Date()).diff(member.user.createdAt, 'days')} dias\`*** e você deve ter mais de ***\`${guildDb.antifake.days} dias\`*** de criação de conta para entrar neste servidor.`);
+                    .setDescription(`Olá, \`${member.user.username}\`, infelizmente você foi expulso(a) do servidor \`${guild.name}\` pelo \`sistema anti-fake\`, a sua conta foi criada faz ***\`${Day(new Date()).diff(member.user.createdAt, 'days')} dias\`*** e você deve ter mais de ***\`${guildData.antifake.days} dias\`*** de criação de conta para entrar neste servidor.`);
 
                 const timeAccount = Day(new Date()).diff(member.user.createdAt, 'days');
-                const minimumDays = guildDb.antifake.days;
+                const minimumDays = guildData.antifake.days;
 
                 if (timeAccount < minimumDays) {
-                    if (guildDb.logs.status && guildDb.logs.moderation) {
-                        const channel = guild.channels.cache.get(guildDb.logs.channel) as TextChannel;
+                    if (guildData.logs.status && guildData.logs.moderation) {
+                        const channel = guild.channels.cache.get(guildData.logs.channel) as TextChannel;
 
                         channel.send({ embeds: [kick] });
                     }
@@ -62,7 +62,7 @@ export default class guildMemberAddListener extends ListenerStructure {
                 }
             }
 
-            if (guildDb.logs.status && guildDb.logs.invites) {
+            if (guildData && guildData.logs.status && guildData.logs.invites) {
                 if (guild.members.me?.permissions.has(PermissionFlagsBits.ManageGuild)) {
                     const newInvites = await guild.invites.fetch();
                     const cachedInvites = this.client.invites.get(member.guild.id);
@@ -82,7 +82,7 @@ export default class guildMemberAddListener extends ListenerStructure {
                         newInvites.each((inv) => cachedInvites.set(inv.code, inv));
                         this.client.invites.set(guild.id, cachedInvites);
 
-                        const channel = guild.channels.cache.get(guildDb.logs.channel) as TextChannel;
+                        const channel = guild.channels.cache.get(guildData.logs.channel) as TextChannel;
                         channel.send({ embeds: [embed] });
                     }
                 }
@@ -102,8 +102,8 @@ export default class guildMemberAddListener extends ListenerStructure {
                 member.roles.add(guildDb.autorole.roles, "Sistema de autorole");
             }*/
 
-            if (guildDb.serverstats.status) {
-                const st = guildDb.serverstats;
+            if (guildData && guildData.serverstats.status) {
+                const st = guildData.serverstats;
                 const ch = st.channels;
 
                 if (ch.total != null) {
@@ -125,8 +125,8 @@ export default class guildMemberAddListener extends ListenerStructure {
                 }
             }
 
-            if (guildDb.counter.status) {
-                (this.client.channels.cache.get(guildDb.counter.channel) as TextChannel).setTopic(guildDb.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
+            if (guildData && guildData.counter.status) {
+                (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, guildMemberAddListener.name);

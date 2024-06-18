@@ -31,6 +31,7 @@ class LogsCommandDataConstructor extends CommandData {
                 cooldown: 60,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: true,
                 args: false
             }

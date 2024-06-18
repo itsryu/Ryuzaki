@@ -10,16 +10,18 @@ export default class aboutModal extends ModuleStructure {
 
     async moduleExecute(interaction: ModalSubmitInteraction) {
         const user = interaction.user;
-        const userDb = await this.client.getData(user.id, 'user');
+        const userData = await this.client.getData(user.id, 'user');
         const about = interaction.fields.getTextInputValue('aboutInput');
 
-        userDb.set({ 'about': about });
-        userDb.save();
+        if (userData) {
+            userData.set({ 'about': about });
+            await userData.save();
 
-        const profileBuild = await (new profileConstructor(this.client).moduleExecute({ user, data: userDb, message: interaction }));
-        const attachment = new AttachmentBuilder(profileBuild.toBuffer('image/png'), { name: 'profile_card.png', description: 'Your profile card.' });
+            const profileBuild = await (new profileConstructor(this.client).moduleExecute({ user, data: userData, message: interaction }));
+            const attachment = new AttachmentBuilder(profileBuild.toBuffer('image/png'), { name: 'profile_card.png', description: 'Your profile card.' });
 
-        interaction.deferUpdate();
-        return interaction.message?.edit({ files: [attachment] });
+            interaction.deferUpdate();
+            return interaction.message?.edit({ files: [attachment] });
+        }
     }
 }

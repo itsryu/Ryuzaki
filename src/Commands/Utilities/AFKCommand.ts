@@ -9,16 +9,21 @@ export default class AFKCommand extends CommandStructure {
     }
 
     async commandExecute({ message, args }: { message: Message, args: string[] }) {
-        const user = await this.client.getData(message.author.id, 'user');
-        const reason = args.join(' ') || null;
+        const userData = await this.client.getData(message.author.id, 'user');
 
-        await user.set({
-            'AFK.away': true,
-            'AFK.lastNickname': message.member?.nickname ? message.member.nickname : message.author.username,
-            'AFK.reason': reason
-        }).save();
+        if (!userData) {
+            return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+        } else {
+            const reason = args.join(' ') || null;
 
-        message.member?.setNickname(`[AFK] ${message.member.nickname ?? message.author.username}`).catch(() => { });
-        return void message.reply({ content: this.client.t('utilities:AFK.success') });
+            await userData.set({
+                'AFK.away': true,
+                'AFK.lastNickname': message.member?.nickname ? message.member.nickname : message.author.username,
+                'AFK.reason': reason
+            }).save();
+
+            message.member?.setNickname(`[AFK] ${message.member.nickname ?? message.author.username}`).catch(() => { });
+            return void message.reply({ content: this.client.t('utilities:AFK.success') });
+        }
     }
 }

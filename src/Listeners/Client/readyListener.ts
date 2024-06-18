@@ -22,9 +22,9 @@ export default class readyListener extends ListenerStructure {
             //===============> Convite:
 
             this.client.guilds.cache.forEach(async (guild) => {
-                const guildDb = await this.client.getData(guild.id, 'guild');
+                const guildData = await this.client.getData(guild.id, 'guild');
 
-                if (guildDb.logs.invites) {
+                if (guildData && guildData.logs.invites) {
                     if (guild.members.me?.permissions.has(PermissionFlagsBits.ManageGuild)) {
                         const invites = await guild.invites.fetch();
                         const codeUses = new Collection<string, Invite>();

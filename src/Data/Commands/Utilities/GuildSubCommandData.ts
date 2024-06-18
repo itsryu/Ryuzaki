@@ -35,6 +35,7 @@ class GuildSubCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: true,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: true,
                 args: true
             },

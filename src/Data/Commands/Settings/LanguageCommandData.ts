@@ -35,6 +35,7 @@ class LanguageCommandDataConstructor extends CommandData {
                 cooldown: 20,
                 devOnly: false,
                 interactionOnly: false,
+                isDMAllowed: true,
                 registerSlash: true,
                 args: false
             },

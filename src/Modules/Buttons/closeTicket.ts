@@ -12,8 +12,8 @@ export default class closeTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction, language: Languages) {
         try {
             if (interaction.guild && interaction.channel) {
-                const user = await this.client.getData(interaction.user.id, 'user');
-                const guild = await this.client.getData(interaction.guild.id, 'guild');
+                const userData = await this.client.getData(interaction.user.id, 'user');
+                const guildData = await this.client.getData(interaction.guild.id, 'guild');
 
                 const save = new ButtonBuilder()
                     .setCustomId('save')
@@ -29,7 +29,7 @@ export default class closeTicketButton extends ModuleStructure {
 
                 const row = new ActionRowBuilder<ButtonBuilder>().addComponents(save, not_save);
                 const msg = await interaction.reply({ content: 'Você quer que eu envie o `log desse ticket` em seu privado?', components: [row], fetchReply: true });
-                const filter = (i: MessageComponentInteraction) => (i.user.id === interaction.user.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user}), ephemeral: true }), false);
+                const filter = (i: MessageComponentInteraction) => (i.user.id === interaction.user.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
                 const collector = msg.createMessageComponentCollector({ filter });
 
                 const messages = await (interaction.channel as TextChannel).messages.fetch();
@@ -55,82 +55,84 @@ export default class closeTicketButton extends ModuleStructure {
                                     return interaction.followUp({ content: 'Não pude enviar o arquivo em sua DM, então aqui esta ele:', files: [pathFile] });
                                 });
 
-                            if (guild.logs.status && guild.logs.moderation) {
-                                const channel = interaction.guild?.channels.cache.get(guild.logs.channel) as TextChannel;
+                            if (guildData && guildData.logs.status && guildData.logs.moderation) {
+                                const channel = interaction.guild?.channels.cache.get(guildData.logs.channel) as TextChannel;
                                 channel.send({ files: [pathFile] }).catch(() => undefined);
                             }
 
                             interaction.followUp('Irei `fechar o ticket e deletar o canal` daqui `15 segundos`.');
 
-                            setTimeout(() => {
+                            setTimeout(async () => {
                                 try {
-                                    interaction.channel?.delete();
-                                } catch (err) {
-                                    console.error(err); return;
-                                }
+                                    userData?.set({
+                                        'ticket.have': false,
+                                        'ticket.channel': null
+                                    });
+                                    await userData?.save();
 
-                                user.set({
-                                    'ticket.have': false,
-                                    'ticket.channel': null
-                                });
-                                user.save();
+                                    await interaction.channel?.delete();
+                                } catch (err) {
+                                    this.client.logger.error((err as Error).message, closeTicketButton.name);
+                                    this.client.logger.warn((err as Error).stack!, closeTicketButton.name);
+                                }
                             }, 15000);
                         } else {
                             interaction.followUp('O seu ticket não apresenta conversas. Irei `fechar o ticket e deletar` o canal daqui `5 segundos`.');
 
-                            setTimeout(() => {
+                            setTimeout(async () => {
                                 try {
-                                    interaction.channel?.delete();
+                                    userData?.set({
+                                        'ticket.have': false,
+                                        'ticket.channel': null
+                                    });
+                                    await userData?.save();
+
+                                    await interaction.channel?.delete();
                                 } catch (err) {
                                     console.error(err); return;
                                 }
-
-                                user.set({
-                                    'ticket.have': false,
-                                    'ticket.channel': null
-                                });
-                                user.save();
                             }, 5000);
                         }
                     }
 
                     if (i.customId == 'not_save') {
                         if (size > 0) {
-                            if (guild.logs.status && guild.logs.moderation) {
-                                const channel = interaction.guild?.channels.cache.get(guild.logs.channel) as TextChannel;
+                            if (guildData && guildData.logs.status && guildData.logs.moderation) {
+                                const channel = interaction.guild?.channels.cache.get(guildData.logs.channel) as TextChannel;
                                 channel.send({ files: [pathFile] }).catch(() => undefined);
                             }
 
                             interaction.followUp('Irei `fechar o ticket e deletar` o canal daqui `5 segundos`.');
 
-                            setTimeout(() => {
+                            setTimeout(async () => {
                                 try {
-                                    interaction.channel?.delete();
-                                } catch (err) {
-                                    console.error(err); return;
-                                }
+                                    userData?.set({
+                                        'ticket.have': false,
+                                        'ticket.channel': null
+                                    });
+                                    await userData?.save();
 
-                                user.set({
-                                    'ticket.have': false,
-                                    'ticket.channel': null
-                                });
-                                user.save();
+                                    await interaction.channel?.delete();
+                                } catch (err) {
+                                    this.client.logger.error((err as Error).message, closeTicketButton.name);
+                                    this.client.logger.warn((err as Error).stack!, closeTicketButton.name);
+                                }
                             }, 5000);
                         } else {
                             interaction.followUp('Irei `fechar o ticket e deletar` o canal daqui `5 segundos`.');
 
-                            setTimeout(() => {
+                            setTimeout(async () => {
                                 try {
-                                    interaction.channel?.delete();
+                                    userData?.set({
+                                        'ticket.have': false,
+                                        'ticket.channel': null
+                                    });
+                                    await userData?.save();
+
+                                    await interaction.channel?.delete();
                                 } catch (err) {
                                     console.error(err); return;
                                 }
-
-                                user.set({
-                                    'ticket.have': false,
-                                    'ticket.channel': null
-                                });
-                                user.save();
                             }, 5000);
                         }
                     }

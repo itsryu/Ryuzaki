@@ -35,6 +35,7 @@ class SayCommandDataConstructor extends CommandData {
                 cooldown: 10,
                 devOnly: true,
                 interactionOnly: false,
+                isDMAllowed: false,
                 registerSlash: false,
                 args: true
             }

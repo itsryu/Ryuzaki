@@ -6,6 +6,14 @@ const userSchema = new Schema<UserDocument>({
         type: Schema.Types.String,
         require: true
     },
+    prefix: {
+        type: Schema.Types.String,
+        default: 'r.'
+    },
+    lang: {
+        type: Schema.Types.String,
+        default: 'pt-BR'
+    },
     about: {
         type: Schema.Types.String,
         default: null

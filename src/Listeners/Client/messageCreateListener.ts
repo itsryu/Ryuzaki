@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures';
-import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel } from 'discord.js';
+import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 
 export default class messageCreateListener extends ListenerStructure {
@@ -11,21 +11,22 @@ export default class messageCreateListener extends ListenerStructure {
     }
 
     async eventExecute(message: Message): Promise<void> {
-        if (message.author.bot || !message.guild) return;
+        if (message.author.bot) return;
 
         try {
             const client = await this.client.getData(this.client.user?.id, 'client');
-            const server = await this.client.getData(message.guild.id, 'guild');
-            const prefix = server.prefix ?? process.env.PREFIX;
+            const server = await this.client.getData(message.guild?.id, 'guild');
+            const user = await this.client.getData(message.author.id, 'user');
+            const prefix = server ? server.prefix : user ? user.prefix : process.env.PREFIX;
 
             //===============> Módulo de tradução <===============//
 
-            const language = await this.client.getLanguage(message.guild.id);
-            await this.client.getTranslate(message.guild.id);
+            const language = message.guild ? await this.client.getLanguage(message.guild?.id) : await this.client.getLanguage(message.author.id);
+            await this.client.getTranslate(message.guild ? message.guild?.id : message.author.id);
 
             //===============> Menções <===============//
 
-            if (!(message.channel as GuildChannel).permissionsFor(message.guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
+            if (message.guild && !(message.channel as GuildChannel).permissionsFor(message.guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
                 return void message.member?.send({ content: this.client.t('main:permissions.alert', { index: 3, member: message.member }) })
                     .catch(() => undefined);
             }
@@ -96,21 +97,21 @@ export default class messageCreateListener extends ListenerStructure {
 
                     //============================================//
 
-                    const cmdDb = await this.client.getData(command.data.options.name, 'command');
+                    const commandData = await this.client.getData(command.data.options.name, 'command');
 
                     const mainCmd = new ClientEmbed(this.client)
                         .setAuthor({ name: this.client.t('main:maintenance:command:embed.title', { command: command.data.options.name.replace(/^\w/, (c) => c.toUpperCase()) }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(this.client.t('main:maintenance:command:embed.description', { command: command.data.options.name, reason: cmdDb.reason }));
+                        .setDescription(this.client.t('main:maintenance:command:embed.description', { command: command.data.options.name, reason: commandData?.reason }));
 
                     const mainBot = new ClientEmbed(this.client)
                         .setAuthor({ name: this.client.t('main:maintenance:client:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: client.reason }));
+                        .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: client?.reason }));
 
                     if (!this.client.developers.includes(message.author.id)) {
                         timestamps?.set(message.author.id, now);
                         setTimeout(() => timestamps?.delete(message.author.id), cooldownAmount);
 
-                        if (server.cmdblock.status) {
+                        if (server?.cmdblock.status) {
                             if (!message.member?.permissions.has(PermissionFlagsBits.ManageMessages)) {
                                 if (server.cmdblock.cmds.some((x) => x === command.data.options.name || server.cmdblock.channels.some((x) => x === message.channel.id))) {
                                     return void message.reply({ content: server.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
@@ -120,17 +121,21 @@ export default class messageCreateListener extends ListenerStructure {
                             }
                         }
 
-                        if (cmdDb.maintenance) {
+                        if (commandData?.maintenance) {
                             return void message.reply({ embeds: [mainCmd] });
-                        } else if (client.maintenance) {
+                        } else if (client?.maintenance) {
                             return void message.reply({ embeds: [mainBot] });
-                        } else if (client.blacklist.some((x) => x == message.author.id)) {
+                        } else if (client?.blacklist.some((x) => x == message.author.id)) {
                             return void message.reply({ content: this.client.t('main:blacklist.user', { user: message.author }) });
                         }
                     }
 
                     if (command.data.options.config.devOnly && !this.client.developers.some((id) => [id].includes(message.author.id))) {
                         return void message.reply({ content: this.client.t('main:owner.reply', { client: this.client.user?.username }) });
+                    }
+
+                    if (message.channel.type === ChannelType.DM && !command.data.options.config.isDMAllowed) {
+                        return void message.reply({ content: `${message.author}, este comando não pode ser executado em sua DM, tente executa-lo em um servidor.` });
                     }
 
                     if (command.data.options.config.args && !args.length) {
@@ -250,30 +255,31 @@ export default class messageCreateListener extends ListenerStructure {
                             webHook.send({ embeds: [whEmbed] });
                         }
 
-                        const num = cmdDb.usages;
-
-                        cmdDb.updateOne({ $set: { usages: num + 1 } });
+                        const num = commandData?.usages || 0;
+                        commandData?.updateOne({ $set: { usages: num + 1 } });
                     });
                 }
             }
 
             //===============> Módulos <===============//
 
-            //===============> AFK:
-            const { default: afkModule } = await import('../../Modules/afkModule');
-            new afkModule(this.client).moduleExecute(message);
+            if (message.guild) {
+                //===============> AFK:
+                const { default: afkModule } = await import('../../Modules/afkModule');
+                new afkModule(this.client).moduleExecute(message);
 
-            //===============> Levels:
-            const { default: xpModule } = await import('../../Modules/xpModule');
-            new xpModule(this.client).moduleExecute(message);
+                //===============> Levels:
+                const { default: xpModule } = await import('../../Modules/xpModule');
+                new xpModule(this.client).moduleExecute(message);
 
-            //===============> Anti-Invites:
-            const { default: inviteModule } = await import('../../Modules/inviteModule');
-            new inviteModule(this.client).moduleExecute(message);
+                //===============> Anti-Invites:
+                const { default: inviteModule } = await import('../../Modules/inviteModule');
+                new inviteModule(this.client).moduleExecute(message);
 
-            //===============> Anti-Spam:
-            const { default: spamModule } = await import('../../Modules/spamModule');
-            new spamModule(this.client).moduleExecute(message);
+                //===============> Anti-Spam:
+                const { default: spamModule } = await import('../../Modules/spamModule');
+                new spamModule(this.client).moduleExecute(message);
+            }
 
             //========================================//
 

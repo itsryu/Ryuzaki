@@ -9,12 +9,15 @@ const client = new Ryuzaki({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildInvites,
         GatewayIntentBits.GuildMessageTyping,
-        GatewayIntentBits.GuildVoiceStates
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageTyping,
+        GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.MessageContent
     ],
     partials: [
         Partials.Channel,
