@@ -4,7 +4,7 @@ import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
 import { NextFunction } from 'express-serve-static-core';
 import { Snowflake } from 'discord-api-types/v10';
 import { DiscordUser } from '../../Types/GatewayTypes';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 class DiscordUserController extends RouteStructure {
     constructor(app: App) {
@@ -37,21 +37,23 @@ class DiscordUserController extends RouteStructure {
     private getUser = async (id: Snowflake): Promise<DiscordUser | null> => {
         const fetchUser = async (resolve: any) => {
             try {
-                const data: DiscordUser = await axios.get(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
-                    method: 'GET',
+                const response = await axios.get(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
                     headers: {
                         Authorization: process.env.USER_TOKEN
                     }
-                })
-                    .then((res) => res.data)
-                    .catch((err) => this.app.logger.error('Error while fetching user profile: ' + err, 'Gateway Message'));
+                });
 
-                if(data) {
-                    resolve(data);
-                } else {
-                    resolve(null);
-                }
+                resolve(response.data);
             } catch (err) {
+                if ((err as AxiosError).response) {
+                    this.app.logger.error(`Error while fetching user profile: ${(err as AxiosError).response?.status} ${(err as AxiosError).response?.statusText} - ${(err as AxiosError).response?.data}`, 'Gateway Message');
+                } else if ((err as AxiosError).request) {
+                    this.app.logger.error('Error while fetching user profile: No response received', 'Gateway Message');
+                } else {
+                    this.app.logger.error(`Error while fetching user profile: ${(err as AxiosError).message}`, 'Gateway Message');
+                }
+
+                
                 resolve(null);
             }
         };
