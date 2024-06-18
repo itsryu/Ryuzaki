@@ -1,7 +1,7 @@
 ﻿import { KickCommandData } from '../../Data/Commands/Moderation/KickCommandData';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures'
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';
 
 export default class KickCommand extends CommandStructure {
@@ -48,7 +48,7 @@ export default class KickCommand extends CommandStructure {
 
 				const row = new ActionRowBuilder<ButtonBuilder>().addComponents(yesButton, noButton);
 				const msg = await message.reply({ embeds: [buttonEmbed], components: [row] });
-				const filter = (i) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
+				const filter = (i: MessageComponentInteraction) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
 				const collector = msg.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
 				collector.on('end', (collected) => {
