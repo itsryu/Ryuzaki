@@ -12,6 +12,7 @@
     "node": "^18 || >=19.0.0",
     "npm": "^9 || >=10.0.0"
   },
+  "packageManager": "yarn@1.22.22",
   "scripts": {
     "build": "tsc --project tsconfig.json --pretty --noEmitOnError",
     "clean-win": "rmdir /s /q dist",
