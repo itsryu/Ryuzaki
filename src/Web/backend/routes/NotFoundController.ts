@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import App from '../server';
 
 class NotFoundController extends RouteStructure {

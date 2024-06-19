@@ -16,6 +16,7 @@ export default class WorkCommand extends CommandStructure {
             return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
         } else {
             //================= Importações =================/
+
             const money = this.client.utils.randomIntFromInterval(1000, 5000);
             const extraMoney = this.client.utils.randomIntFromInterval(5000, 20000);
             const totalReceived = userData.vip.status ? money + extraMoney : money;
@@ -38,7 +39,7 @@ export default class WorkCommand extends CommandStructure {
             } else {
                 userData.set({
                     'economy.coins': totalReceived + atual,
-                    'economy.daily': Date.now()
+                    'economy.work': Date.now()
                 });
                 await userData.save();
 

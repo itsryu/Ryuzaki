@@ -14,10 +14,10 @@ export default class messageCreateListener extends ListenerStructure {
         if (message.author.bot) return;
 
         try {
-            const client = await this.client.getData(this.client.user?.id, 'client');
-            const server = await this.client.getData(message.guild?.id, 'guild');
-            const user = await this.client.getData(message.author.id, 'user');
-            const prefix = server ? server.prefix : user ? user.prefix : process.env.PREFIX;
+            const clientData = await this.client.getData(this.client.user?.id, 'client');
+            const guildData = await this.client.getData(message.guild?.id, 'guild');
+            const userData = await this.client.getData(message.author.id, 'user');
+            const prefix = guildData ? guildData.prefix : userData ? userData.prefix : process.env.PREFIX;
 
             //===============> Módulo de tradução <===============//
 
@@ -105,27 +105,27 @@ export default class messageCreateListener extends ListenerStructure {
 
                     const mainBot = new ClientEmbed(this.client)
                         .setAuthor({ name: this.client.t('main:maintenance:client:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: client?.reason }));
+                        .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: clientData?.reason }));
 
                     if (!this.client.developers.includes(message.author.id)) {
                         timestamps?.set(message.author.id, now);
                         setTimeout(() => timestamps?.delete(message.author.id), cooldownAmount);
 
-                        if (server?.cmdblock.status) {
+                        if (guildData?.cmdblock.status) {
                             if (!message.member?.permissions.has(PermissionFlagsBits.ManageMessages)) {
-                                if (server.cmdblock.cmds.some((x) => x === command.data.options.name || server.cmdblock.channels.some((x) => x === message.channel.id))) {
-                                    return void message.reply({ content: server.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
+                                if (guildData.cmdblock.cmds.some((x) => x === command.data.options.name || guildData.cmdblock.channels.some((x) => x === message.channel.id))) {
+                                    return void message.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
                                         .then((sent) => setTimeout(() => sent.delete(), 10000))
                                         .catch((err) => { this.client.logger.warn(err.stack, messageCreateListener.name); });
                                 }
                             }
                         }
 
-                        if (commandData?.maintenance) {
+                        if (commandData && commandData.maintenance) {
                             return void message.reply({ embeds: [mainCmd] });
-                        } else if (client?.maintenance) {
+                        } else if (clientData?.maintenance) {
                             return void message.reply({ embeds: [mainBot] });
-                        } else if (client?.blacklist.some((x) => x == message.author.id)) {
+                        } else if (clientData?.blacklist.some((x) => x == message.author.id)) {
                             return void message.reply({ content: this.client.t('main:blacklist.user', { user: message.author }) });
                         }
                     }
@@ -212,51 +212,69 @@ export default class messageCreateListener extends ListenerStructure {
                     const commandExecute = new Promise(commandPromise);
 
                     commandExecute.catch((err) => {
-                        this.client.logger.error(err.message, command.data.options.name);
-                        this.client.logger.warn(err.stack, command.data.options.name);
+                        try {
+                            this.client.logger.error(err.message, command.data.options.name);
+                            this.client.logger.warn(err.stack, command.data.options.name);
 
-                        const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
+                            const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
-                        const errorEmbed = new ClientEmbed(this.client)
-                            .setColor(Colors.Red)
-                            .setTitle(`Command: ${command.data.options.name}`)
-                            .setDescription('```js' + '\n' + err.stack + '\n' + '```');
+                            const errorEmbed = new ClientEmbed(this.client)
+                                .setColor(Colors.Red)
+                                .setTitle(`Command: ${command.data.options.name}`)
+                                .setDescription('```js' + '\n' + err.stack + '\n' + '```');
 
-                        errorChannel.send({ embeds: [errorEmbed] });
-                        return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
-                            .then((message) => setTimeout(() => message.delete(), 1000 * 10));
+                            errorChannel.send({ embeds: [errorEmbed] });
+                            return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
+                                .then((message) => setTimeout(() => message.delete(), 1000 * 10));
+                        } catch (err) {
+                            this.client.logger.error((err as Error).message, messageCreateListener.name);
+                            this.client.logger.warn((err as Error).stack!, messageCreateListener.name);
+                        }
                     });
 
-                    commandExecute.then(() => {
-                        if (![process.env.OWNER_ID].includes(message.author.id) && message.guild) {
-                            const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
+                    commandExecute.then(async () => {
+                        try {
+                            if (![process.env.OWNER_ID].includes(message.author.id) && message.guild) {
+                                const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
 
-                            const whEmbed = new ClientEmbed(this.client)
-                                .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
-                                .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                                .addFields(
-                                    {
-                                        name: 'Guild:',
-                                        value: `\`${message.guild.name}\` \`(${message.guild.id})\``
-                                    },
-                                    {
-                                        name: 'Author:',
-                                        value: `\`${message.author.tag}\` \`(${message.author.id})\``
-                                    },
-                                    {
-                                        name: 'Command Type:',
-                                        value: '`Prefix`'
-                                    },
-                                    {
-                                        name: 'What was executed:',
-                                        value: `**\`${prefix}${command.data.options.name} ${args.join(' ')}\`**`
-                                    });
+                                const whEmbed = new ClientEmbed(this.client)
+                                    .setThumbnail(message.author.displayAvatarURL({ extension: 'png', size: 4096 }))
+                                    .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                                    .addFields(
+                                        {
+                                            name: 'Guild:',
+                                            value: `\`${message.guild.name}\` \`(${message.guild.id})\``
+                                        },
+                                        {
+                                            name: 'Author:',
+                                            value: `\`${message.author.tag}\` \`(${message.author.id})\``
+                                        },
+                                        {
+                                            name: 'Command Type:',
+                                            value: '`Prefix`'
+                                        },
+                                        {
+                                            name: 'What was executed:',
+                                            value: `**\`${prefix}${command.data.options.name} ${args.join(' ')}\`**`
+                                        });
 
-                            webHook.send({ embeds: [whEmbed] });
+                                webHook.send({ embeds: [whEmbed] });
+                            }
+
+                            commandData && commandData.set({
+                                'usages': commandData.usages + 1
+                            });
+
+                            userData && userData.set({
+                                'commands.usages': userData.commands.usages + 1
+                            });
+
+                            commandData && await commandData.save();
+                            userData && await userData.save();
+                        } catch (err) {
+                            this.client.logger.error((err as Error).message, messageCreateListener.name);
+                            this.client.logger.warn((err as Error).stack!, messageCreateListener.name);
                         }
-
-                        const num = commandData?.usages || 0;
-                        commandData?.updateOne({ $set: { usages: num + 1 } });
                     });
                 }
             }

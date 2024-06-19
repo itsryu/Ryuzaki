@@ -16,8 +16,8 @@ class CalculatorCommandDataConstructor extends CommandData {
                 'en-US': 'Displays a calculator.'
             },
             category: {
-                'pt-BR': '🥳 Diversão',
-                'en-US': '🥳 Fun'
+                'pt-BR': '⚙️ Utilidades',
+                'en-US': '⚙️ Utilities'
             },
             aliases: {
                 'pt-BR': ['calc', 'calculadora', 'calcular'],

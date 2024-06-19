@@ -3,7 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { HelpCommandData } from '../../Data/Commands/Infos/HelpCommandData';
 import { PermissionFlagKey, PermissionsFlagsText } from '../../Utils/Objects/flags';
 import { Languages } from '../../Types/ClientTypes';
-import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
+import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField } from 'discord.js';
 
 export default class helpCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -23,52 +23,49 @@ export default class helpCommand extends CommandStructure {
 
             if (!command) {
                 return void message.reply({ content: this.client.t('infos:help.!command', { name }) });
-            }
+            } else {
+                const memberPermissions = new PermissionsBitField(command.data.options.permissions.member);
+                const clientPermissions = new PermissionsBitField(command.data.options.permissions.client);
 
-            const memberPermissions = command.data.options.permissions.member;
-            const clientPermissions = command.data.options.permissions.client;
-            const memberPermArray: string[] = [];
-            const clientPermArray: string[] = [];
+                const memberPermArray = Object.entries(PermissionsFlagsText)
+                    .filter(([flag]) => memberPermissions.toArray().includes(flag as PermissionFlagKey))
+                    .map(([, text]) => text[language]);
 
-            for (const flag in PermissionsFlagsText) {
-                if (memberPermissions.includes(flag as PermissionFlagKey)) {
-                    memberPermArray.push(PermissionsFlagsText[flag][language]);
+                const clientPermArray = Object.entries(PermissionsFlagsText)
+                    .filter(([flag]) => clientPermissions.toArray().includes(flag as PermissionFlagKey))
+                    .map(([, text]) => text[language]);
+
+                const commandData = await this.client.getData(command.data.options.name, 'command');
+
+                embed.setDescription(
+                    command.data.options.permissions.member.length === 0
+                        ? this.client.t('infos:help:permissions.member', { index: 0 })
+                        : this.client.t('infos:help:permissions.member', { index: 1, permission: memberPermArray.join(', ').replace(/,([^,]*)$/, ' e$1') }) + '\n' + (command.data.options.permissions.client.length === 0)
+                            ? this.client.t('infos:help:permissions.client', { index: 0, client: this.client.user?.username })
+                            : this.client.t('infos:help:permissions.client', { index: 1, client: this.client.user?.username, permission: clientPermArray.join(', ').replace(/,([^,]*)$/, ' ' + this.client.t('infos:help:permissions.separator')) })
+                );
+
+                embed.addFields({ name: this.client.t('infos:help.fields', { index: 0 }), value: `\`${command.data.options.name.replace(/^\w/, (c) => c.toUpperCase())}\``, inline: true });
+
+                if (command.data.options.aliases && command.data.options.aliases[language].length) {
+                    embed.addFields({ name: this.client.t('infos:help.fields', { index: 1 }), value: `\`${!command.data.options.aliases[language].length ? this.client.t('infos:help.fields_1', { index: 0 }) : command.data.options.aliases[language].join(', ')}\``, inline: true });
                 }
-                if (clientPermissions.includes(flag as PermissionFlagKey)) {
-                    clientPermArray.push(PermissionsFlagsText[flag][language]);
+                if (command.data.options.category) {
+                    embed.addFields({ name: this.client.t('infos:help.fields', { index: 2 }), value: `\`${command.data.options.category[language]}\``, inline: true });
                 }
-            }
+                if (command.data.options.description_localizations?.[language]) {
+                    embed.addFields({ name: this.client.t('infos:help.fields', { index: 3 }), value: `\`${!commandData ? this.client.t('infos:help.values', { index: 0 }) : commandData.usages === 0 ? this.client.t('infos:help.values', { index: 1 }) : `${commandData.usages}`}\``, inline: true });
+                    embed.addFields({ name: this.client.t('infos:help.fields', { index: 4 }), value: `\`${command.data.options.description_localizations[language]?.length ? command.data.options.description_localizations[language] : this.client.t('infos:help.fields_1', { index: 1 })}\``, inline: true });
+                }
+                if (command.data.options.usage) {
+                    embed.addFields({ name: this.client.t('infos:help.fields', { index: 5 }), value: command.data.options.usage[language].length ? command.data.options.usage[language].map((usage) => `\`${command.data.options.name_localizations ? prefix + command.data.options.name_localizations[language] : prefix + command.data.options.name} ${usage}\``).join('\n') : `\`${command.data.options.name_localizations ? prefix + command.data.options.name_localizations[language] : prefix + command.data.options.name}\``, inline: true });
+                }
+                if (command.data.options.config.cooldown) {
+                    embed.addFields({ name: this.client.t('infos:help.fields', { index: 6 }), value: `\`${command.data.options.config.cooldown} ${this.client.t('infos:help.fields_1', { index: 2 })}\``, inline: true });
+                }
 
-            const cmdDb = await this.client.getData(command.data.options.name, 'command');
-
-            embed.setDescription(
-                command.data.options.permissions.member.length === 0
-                    ? this.client.t('infos:help:permissions.member', { index: 0 })
-                    : this.client.t('infos:help:permissions.member', { index: 1, permission: memberPermArray.join(', ').replace(/,([^,]*)$/, ' e$1') }) + '\n' + (command.data.options.permissions.client.length === 0)
-                        ? this.client.t('infos:help:permissions.client', { index: 0, client: this.client.user?.username })
-                        : this.client.t('infos:help:permissions.client', { index: 1, client: this.client.user?.username, permission: clientPermArray.join(', ').replace(/,([^,]*)$/, ' ' + this.client.t('infos:help:permissions.separator')) })
-            );
-
-            embed.addFields({ name: this.client.t('infos:help.fields', { index: 0 }), value: `\`${command.data.options.name.replace(/^\w/, (c) => c.toUpperCase())}\``, inline: true });
-
-            if (command.data.options.aliases && command.data.options.aliases[language].length) {
-                embed.addFields({ name: this.client.t('infos:help.fields', { index: 1 }), value: `\`${!command.data.options.aliases[language].length ? this.client.t('infos:help.fields_1', { index: 0 }) : command.data.options.aliases[language].join(', ')}\``, inline: true });
+                return void message.reply({ embeds: [embed] });
             }
-            if (command.data.options.category) {
-                embed.addFields({ name: this.client.t('infos:help.fields', { index: 2 }), value: `\`${command.data.options.category[language]}\``, inline: true });
-            }
-            if (command.data.options.description_localizations?.[language]) {
-                embed.addFields({ name: this.client.t('infos:help.fields', { index: 3 }), value: `\`${!cmdDb ? this.client.t('infos:help.values', { index: 0 }) : cmdDb.usages == 0 ? this.client.t('infos:help.values', { index: 1 }) : `${cmdDb.usages}`}\``, inline: true });
-                embed.addFields({ name: this.client.t('infos:help.fields', { index: 4 }), value: `\`${command.data.options.description_localizations[language]?.length ? command.data.options.description_localizations[language] : this.client.t('infos:help.fields_1', { index: 1 })}\``, inline: true });
-            }
-            if (command.data.options.usage) {
-                embed.addFields({ name: this.client.t('infos:help.fields', { index: 5 }), value: command.data.options.usage[language].length ? command.data.options.usage[language].map((usage) => `\`${command.data.options.name_localizations ? prefix + command.data.options.name_localizations[language] : prefix + command.data.options.name} ${usage}\``).join('\n') : `\`${command.data.options.name_localizations ? prefix + command.data.options.name_localizations[language] : prefix + command.data.options.name}\``, inline: true });
-            }
-            if (command.data.options.config.cooldown) {
-                embed.addFields({ name: this.client.t('infos:help.fields', { index: 6 }), value: `\`${command.data.options.config.cooldown} ${this.client.t('infos:help.fields_1', { index: 2 })}\``, inline: true });
-            }
-
-            return void message.reply({ embeds: [embed] });
         } else {
             const help = new ClientEmbed(this.client)
                 .setAuthor({ name: this.client.t('infos:help:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })

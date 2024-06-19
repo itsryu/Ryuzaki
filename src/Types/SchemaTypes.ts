@@ -122,6 +122,9 @@ interface UserDocument extends Document {
     _id: string,
     prefix: string,
     lang: string,
+    commands: {
+        usages: number
+    }
     about: string,
     profile: {
         layout: number,

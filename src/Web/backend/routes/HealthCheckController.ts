@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import App from '../server';
-import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 
 class HealthCheckController extends RouteStructure {
     constructor(app: App) {

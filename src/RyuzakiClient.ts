@@ -45,8 +45,9 @@ export class Ryuzaki extends Client {
         this.registerSlashCommands();
         this.loadWS();
 
-        process.on('uncaughtException', (err: Error) => { this.logger.error((err).stack!, 'uncaughtException'); });
-        process.on('unhandledRejection', (err: Error) => { this.logger.error((err).stack!, 'unhandledRejection'); });
+        process.on('warning', (warn) => this.logger.warn(warn.stack!, 'warning'));
+        process.on('uncaughtException', (err: Error) => this.logger.error(err.stack!, 'uncaughtException'));
+        process.on('unhandledRejection', (err: Error) => this.logger.error(err.stack!, 'unhandledRejection'));
     }
 
     private async clientManager() {
@@ -55,7 +56,7 @@ export class Ryuzaki extends Client {
     }
 
     private async loadWS() {
-        const { default: App } = await import('./Web/server');
+        const { default: App } = await import('./Web/backend/server');
         await new App(this).serverExecute();
     }
 

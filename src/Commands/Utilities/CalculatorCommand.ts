@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, MessageComponentInteraction } from 'discord.js';
-import { CalculatorCommandData } from '../../Data/Commands/Fun/CalculatorCommandData';
+import { CalculatorCommandData } from '../../Data/Commands/Utilities/CalculatorCommandData';
 import { inspect } from 'util';
 
 export default class CalculatorCommand extends CommandStructure {

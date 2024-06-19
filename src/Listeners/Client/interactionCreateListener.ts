@@ -13,16 +13,16 @@ export default class interactionCreateListener extends ListenerStructure {
         try {
             if (interaction.user.bot) return;
 
-            const client = await this.client.getData(this.client.user?.id, 'client');
-            const server = await this.client.getData(interaction.guild?.id, 'guild');
-            const user = await this.client.getData(interaction.user.id, 'user');
+            const clientData = await this.client.getData(this.client.user?.id, 'client');
+            const guildData = await this.client.getData(interaction.guild?.id, 'guild');
+            const userData = await this.client.getData(interaction.user.id, 'user');
 
             //===============> Módulo de tradução <===============//
 
             const language = await this.client.getLanguage(interaction.guild ? interaction.guild.id : interaction.user.id);
             await this.client.getTranslate(interaction.guild ? interaction.guild.id : interaction.user.id);
 
-            const prefix = server ? server.prefix : user ? user.prefix : process.env.PREFIX;
+            const prefix = guildData ? guildData.prefix : userData ? userData.prefix : process.env.PREFIX;
             const args: string[] = [];
 
             //===============> Comandos <===============//
@@ -98,29 +98,29 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         const mainCmd = new ClientEmbed(this.client)
                             .setAuthor({ name: this.client.t('main:maintenance:command:embed.title', { command: command.data.options.name.replace(/^\w/, (c) => c.toUpperCase()) }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                            .setDescription(this.client.t('main:maintenance:command:embed.description', { command: command.data.options.name }));
+                            .setDescription(this.client.t('main:maintenance:command:embed.description', { command: command.data.options.name, reason: commandData?.reason }));
 
                         const mainBot = new ClientEmbed(this.client)
                             .setAuthor({ name: this.client.t('main:maintenance:client:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                            .setDescription(this.client.t('main:maintenance:client:embed.description'));
+                            .setDescription(this.client.t('main:maintenance:client:embed.description', { reason: clientData?.reason }));
 
                         if (!this.client.developers.includes(interaction.user.id)) {
                             timestamps?.set(interaction.user.id, now);
                             setTimeout(() => timestamps?.delete(interaction.user.id), cooldownAmount);
 
-                            if (server?.cmdblock.status) {
+                            if (guildData?.cmdblock.status) {
                                 if (!(interaction.member?.permissions as Readonly<PermissionsBitField>).has(PermissionFlagsBits.ManageMessages)) {
-                                    if (server.cmdblock.cmds.some((x) => x === command.data.options.name) || server.cmdblock.channels.some((x) => x === interaction.channel?.id)) {
-                                        return void interaction.reply({ content: server.cmdblock.msg.replace(/{member}/g, `<@${interaction.user.id}>`).replace(/{channel}/g, `<#${interaction.channel?.id}`).replace(/{cmd}/g, command.data.options.name), ephemeral: true });
+                                    if (guildData.cmdblock.cmds.some((x) => x === command.data.options.name) || guildData.cmdblock.channels.some((x) => x === interaction.channel?.id)) {
+                                        return void interaction.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${interaction.user.id}>`).replace(/{channel}/g, `<#${interaction.channel?.id}`).replace(/{cmd}/g, command.data.options.name), ephemeral: true });
                                     }
                                 }
                             }
 
-                            if (commandData?.maintenance) {
+                            if (commandData && commandData.maintenance) {
                                 return void interaction.reply({ embeds: [mainCmd], ephemeral: true });
-                            } else if (client?.maintenance) {
+                            } else if (clientData?.maintenance) {
                                 return void interaction.reply({ embeds: [mainBot], ephemeral: true });
-                            } else if (client?.blacklist.some((x) => x == interaction.user.id)) {
+                            } else if (clientData?.blacklist.some((x) => x == interaction.user.id)) {
                                 return void interaction.reply({ content: this.client.t('main:blacklist.user', { user: interaction.user }), ephemeral: true });
                             }
                         }
@@ -186,7 +186,7 @@ export default class interactionCreateListener extends ListenerStructure {
                             return interaction.reply({ content: this.client.t('main:errors.interaction', { index: 0 }), ephemeral: true });
                         });
 
-                        interactionExecute.then(() => {
+                        interactionExecute.then(async () => {
                             if (![process.env.OWNER_ID].includes(interaction.user.id) && interaction.guild) {
                                 const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
 
@@ -218,8 +218,16 @@ export default class interactionCreateListener extends ListenerStructure {
                                 webHook.send({ embeds: [whEmbed] });
                             }
 
-                            const num = commandData?.usages || 0;
-                            commandData?.updateOne({ $set: { usages: num + 1 } });
+                            commandData && commandData.set({
+                                'usages': commandData.usages + 1
+                            });
+
+                            userData && userData.set({
+                                'commands.usages': userData.commands.usages + 1
+                            });
+
+                            commandData && await commandData.save();
+                            userData && await userData.save();
                         });
                     } catch (err) {
                         this.client.logger.error((err as Error).message, interactionCreateListener.name);

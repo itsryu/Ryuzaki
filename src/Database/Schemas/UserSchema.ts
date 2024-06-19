@@ -14,6 +14,12 @@ const userSchema = new Schema<UserDocument>({
         type: Schema.Types.String,
         default: 'pt-BR'
     },
+    commands: {
+        usages: {
+            type: Schema.Types.Number,
+            default: 0
+        },
+    },
     about: {
         type: Schema.Types.String,
         default: null

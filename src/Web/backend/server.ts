@@ -1,14 +1,16 @@
-import { Ryuzaki } from '../RyuzakiClient';
-import { AppStructure } from '../Structures';
+import { Ryuzaki } from '../../RyuzakiClient';
+import { AppStructure } from '../../Structures';
 import express, { Express, Router } from 'express';
 import { Client, } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, CommandMiddleware, AuthMiddleware } from './middlewares/index';
-import { Logger } from '../Utils/util';
-import { Route } from '../Types/HTTPSInterfaces';
+import { Logger } from '../../Utils/util';
+import { Route } from '../../Types/HTTPSInterfaces';
 import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController, CommandExecuteController } from './routes/index';
 import { Webhook } from '@top-gg/sdk';
 import cors from 'cors';
+import { verifyKey } from 'discord-interactions';
+import { JSONResponse } from '../../Structures/RouteStructure';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
@@ -26,6 +28,7 @@ export default class App extends AppStructure {
     private configServer(): void {
         this.app.use(cors());
         this.app.use(json());
+        this.app.use(express.json({ verify: this.verifyDiscordRequest(process.env.PUBLIC_KEY) }));
         this.app.use(urlencoded({ extended: true }));
         this.app.use(this.initRoutes());
     }
@@ -75,7 +78,7 @@ export default class App extends AppStructure {
 
             switch (method) {
                 case 'GET': {
-                    router.get(path, new InfoMiddleware(this).run, new AuthMiddleware(this).run ,async (req, res, next) => {
+                    router.get(path, new InfoMiddleware(this).run, new AuthMiddleware(this).run, async (req, res, next) => {
                         return await handler.run(req, res, next);
                     });
 
@@ -116,11 +119,24 @@ export default class App extends AppStructure {
         const routes: Array<Route> = [
             { method: 'GET', path: '/', handler: new HomeController(this) },
             { method: 'GET', path: '/health', handler: new HealthCheckController(this) },
-            { method: 'GET', path: '/discord/user/:id', handler: new DiscordUserController(this)},
+            { method: 'GET', path: '/discord/user/:id', handler: new DiscordUserController(this) },
             { method: 'POST', path: '/command/:name', handler: new CommandExecuteController(this) },
             { method: 'POST', path: '/dblwebhook', handler: new DBLController(this) }
         ];
 
         return routes;
+    }
+
+    private verifyDiscordRequest(clientKey: string) {
+        return function (req, res, buf: Buffer) {
+            const signature = req.get('X-Signature-Ed25519');
+            const timestamp = req.get('X-Signature-Timestamp');
+
+            const isValidRequest = verifyKey(buf, signature, timestamp, clientKey);
+
+            if (!isValidRequest) {
+                res.status(401).json(new JSONResponse(401, 'Bad request signature').toJSON());
+            }
+        };
     }
 }

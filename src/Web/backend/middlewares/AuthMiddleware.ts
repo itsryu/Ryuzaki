@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import App from '../server';
-import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 
 class AuthMiddleware extends RouteStructure {
     constructor(client: App) {

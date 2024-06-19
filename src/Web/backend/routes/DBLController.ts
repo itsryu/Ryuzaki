@@ -1,10 +1,10 @@
 import { WebhookPayload } from '@top-gg/sdk';
 import { Request, Response } from 'express';
-import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import App from '../server';
 import { NextFunction } from 'express-serve-static-core';
-import { ClientEmbed } from '../../Structures';
-import { Ryuzaki } from '../../RyuzakiClient';
+import { ClientEmbed } from '../../../Structures';
+import { Ryuzaki } from '../../../RyuzakiClient';
 
 class DBLController extends RouteStructure {
     constructor(app: App) {

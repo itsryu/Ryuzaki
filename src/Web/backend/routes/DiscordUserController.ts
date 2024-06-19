@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import App from '../server';
-import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import { NextFunction } from 'express-serve-static-core';
 import { Snowflake } from 'discord-api-types/v10';
-import { DiscordUser } from '../../Types/GatewayTypes';
+import { DiscordUser } from '../../../Types/GatewayTypes';
 
 class DiscordUserController extends RouteStructure {
     constructor(app: App) {
@@ -38,15 +38,22 @@ class DiscordUserController extends RouteStructure {
             try {
                 const response = await fetch(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
                     headers: {
-                        Authorization: process.env.USER_TOKEN
+                        Authorization: process.env.USER_TOKEN,
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'User-Agent': 'Ryuzaki (https://github.com/itsryu/Ryuzaki, 1.0.0)'
                     }
                 });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    this.app.logger.error(JSON.stringify(data), DiscordUserController.name);
+                }
 
                 resolve(response.json());
             } catch (err) {
                 this.app.logger.error((err as Error).message, DiscordUserController.name);
                 this.app.logger.warn((err as Error).stack as string, DiscordUserController.name);
-                
+
                 resolve(null);
             }
         };

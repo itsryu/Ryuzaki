@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import App from '../Web/server';
+import App from '../Web/backend/server';
 import { HTTPStatus } from '../Types/HTTPSInterfaces';
 
 interface JSONObjectResponse {

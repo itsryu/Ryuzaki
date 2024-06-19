@@ -5,6 +5,7 @@ declare global {
 		interface ProcessEnv {
 			CLIENT_TOKEN: string;
 			USER_TOKEN: string;
+			PUBLIC_KEY: string;
 			DISCORD_API: string;
 			DBL_TOKEN: string;
 			AUTH_KEY: string;

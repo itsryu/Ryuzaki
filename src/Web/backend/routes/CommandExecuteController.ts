@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import App from '../server';
-import { JSONResponse, RouteStructure } from '../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import { NextFunction } from 'express-serve-static-core';
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../../RyuzakiClient';
 
 class CommandExecuteController extends RouteStructure {
     constructor(app: App) {
