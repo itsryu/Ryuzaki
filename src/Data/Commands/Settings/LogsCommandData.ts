@@ -12,8 +12,9 @@ class LogsCommandDataConstructor extends CommandData {
                 'en-US': 'Configures the guild\'s log channel.'
             },
             category: {
-                'pt-BR': '🔧 Configurações',
-                'en-US': '🔧 Settings'
+                'pt-BR': 'Configurações',
+                'en-US': 'Settings',
+                'es-ES': 'Ajustes'
             },
             aliases: {
                 'pt-BR': ['log'],

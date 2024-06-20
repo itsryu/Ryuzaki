@@ -16,8 +16,9 @@ class BagCommandDataConstructor extends CommandData {
                 'en-US': 'Displays the amount of money of the mentioned user or yours.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['carteira'],

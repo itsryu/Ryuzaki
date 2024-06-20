@@ -1,15 +1,12 @@
 import { Ryuzaki } from '../RyuzakiClient';
 import { PermissionResolvable, ApplicationCommandType, Message, ChatInputCommandInteraction } from 'discord.js';
 import { type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { Languages } from '../Types/ClientTypes';
+import { Categories, CategoryValidation, Languages } from '../Types/ClientTypes';
 
 interface RawCommandData extends RESTPostAPIChatInputApplicationCommandsJSONBody {
     name: string;
     type: ApplicationCommandType.ChatInput;
-    category: {
-        'pt-BR': string;
-        'en-US': string;
-    };
+    category: CategoryValidation<Languages>;
     aliases: {
         'pt-BR': string[],
         'en-US': string[]
@@ -72,3 +69,4 @@ abstract class CommandStructure {
 }
 
 export { CommandStructure, CommandData, RawCommandData };
+export type { Categories };

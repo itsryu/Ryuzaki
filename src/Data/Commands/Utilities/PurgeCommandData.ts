@@ -16,8 +16,9 @@ class PurgeCommandDataConstructor extends CommandData {
                 'en-US': 'Purges [1-100] messages from the user where the command was executed.'
             },
             category: {
-                'pt-BR': '🛠️ Moderação',
-                'en-US': '🛠️ Moderation'
+                'pt-BR': 'Moderação',
+                'en-US': 'Moderation',
+                'es-ES': 'Moderación'
             },
             aliases: {
                 'pt-BR': [],

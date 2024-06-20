@@ -16,8 +16,9 @@ class VoteCommandDataConstructor extends CommandData {
                 'en-US': 'Earn a reward by voting me on DBL'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['dbl', 'upvote', 'votar'],

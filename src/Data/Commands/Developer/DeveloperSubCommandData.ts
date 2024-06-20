@@ -16,8 +16,9 @@ class DeveloperSubCommandDataConstructor extends CommandData {
                 'en-US': 'Commands used only for developers'
             },
             category: {
-                'pt-BR': '🧦 Desenvolvedor',
-                'en-US': '🧦 Developer'
+                'pt-BR': 'Desenvolvedor',
+                'en-US': 'Developer',
+                'es-ES': 'Desarrollador'
             },
             aliases: {
                 'pt-BR': ['desenvolvedor'],

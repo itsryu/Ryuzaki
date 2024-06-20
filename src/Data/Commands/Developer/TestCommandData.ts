@@ -16,8 +16,9 @@ class TestCommandDataConstructor extends CommandData {
                 'en-US': 'null'
             },
             category: {
-                'pt-BR': '🧦 Desenvolvedor',
-                'en-US': '🧦 Developer'
+                'pt-BR': 'Desenvolvedor',
+                'en-US': 'Developer',
+                'es-ES': 'Desarrollador'
             },
             aliases: {
                 'pt-BR': ['t', 'teste'],

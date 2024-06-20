@@ -16,8 +16,9 @@ class DivorceCommandDataConstructor extends CommandData {
                 'en-US': 'Divorce from your soul mate'
             },
             category: {
-                'pt-BR': '🎈 Interação',
-                'en-US': '🎈 Interaction'
+                'pt-BR': 'Interação',
+                'en-US': 'Interaction',
+                'es-ES': 'Interacción'
             },
             aliases: {
                 'pt-BR': ['divórcio', 'divorcio'],

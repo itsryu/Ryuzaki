@@ -16,8 +16,9 @@ class InviteCommandDataConstructor extends CommandData {
                 'en-US': 'Invite me!'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': ['convite'],

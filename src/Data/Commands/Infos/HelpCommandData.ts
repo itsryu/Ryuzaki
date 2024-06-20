@@ -16,8 +16,9 @@ class HelpCommandDataConstructor extends CommandData {
                 'en-US': 'Opens a help menu with some BOT commands.'
             },
             category: {
-                'pt-BR': '❔ Infos',
-                'en-US': '❔ Infos'
+                'pt-BR': 'Informações',
+                'en-US': 'Infos',
+                'es-ES': 'Infos'
             },
             aliases: {
                 'pt-BR': ['ajuda', 'comandos', 'comando'],
@@ -52,6 +53,7 @@ class HelpCommandDataConstructor extends CommandData {
                         'pt-BR': 'Selecione um comando',
                         'en-US': 'Select a command:'
                     },
+                    autocomplete: true,
                     required: false
                 }
             ]

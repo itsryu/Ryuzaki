@@ -16,8 +16,9 @@ class KickCommandDataConstructor extends CommandData {
                 'en-US': 'Kicks the mentioned user from server'
             },
             category: {
-                'pt-BR': '🛠️ Moderação',
-                'en-US': '🛠️ Moderation'
+                'pt-BR': 'Moderação',
+                'en-US': 'Moderation',
+                'es-ES': 'Moderación'
             },
             aliases: {
                 'pt-BR': ['expulsar'],

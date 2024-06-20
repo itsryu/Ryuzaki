@@ -6,7 +6,7 @@ import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, CommandMiddleware, AuthMiddleware } from './middlewares/index';
 import { Logger } from '../../Utils/util';
 import { Route } from '../../Types/HTTPSInterfaces';
-import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController, CommandExecuteController } from './routes/index';
+import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController, CommandExecuteController, InteractionController } from './routes/index';
 import { Webhook } from '@top-gg/sdk';
 import cors from 'cors';
 import { verifyKey } from 'discord-interactions';
@@ -92,7 +92,7 @@ export default class App extends AppStructure {
                             webhook.listener(async (vote) => {
                                 return handler.run(req, res, next, vote, this.client);
                             })(req, res, next);
-                        } else if (path.includes('/command') && req.params.name) {
+                        } else if (path.includes('/command') || path.includes('/api/interactions')) {
                             const commandMiddleware = new CommandMiddleware(this)
 
                             commandMiddleware.run(req, res, () => {
@@ -119,7 +119,8 @@ export default class App extends AppStructure {
         const routes: Array<Route> = [
             { method: 'GET', path: '/', handler: new HomeController(this) },
             { method: 'GET', path: '/health', handler: new HealthCheckController(this) },
-            { method: 'GET', path: '/discord/user/:id', handler: new DiscordUserController(this) },
+            { method: 'GET', path: '/api/discord/user/:id', handler: new DiscordUserController(this) },
+            { method: 'POST', path: '/api/interactions/', handler: new InteractionController(this) },
             { method: 'POST', path: '/command/:name', handler: new CommandExecuteController(this) },
             { method: 'POST', path: '/dblwebhook', handler: new DBLController(this) }
         ];

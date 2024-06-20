@@ -1,3 +1,5 @@
+import { CategoryEmojis } from "../../Types/ClientTypes";
+
 const emojis = {
     errado: '❌',
     certo: '✅',
@@ -50,4 +52,37 @@ const emojis = {
     disabled: '<:removeu_2:934208717619093614>'
 };
 
-export { emojis };
+const categoryEmojis: CategoryEmojis = {
+    'pt-BR': {
+        'Desenvolvedor': '💻',
+        'Informações': '📚',
+        'Moderação': '🛡️',
+        'Economia': '💰',
+        'Utilidades': '🔧',
+        'Interação': '🤝',
+        'Diversão': '🎉',
+        'Configurações': '⚙️',
+    },
+    'en-US': {
+        'Developer': '💻',
+        'Infos': '📚',
+        'Moderation': '🛡️',
+        'Economy': '💰',
+        'Utilities': '🔧',
+        'Interaction': '🤝',
+        'Fun': '🎉',
+        'Settings': '⚙️',
+    },
+    'es-ES': {
+        'Desarrollador': '💻',
+        'Infos': '📚',
+        'Moderación': '🛡️',
+        'Economía': '💰',
+        'Utilidades': '🔧',
+        'Interacción': '🤝',
+        'Diversión': '🎉',
+        'Ajustes': '⚙️',
+    },
+};
+
+export { categoryEmojis, emojis };

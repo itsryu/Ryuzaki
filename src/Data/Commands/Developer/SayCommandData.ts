@@ -16,8 +16,9 @@ class SayCommandDataConstructor extends CommandData {
                 'en-US': 'Make Ryuzaki say something.'
             },
             category: {
-                'pt-BR': '🧦 Desenvolvedor',
-                'en-US': '🧦 Developer'
+                'pt-BR': 'Desenvolvedor',
+                'en-US': 'Developer',
+                'es-ES': 'Desarrollador'
             },
             aliases: {
                 'pt-BR': ['falar', 'dizer'],

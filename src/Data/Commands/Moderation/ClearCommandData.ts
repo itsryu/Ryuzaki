@@ -16,8 +16,9 @@ class ClearCommandDataConstructor extends CommandData {
                 'en-US': 'Clears [1-100] messages from the channel where command was executed.'
             },
             category: {
-                'pt-BR': '🛠️ Moderação',
-                'en-US': '🛠️ Moderation'
+                'pt-BR': 'Moderação',
+                'en-US': 'Moderation',
+                'es-ES': 'Moderación'
             },
             aliases: {
                 'pt-BR': ['deletar', 'limpar'],

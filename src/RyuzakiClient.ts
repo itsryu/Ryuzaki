@@ -68,8 +68,11 @@ export class Ryuzaki extends Client {
     public loadInvite() {
         return this.url = this.generateInvite({
             permissions: [
+                PermissionFlagsBits.ManageGuild,
                 PermissionFlagsBits.ManageRoles,
                 PermissionFlagsBits.ManageChannels,
+                PermissionFlagsBits.ManageMessages,
+                PermissionFlagsBits.ManageNicknames,
                 PermissionFlagsBits.KickMembers,
                 PermissionFlagsBits.BanMembers,
                 PermissionFlagsBits.CreateInstantInvite,
@@ -79,9 +82,6 @@ export class Ryuzaki extends Client {
                 PermissionFlagsBits.ViewChannel,
                 PermissionFlagsBits.ModerateMembers,
                 PermissionFlagsBits.SendMessages,
-                PermissionFlagsBits.ManageMessages,
-                PermissionFlagsBits.ManageNicknames,
-                PermissionFlagsBits.ManageGuild,
                 PermissionFlagsBits.EmbedLinks,
                 PermissionFlagsBits.AttachFiles,
                 PermissionFlagsBits.UseExternalEmojis,

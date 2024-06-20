@@ -12,8 +12,9 @@ class RyuCommandDataConstructor extends CommandData {
                 'en-US': 'Informations about me.'
             },
             category: {
-                'pt-BR': '❔ Infos',
-                'en-US': '❔ Infos'
+                'pt-BR': 'Informações',
+                'en-US': 'Infos',
+                'es-ES': 'Infos'
             },
             aliases: {
                 'pt-BR': ['ryuzaki'],

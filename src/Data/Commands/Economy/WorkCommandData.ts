@@ -16,8 +16,9 @@ class WorkCommandDataConstructor extends CommandData {
                 'en-US': 'Command to work and get your money and experience.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['trabalhar', 'trabalho'],

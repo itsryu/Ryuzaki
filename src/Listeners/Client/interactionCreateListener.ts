@@ -264,6 +264,28 @@ export default class interactionCreateListener extends ListenerStructure {
                 }
             }
 
+            //===============> Auto Complete <===============//
+
+            if (interaction.isAutocomplete()) {
+                try {
+                    if (interaction.commandName === 'help') {
+                        const input = interaction.options.getFocused();
+
+                        const commands = this.client.commands
+                            .map((command) => command.data.options.name)
+                            .filter((command) => command.toLowerCase().includes(input));
+
+                        const response = commands.slice(0, 25).map((name) => ({ name, value: name }));
+
+                        await interaction.respond(response);
+                    }
+                } catch (err) {
+                    this.client.logger.error((err as Error).message, interactionCreateListener.name);
+                    this.client.logger.warn((err as Error).stack!, interactionCreateListener.name);
+                }
+            }
+
+
             //==============================================//
         } catch (err) {
             this.client.logger.error((err as Error).message, interactionCreateListener.name);

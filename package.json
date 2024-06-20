@@ -39,6 +39,7 @@
     "glob": "^10.4.1",
     "mongoose": "^8.4.1",
     "ms": "^2.1.3",
+    "node-fetch": "^3.3.2",
     "winston": "^3.13.0"
   },
   "devDependencies": {

@@ -12,8 +12,9 @@ class ShardCommandDataConstructor extends CommandData {
                 'en-US': 'Displays information about the shards.'
             },
             category: {
-                'pt-BR': '❔ Infos',
-                'en-US': '❔ Infos'
+                'pt-BR': 'Informações',
+                'en-US': 'Infos',
+                'es-ES': 'Infos'
             },
             aliases: {
                 'pt-BR': ['shards'],

@@ -16,8 +16,9 @@ class WithdrawCommandDataConstructor extends CommandData {
                 'en-US': 'Withdraw your money from the bank.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['retirar', 'sacar'],

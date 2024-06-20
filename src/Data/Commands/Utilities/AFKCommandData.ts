@@ -16,8 +16,9 @@ class AFKCommandDataConstructor extends CommandData {
                 'en-US': 'Sets user as AFK.'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': [],

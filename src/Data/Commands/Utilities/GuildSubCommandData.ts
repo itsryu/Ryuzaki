@@ -16,8 +16,9 @@ class GuildSubCommandDataConstructor extends CommandData {
                 'en-US': 'General server commands'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': ['servidor'],

@@ -2,8 +2,9 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { HelpCommandData } from '../../Data/Commands/Infos/HelpCommandData';
 import { PermissionFlagKey, PermissionsFlagsText } from '../../Utils/Objects/flags';
-import { Languages } from '../../Types/ClientTypes';
+import { CategoryValidation, Languages } from '../../Types/ClientTypes';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField } from 'discord.js';
+import { categoryEmojis } from '../../Utils/Objects/emojis';
 
 export default class helpCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -15,7 +16,6 @@ export default class helpCommand extends CommandStructure {
 
         const embed = new ClientEmbed(this.client)
             .setAuthor({ name: this.client.t('infos:help:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-            .setThumbnail(this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) ?? null);
 
         if (args[0]) {
             const name = args[0].toLowerCase();
@@ -38,11 +38,14 @@ export default class helpCommand extends CommandStructure {
                 const commandData = await this.client.getData(command.data.options.name, 'command');
 
                 embed.setDescription(
-                    command.data.options.permissions.member.length === 0
-                        ? this.client.t('infos:help:permissions.member', { index: 0 })
-                        : this.client.t('infos:help:permissions.member', { index: 1, permission: memberPermArray.join(', ').replace(/,([^,]*)$/, ' e$1') }) + '\n' + (command.data.options.permissions.client.length === 0)
-                            ? this.client.t('infos:help:permissions.client', { index: 0, client: this.client.user?.username })
-                            : this.client.t('infos:help:permissions.client', { index: 1, client: this.client.user?.username, permission: clientPermArray.join(', ').replace(/,([^,]*)$/, ' ' + this.client.t('infos:help:permissions.separator')) })
+                    (
+                        (memberPermArray.length === 0
+                            ? this.client.t('infos:help:permissions.member', { index: 0 })
+                            : this.client.t('infos:help:permissions.member', { index: 1, permission: memberPermArray.join(', ').replace(/,([^,]*)$/, ' e$1') })) + '\n\n' +
+                        (clientPermArray.length === 0
+                            ? this.client.t('infos:help:permissions.client', { index: 0, client: this.client.user })
+                            : this.client.t('infos:help:permissions.client', { index: 1, client: this.client.user, permission: clientPermArray.join(', ').replace(/,([^,]*)$/, ' ' + this.client.t('infos:help:permissions.separator')) }))
+                    )
                 );
 
                 embed.addFields({ name: this.client.t('infos:help.fields', { index: 0 }), value: `\`${command.data.options.name.replace(/^\w/, (c) => c.toUpperCase())}\``, inline: true });
@@ -84,14 +87,22 @@ export default class helpCommand extends CommandStructure {
                     }
                 ]);
 
-            const categories = commands.map((command) => command.data.options.category[language]).filter((x, y, z) => z.indexOf(x) === y).filter((x) => x != null);
+            const supressedCategories: CategoryValidation<Languages>[] = [
+                {
+                    "en-US": "Developer",
+                    "pt-BR": "Desenvolvedor",
+                    "es-ES": "Desarrollador"
+                }
+            ];
+
+            const categories = commands.map((command) => command.data.options.category[language]).filter((x, y, z) => z.indexOf(x) === y && supressedCategories.some((category) => category[language] !== x));
 
             categories.forEach((category) => {
                 menu.addOptions([
                     {
-                        label: category.split(' ')[1],
-                        description: this.client.t('infos:help:menu.description', { index: 1, category: category.split(' ')[1] }),
-                        emoji: category.split(' ')[0],
+                        label: category,
+                        description: this.client.t('infos:help:menu.description', { index: 1, category: category }),
+                        emoji: categoryEmojis[language][category],
                         value: category
                     }]
                 );
@@ -110,6 +121,7 @@ export default class helpCommand extends CommandStructure {
 
             collector.on('collect', (i: StringSelectMenuInteraction) => {
                 if (i.values[0] == 'back') {
+                    help.setThumbnail(this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) ?? null);
                     help.setAuthor({ name: this.client.t('infos:help:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
                     help.setDescription(this.client.t('infos:help:embed.description', { author: message.author, prefix, client: this.client.user?.username }));
                     help.spliceFields(0, 1);
@@ -118,6 +130,7 @@ export default class helpCommand extends CommandStructure {
                 } else {
                     const comandos = commands.filter((command) => command.data.options.category != null && command.data.options.category[language] === i.values[0]).sort((a, b) => a.data.options.name.localeCompare(b.data.options.name)).map((f) => f.data.options.name);
 
+                    help.setThumbnail(null);
                     help.setDescription(`${this.client.t('infos:help.fields', { index: 7 })} \`${i.values[0]}\``);
                     help.setFields({ name: `[${comandos.length}] ${this.client.t('infos:help.fields', { index: 7 })}`, value: `\`${comandos.join(' - ')}.\`` || this.client.t('infos:help.fields_1')[3], inline: false });
 

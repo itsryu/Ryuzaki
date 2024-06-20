@@ -16,8 +16,9 @@ class BannerCommandDataConstructor extends CommandData {
                 'en-US': 'Shows the banner of the mentioned user or your own banner.'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': [],

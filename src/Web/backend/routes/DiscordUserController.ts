@@ -44,12 +44,13 @@ class DiscordUserController extends RouteStructure {
                     }
                 });
 
+                const data = await response.json();
+
                 if (!response.ok) {
-                    const data = await response.json();
                     this.app.logger.error(JSON.stringify(data), DiscordUserController.name);
                 }
 
-                resolve(response.json());
+                resolve(data);
             } catch (err) {
                 this.app.logger.error((err as Error).message, DiscordUserController.name);
                 this.app.logger.warn((err as Error).stack as string, DiscordUserController.name);

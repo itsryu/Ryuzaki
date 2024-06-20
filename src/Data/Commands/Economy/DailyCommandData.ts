@@ -16,8 +16,9 @@ class DailyCommandDataConstructor extends CommandData {
                 'en-US': 'Command to get your daily reward.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['diário', 'diario'],

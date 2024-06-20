@@ -9,7 +9,7 @@
         "permissions": {
             "member": [
                 "You `don't need permissions` to use this command.",
-                "You need the permissions: `{{permission}}` to use this command"
+                "You need the permissions: `{{permission}}` to use this command."
             ],
             "client": [
                 "The {{client}} `does not need permissions` to run this command.",

@@ -107,7 +107,7 @@ export default class UserSubCommand extends CommandStructure {
                 const pages: ClientEmbed[] = [];
                 let current = 0;
 
-                const data = await fetch((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + '/discord/user/' + user.id, {
+                const data = await fetch((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + '/api/discord/user/' + user.id, {
                     headers: {
                         'Authorization': 'Bearer ' + process.env.AUTH_KEY,
                     }

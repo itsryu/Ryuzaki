@@ -16,8 +16,9 @@ class LanguageCommandDataConstructor extends CommandData {
                 'en-US': 'Changes Ryuzaki language'
             },
             category: {
-                'pt-BR': '🔧 Configurações',
-                'en-US': '🔧 Settings'
+                'pt-BR': 'Configurações',
+                'en-US': 'Settings',
+                'es-ES': 'Ajustes'
             },
             aliases: {
                 'pt-BR': ['idioma', 'idiomas'],

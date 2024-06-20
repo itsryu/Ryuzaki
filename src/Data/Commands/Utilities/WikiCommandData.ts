@@ -12,8 +12,9 @@ class WikiCommandDataConstructor extends CommandData {
                 'en-US': 'Search for a specific topic on Wikipédia.'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': ['wikipedia', 'wikipédia'],

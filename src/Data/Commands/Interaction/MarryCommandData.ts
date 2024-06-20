@@ -16,8 +16,9 @@ class MarryCommandDataConstructor extends CommandData {
                 'en-US': 'Marry the mentioned user.'
             },
             category: {
-                'pt-BR': '🎈 Interação',
-                'en-US': '🎈 Interaction'
+                'pt-BR': 'Interação',
+                'en-US': 'Interaction',
+                'es-ES': 'Interacción'
             },
             aliases: {
                 'pt-BR': ['casar'],

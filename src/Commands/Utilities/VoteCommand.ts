@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { VoteCommandData } from '../../Data/Commands/Utilities/VoteCommandData';
+import { VoteCommandData } from '../../Data/Commands/Economy/VoteCommandData';
 import { Message } from 'discord.js';
 
 export default class voteCommand extends CommandStructure {

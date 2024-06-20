@@ -16,8 +16,9 @@ class BanCommandDataConstructor extends CommandData {
                 'en-US': 'Bans the mentioned user'
             },
             category: {
-                'pt-BR': '🛠️ Moderação',
-                'en-US': '🛠️ Moderation'
+                'pt-BR': 'Moderação',
+                'en-US': 'Moderation',
+                'es-ES': 'Moderación'
             },
             aliases: {
                 'pt-BR': ['banir'],

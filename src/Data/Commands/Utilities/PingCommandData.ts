@@ -16,8 +16,9 @@ class PingCommandDataConstructor extends CommandData {
                 'en-US': 'Displays the response ping between user and client and BOT host.'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': ['pong'],

@@ -4,3 +4,4 @@ export * from './NotFoundController';
 export * from './DBLController';
 export * from './CommandExecuteController';
 export * from './DiscordUserController';
+export * from './InteractionController';

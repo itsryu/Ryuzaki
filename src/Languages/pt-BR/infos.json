@@ -12,7 +12,7 @@
                 "Você precisa das permissões: `{{permission}}` para utilizar este comando."
             ],
             "client": [
-                "O {{client}} `não precisa de permissões` para executar este comando",
+                "O {{client}} `não precisa de permissões` para executar este comando.",
                 "O {{client}} precisa das permissões: `{{permission}}` para executar este comando."
             ],
             "separator": "e$1"

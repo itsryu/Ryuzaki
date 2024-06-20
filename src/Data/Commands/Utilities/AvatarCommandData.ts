@@ -16,8 +16,9 @@ class AvatarCommandDataConstructor extends CommandData {
                 'en-US': 'Shows the avatar of the mentioned user or your own avatar.'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': ['av'],

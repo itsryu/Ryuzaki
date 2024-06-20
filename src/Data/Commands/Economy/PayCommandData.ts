@@ -16,8 +16,9 @@ class PayCommandDataConstructor extends CommandData {
                 'en-US': 'Send your money to a specific user.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['pagar', 'enviar', 'dar'],

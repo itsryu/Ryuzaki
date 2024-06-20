@@ -16,8 +16,9 @@ class CatsCommandDataConstructor extends CommandData {
                 'en-US': 'Random cat pictures or gifs.'
             },
             category: {
-                'pt-BR': '🥳 Diversão',
-                'en-US': '🥳 Fun'
+                'pt-BR': 'Diversão',
+                'en-US': 'Fun',
+                'es-ES': 'Diversión'
             },
             aliases: {
                 'pt-BR': ['gato', 'gatos'],

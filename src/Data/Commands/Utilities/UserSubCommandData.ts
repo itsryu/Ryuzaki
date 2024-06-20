@@ -16,8 +16,9 @@ class UserSubCommandDataConstructor extends CommandData {
                 'en-US': 'General user commands'
             },
             category: {
-                'pt-BR': '⚙️ Utilidades',
-                'en-US': '⚙️ Utilities'
+                'pt-BR': 'Utilidades',
+                'en-US': 'Utilities',
+                'es-ES': 'Utilidades'
             },
             aliases: {
                 'pt-BR': ['usuário', 'usuario', 'usuários'],

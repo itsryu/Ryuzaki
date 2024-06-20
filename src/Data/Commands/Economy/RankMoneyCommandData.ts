@@ -16,8 +16,9 @@ class RankMoneyCommandDataConstructor extends CommandData {
                 'en-US': 'Displays currency rank.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['rankcoin', 'coinrank', 'coinsrank'],

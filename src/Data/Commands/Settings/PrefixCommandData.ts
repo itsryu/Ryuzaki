@@ -16,8 +16,9 @@ class PrefixCommandDataConstructor extends CommandData {
                 'en-US': 'Configure the BOT prefix on the server.'
             },
             category: {
-                'pt-BR': '🔧 Configurações',
-                'en-US': '🔧 Settings'
+                'pt-BR': 'Configurações',
+                'en-US': 'Settings',
+                'es-ES': 'Ajustes'
             },
             aliases: {
                 'pt-BR': ['prefixo'],

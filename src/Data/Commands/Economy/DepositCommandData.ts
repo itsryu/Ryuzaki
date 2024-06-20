@@ -16,8 +16,9 @@ class DepositCommandDataConstructor extends CommandData {
                 'en-US': 'Deposit your money in the bank.'
             },
             category: {
-                'pt-BR': '💸 Economia',
-                'en-US': '💸 Economy'
+                'pt-BR': 'Economia',
+                'en-US': 'Economy',
+                'es-ES': 'Economía'
             },
             aliases: {
                 'pt-BR': ['dep', 'depositar'],
