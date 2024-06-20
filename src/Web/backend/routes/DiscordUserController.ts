@@ -4,6 +4,7 @@ import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure
 import { NextFunction } from 'express-serve-static-core';
 import { Snowflake } from 'discord-api-types/v10';
 import { DiscordUser } from '../../../Types/GatewayTypes';
+import fetch from 'node-fetch';
 
 class DiscordUserController extends RouteStructure {
     constructor(app: App) {

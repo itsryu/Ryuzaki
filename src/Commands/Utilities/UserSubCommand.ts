@@ -6,6 +6,7 @@ import { PermissionFlagKey, PermissionsFlagsText, UserBadges, UserFlagKey, UserF
 import { Languages } from '../../Types/ClientTypes';
 import { Util } from '../../Utils/util';
 import { DiscordUser } from '../../Types/GatewayTypes';
+import fetch from 'node-fetch';
 
 interface UserBoostBadge {
     atualBadge?: string | null;
