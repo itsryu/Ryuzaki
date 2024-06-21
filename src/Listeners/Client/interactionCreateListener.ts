@@ -273,7 +273,7 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         const commands = this.client.commands
                             .map((command) => command.data.options.name)
-                            .filter((command) => command.toLowerCase().includes(input));
+                            .filter((command) => command.toLowerCase().startsWith(input) && command.toLowerCase().includes(input));
 
                         const response = commands.slice(0, 25).map((name) => ({ name, value: name }));
 

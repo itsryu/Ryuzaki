@@ -78,10 +78,10 @@ export default class messageCreateListener extends ListenerStructure {
 
                 } else {
                     //===============> Cooldowns <===============//
-
                     if (!this.client.cooldowns.has(command.data.options.name)) {
                         this.client.cooldowns.set(command.data.options.name, new Collection());
                     }
+                    
                     const now = Date.now();
                     const timestamps = this.client.cooldowns.get(command.data.options.name);
                     const cooldownAmount = (command.data.options.config.cooldown || 2) * 1000;

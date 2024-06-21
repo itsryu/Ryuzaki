@@ -70,6 +70,10 @@ export default class helpCommand extends CommandStructure {
                 return void message.reply({ embeds: [embed] });
             }
         } else {
+            const guildData = await this.client.getData(message.guild?.id, 'guild');
+            const userData = await this.client.getData(message.author.id, 'user');
+            const prefix = guildData ? guildData.prefix : userData ? userData.prefix : process.env.PREFIX;
+
             const help = new ClientEmbed(this.client)
                 .setAuthor({ name: this.client.t('infos:help:embed.title', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
                 .setDescription(this.client.t('infos:help:embed.description', { author: message.author, prefix, client: this.client.user?.username }))
@@ -128,11 +132,11 @@ export default class helpCommand extends CommandStructure {
 
                     return void msg.edit({ embeds: [help] });
                 } else {
-                    const comandos = commands.filter((command) => command.data.options.category != null && command.data.options.category[language] === i.values[0]).sort((a, b) => a.data.options.name.localeCompare(b.data.options.name)).map((f) => f.data.options.name);
+                    const comandos = commands.filter((command) => command.data.options.category[language] === i.values[0]).sort((a, b) => a.data.options.name.localeCompare(b.data.options.name)).map((f) => prefix + f.data.options.name + ' - ' + f.data.options.description_localizations?.[language]);
 
                     help.setThumbnail(null);
                     help.setDescription(`${this.client.t('infos:help.fields', { index: 7 })} \`${i.values[0]}\``);
-                    help.setFields({ name: `[${comandos.length}] ${this.client.t('infos:help.fields', { index: 7 })}`, value: `\`${comandos.join(' - ')}.\`` || this.client.t('infos:help.fields_1')[3], inline: false });
+                    help.setFields({ name: `[${comandos.length}] ${this.client.t('infos:help.fields', { index: 7 })}`, value: `\`\`\`${comandos.join('\n\n')}\`\`\`` || this.client.t('infos:help.fields_1')[3], inline: false });
 
                     return void msg.edit({ embeds: [help] });
                 }
