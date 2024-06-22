@@ -20,9 +20,9 @@ export default class ryuCommand extends CommandStructure {
         const clientUsername = this.client.user?.username;
         const clientTag = this.client.user?.tag;
         const clientId = this.client.user?.id;
-        const usersArray = await this.client.shard?.fetchClientValues('users.cache.size').catch(() => undefined) as number[] | undefined ;
+        const usersArray = await this.client.shard?.fetchClientValues('users.cache.size').catch(() => undefined) as number[] | undefined;
         const clientUsers = usersArray?.reduce((acc, userCount) => acc + userCount, 0);
-        const guildsArray = await this.client.shard?.fetchClientValues('guilds.cache.size').catch(() => undefined) as number[] | undefined ;
+        const guildsArray = await this.client.shard?.fetchClientValues('guilds.cache.size').catch(() => undefined) as number[] | undefined;
         const clientGuilds = guildsArray?.reduce((acc, guildCount) => acc + guildCount, 0);
         const clientShards = this.client.shard?.ids.length;
         const clientCommands = this.client.commands.size;
@@ -31,7 +31,6 @@ export default class ryuCommand extends CommandStructure {
         const clientPing = Math.floor(this.client.ws.ping) + 'ms';
         const djsVersion = version;
         const njsVersion = process.version;
-        const inviteURL = this.client.loadInvite();
         const clientOwner = await this.client.users.fetch(process.env.OWNER_ID);
         const clientAvatar = this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 });
         const dbPing = await this.databasePing();
@@ -45,7 +44,7 @@ export default class ryuCommand extends CommandStructure {
             .addFields(
                 {
                     name: 'Sobre:',
-                    value: `<:info:900050287199399946> Nickname: \`${clientTag}\`\n:id: ID: \`${clientId}\`\n❓ Prefixo neste servidor: \`${prefix}\``
+                    value: `Nickname: \`${clientTag}\`\nID: \`${clientId}\`\nPrefixo neste servidor: \`${prefix}\``
                 },
                 {
                     name: 'Estatísticas:',
@@ -53,21 +52,33 @@ export default class ryuCommand extends CommandStructure {
                 },
                 {
                     name: 'Linguagem e outros:',
-                    value: `🈯 Linguagem: [Typescript](https://www.typescriptlang.org) \n📚 Biblioteca: [Discord.js](https://discord.js.org) \`(v${djsVersion})\`\n🌲 Ambiente: [Node.js](https://nodejs.org/) \`(${njsVersion})\`\n🏦 Banco de dados: [MongoDB](https://www.mongodb.com/)`
+                    value: `🈯 Linguagem: [Typescript](https://www.typescriptlang.org) \n📚 Biblioteca: [Discord.js](https://discord.js.org/docs/packages/discord.js/${version}) \`(v${djsVersion})\`\n🌲 Ambiente: [Node.js](https://nodejs.org/) \`(${njsVersion})\`\n🏦 Banco de dados: [MongoDB](https://www.mongodb.com/)`
                 },
                 {
                     name: 'Sistema:',
                     value: `🤖 CPU: \`\`\`md\n${cpus().map(i => `${i.model}`)[0]}\`\`\`\n🛠️ Arquitetura: \`${arch()}\`\n⏰ Tempo online: \`${clientUptime}\`\n🛰 Ping do Host: \`${clientPing}\`\n🍃 Ping do DB: \`${dbPing}\``
                 })
-            .setFooter({ text: `${clientTag} criado pelo ${clientOwner.tag}`, iconURL: clientOwner.displayAvatarURL({ extension: 'png', size: 4096 }) });
+            .setFooter({ text: `${this.client.user?.username} criado pelo ${clientOwner.tag}`, iconURL: clientOwner.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
-        const button = new ButtonBuilder()
-            .setLabel('Me Adicione!')
+        const addMeButton = new ButtonBuilder()
+            .setURL(this.client.url)
             .setStyle(ButtonStyle.Link)
-            .setURL(inviteURL)
-            .setEmoji(emojis.pin);
+            .setEmoji(emojis.pin)
+            .setLabel(this.client.t('main:mentions:button.add'));
 
-        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+        const githubButton = new ButtonBuilder()
+            .setURL('https://github.com/itsryu/Ryuzaki')
+            .setStyle(ButtonStyle.Link)
+            .setEmoji(emojis.github)
+            .setLabel(this.client.t('main:mentions:button.github'));
+
+        const voteButton = new ButtonBuilder()
+            .setURL('https://top.gg/bot/1117629775046004766/vote')
+            .setStyle(ButtonStyle.Link)
+            .setEmoji('🚀')
+            .setLabel(this.client.t('main:mentions:button.vote'));
+
+        const row = new ActionRowBuilder<ButtonBuilder>().addComponents([addMeButton, githubButton, voteButton]);
         return void message.reply({ embeds: [clientInfo], components: [row] });
     }
 

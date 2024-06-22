@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { VoteCommandData } from '../../Data/Commands/Economy/VoteCommandData';
-import { Message } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js';
 
 export default class voteCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -27,10 +27,17 @@ export default class voteCommand extends CommandStructure {
             } else {
                 const voteEmbed = new ClientEmbed(this.client)
                     .setAuthor({ name: 'Discord Bot List', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                    .setDescription(this.client.t('utilities:vote:embeds:vote.description', { author: message.author, votes, url: 'https://top.gg/bot/1117629775046004766' }))
+                    .setDescription(this.client.t('utilities:vote:embeds:vote.description', { author: message.author, votes, url: 'https://top.gg/bot/1117629775046004766/vote' }))
                     .setFooter({ text: this.client.t('utilities:vote:embeds:vote.footer') });
 
-                return void message.reply({ embeds: [voteEmbed] });
+                const voteButton = new ButtonBuilder()
+                    .setURL('https://top.gg/bot/1117629775046004766/vote')
+                    .setStyle(ButtonStyle.Link)
+                    .setEmoji('🚀')
+                    .setLabel(this.client.t('main:mentions:button.vote'));
+
+                const row = new ActionRowBuilder<ButtonBuilder>().addComponents(voteButton);
+                return void message.reply({ embeds: [voteEmbed], components: [row] });
             }
         }
     }

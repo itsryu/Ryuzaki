@@ -73,17 +73,18 @@ export default class guildMemberAddListener extends ListenerStructure {
                             return invite?.uses && inv.uses ? invite.uses < inv.uses : false;
                         });
 
-                        const embed = new ClientEmbed(this.client)
-                            .setTitle('Bem-vindo!!')
-                            .setURL(`https://discord.gg/${usedInvite?.code}`)
-                            .setDescription(`Seja bem-vindo(a) \`${member.user.tag}\`, convidado(a) por \`${usedInvite?.inviter?.username}\`.\nNº de usos: **${usedInvite?.uses}**`)
-                            .setFooter({ text: guild.name });
+                        if (usedInvite) {
+                            const embed = new ClientEmbed(this.client)
+                                .setURL(`https://discord.gg/${usedInvite?.code}`)
+                                .setDescription(`Seja bem-vindo(a) \`${member.user.tag}\`, convidado(a) por \`${usedInvite.inviter?.username}\`.\nNº de usos: **${usedInvite.uses}**`)
+                                .setFooter({ text: guild.name });
 
-                        newInvites.each((inv) => cachedInvites.set(inv.code, inv));
-                        this.client.invites.set(guild.id, cachedInvites);
+                            newInvites.each((inv) => cachedInvites.set(inv.code, inv));
+                            this.client.invites.set(guild.id, cachedInvites);
 
-                        const channel = guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                        channel.send({ embeds: [embed] });
+                            const channel = guild.channels.cache.get(guildData.logs.channel) as TextChannel;
+                            channel.send({ embeds: [embed] });
+                        }
                     }
                 }
             }

@@ -39,8 +39,7 @@ class DiscordUserController extends RouteStructure {
                 const response = await fetch(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
                     headers: {
                         Authorization: process.env.USER_TOKEN,
-                        'Content-Type': 'application/json; charset=UTF-8',
-                        'User-Agent': 'Ryuzaki (https://github.com/itsryu/Ryuzaki, 1.0.0)'
+                        'Content-Type': 'application/json; charset=UTF-8'
                     }
                 });
 
@@ -48,9 +47,10 @@ class DiscordUserController extends RouteStructure {
 
                 if (!response.ok) {
                     this.app.logger.error(JSON.stringify(data), DiscordUserController.name);
+                    resolve(null);
+                } else {
+                    resolve(data);
                 }
-
-                resolve(data);
             } catch (err) {
                 this.app.logger.error((err as Error).message, DiscordUserController.name);
                 this.app.logger.warn((err as Error).stack as string, DiscordUserController.name);

@@ -7,7 +7,7 @@ const jestConfig: JestConfigWithTsJest = {
   rootDir: './',
   testEnvironment: 'node',
   testMatch: [
-    '<rootDir>/__test__/*.test.ts',
+    '<rootDir>/__tests__/*.test.ts',
   ]
 }
 

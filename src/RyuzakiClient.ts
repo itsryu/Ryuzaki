@@ -66,7 +66,7 @@ export class Ryuzaki extends Client {
     }
 
     public loadInvite() {
-        return this.url = this.generateInvite({
+        this.url = this.generateInvite({
             permissions: [
                 PermissionFlagsBits.ManageGuild,
                 PermissionFlagsBits.ManageRoles,

@@ -31,7 +31,6 @@ export default class messageCreateListener extends ListenerStructure {
                     .catch(() => undefined);
             }
 
-            // Se mencionar o BOT:
             if (message.content.match(this.client.utils.GetMention(this.client.user?.id!))) {
                 const row = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
@@ -290,7 +289,7 @@ export default class messageCreateListener extends ListenerStructure {
                 const { default: xpModule } = await import('../../Modules/xpModule');
                 new xpModule(this.client).moduleExecute(message);
 
-                //===============> Anti-Invites:
+                //===============> Anti-Convites:
                 const { default: inviteModule } = await import('../../Modules/inviteModule');
                 new inviteModule(this.client).moduleExecute(message);
 

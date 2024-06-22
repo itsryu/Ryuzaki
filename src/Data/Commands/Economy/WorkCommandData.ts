@@ -8,8 +8,8 @@ class WorkCommandDataConstructor extends CommandData {
             type: ApplicationCommandType.ChatInput,
             description: 'Command to work and get your money and experience.',
             name_localizations: {
-                'pt-BR': 'diário',
-                'en-US': 'daily'
+                'pt-BR': 'trabalho',
+                'en-US': 'work'
             },
             description_localizations: {
                 'pt-BR': 'Comando para trabalhar e ganhar o seu dinheiro e experiência.',

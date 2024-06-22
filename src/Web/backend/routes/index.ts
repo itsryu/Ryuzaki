@@ -5,3 +5,5 @@ export * from './DBLController';
 export * from './CommandExecuteController';
 export * from './DiscordUserController';
 export * from './InteractionController';
+export * from './LinkedRoleController';
+export * from './DiscordOauthCallbackController';

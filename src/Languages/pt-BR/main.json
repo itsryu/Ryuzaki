@@ -13,7 +13,8 @@
         "button": {
             "github": "Github",
             "support": "Suporte",
-            "add": "Me adicione!" 
+            "add": "Me adicione!",
+            "vote": "Vote em mim!"
         }
     },
     "cooldown": {
