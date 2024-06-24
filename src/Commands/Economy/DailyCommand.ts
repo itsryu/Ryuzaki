@@ -51,6 +51,7 @@ export default class DailyCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, DailyCommand.name);
             this.client.logger.warn((err as Error).stack, DailyCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

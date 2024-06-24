@@ -31,6 +31,7 @@ export default class AFKCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, AFKCommand.name);
             this.client.logger.warn((err as Error).stack, AFKCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

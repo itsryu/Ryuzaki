@@ -283,6 +283,7 @@ export default class CalculatorCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, CalculatorCommand.name);
             this.client.logger.warn((err as Error).stack, CalculatorCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

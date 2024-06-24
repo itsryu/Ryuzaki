@@ -55,6 +55,7 @@ export default class WorkCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, WorkCommand.name);
             this.client.logger.warn((err as Error).stack, WorkCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

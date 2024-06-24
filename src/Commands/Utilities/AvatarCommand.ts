@@ -10,7 +10,7 @@ export default class AvatarCommand extends CommandStructure {
 
     async commandExecute({ message, args }: { message: Message, args: string[] }) {
         try {
-            const user = message.mentions.users.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
+            const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
 
             if (args[0] == 'avatar') {
                 const member = message.guild?.members.cache.get(user.id);
@@ -51,6 +51,7 @@ export default class AvatarCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, AvatarCommand.name);
             this.client.logger.warn((err as Error).stack, AvatarCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

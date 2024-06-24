@@ -89,6 +89,7 @@ export default class ClearCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, ClearCommand.name);
             this.client.logger.warn((err as Error).stack, ClearCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 

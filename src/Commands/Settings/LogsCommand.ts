@@ -5,7 +5,7 @@ import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInt
 import { emojis } from '../../Utils/Objects/emojis';
 import { GuildDocument } from '../../Types/SchemaTypes';
 
-export default class logsCommand extends CommandStructure {
+export default class LogsCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, LogsCommandData);
     }
@@ -307,8 +307,9 @@ export default class logsCommand extends CommandStructure {
                 });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, logsCommand.name);
-            this.client.logger.warn((err as Error).stack, logsCommand.name);
+            this.client.logger.error((err as Error).message, LogsCommand.name);
+            this.client.logger.warn((err as Error).stack, LogsCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 

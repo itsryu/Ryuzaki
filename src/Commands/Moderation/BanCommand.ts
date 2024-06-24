@@ -117,6 +117,7 @@ export default class BanCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, BanCommand.name);
             this.client.logger.warn((err as Error).stack, BanCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

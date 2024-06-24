@@ -88,6 +88,7 @@ export default class DivorceCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, DivorceCommand.name);
             this.client.logger.warn((err as Error).stack, DivorceCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

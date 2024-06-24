@@ -84,6 +84,7 @@ export default class BotInfoCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, BotInfoCommand.name);
             this.client.logger.warn((err as Error).stack, BotInfoCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 

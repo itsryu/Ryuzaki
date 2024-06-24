@@ -76,6 +76,7 @@ export default class RankMoneyCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, RankMoneyCommand.name);
             this.client.logger.warn((err as Error).stack, RankMoneyCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

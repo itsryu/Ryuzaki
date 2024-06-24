@@ -3,7 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { PrefixCommandData } from '../../Data/Commands/Settings/PrefixCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction, ButtonInteraction } from 'discord.js';
 
-export default class prefixCommand extends CommandStructure {
+export default class PrefixCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, PrefixCommandData);
     }
@@ -74,8 +74,9 @@ export default class prefixCommand extends CommandStructure {
                 });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, prefixCommand.name);
-            this.client.logger.warn((err as Error).stack, prefixCommand.name);
+            this.client.logger.error((err as Error).message, PrefixCommand.name);
+            this.client.logger.warn((err as Error).stack, PrefixCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

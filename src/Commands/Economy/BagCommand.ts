@@ -44,6 +44,7 @@ export default class BagCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, BagCommand.name);
             this.client.logger.warn((err as Error).stack, BagCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

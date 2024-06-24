@@ -29,7 +29,7 @@ export default class interactionCreateListener extends ListenerStructure {
 
             if (interaction.isCommand() || interaction.isContextMenuCommand()) {
                 if (interaction.guild && !(interaction.channel as TextChannel).permissionsFor(interaction.guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
-                    return void interaction.reply({ content: this.client.t('main:permissions.alert', { index: 3, member: interaction.member }), ephemeral: true });
+                    return void await interaction.reply({ content: this.client.t('main:permissions.alert', { index: 3, member: interaction.member }), ephemeral: true });
                 }
 
                 interaction.options.data.forEach((option) => {
@@ -86,7 +86,7 @@ export default class interactionCreateListener extends ListenerStructure {
 
                             if (time && now < time + cooldownAmount) {
                                 const timeLeft = (time + cooldownAmount - now) / 1000;
-                                return void interaction.reply({ content: this.client.t('main:cooldown.reply', { time: timeLeft.toFixed(1), command: command.data.options.name }), ephemeral: true }).catch(() => undefined);
+                                return void await interaction.reply({ content: this.client.t('main:cooldown.reply', { time: timeLeft.toFixed(1), command: command.data.options.name }), ephemeral: true }).catch(() => undefined);
                             }
                         }
 
@@ -111,30 +111,30 @@ export default class interactionCreateListener extends ListenerStructure {
                             if (guildData?.cmdblock.status) {
                                 if (!(interaction.member?.permissions as Readonly<PermissionsBitField>).has(PermissionFlagsBits.ManageMessages)) {
                                     if (guildData.cmdblock.cmds.some((x) => x === command.data.options.name) || guildData.cmdblock.channels.some((x) => x === interaction.channel?.id)) {
-                                        return void interaction.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${interaction.user.id}>`).replace(/{channel}/g, `<#${interaction.channel?.id}`).replace(/{cmd}/g, command.data.options.name), ephemeral: true });
+                                        return void await interaction.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${interaction.user.id}>`).replace(/{channel}/g, `<#${interaction.channel?.id}`).replace(/{cmd}/g, command.data.options.name), ephemeral: true });
                                     }
                                 }
                             }
 
                             if (commandData && commandData.maintenance) {
-                                return void interaction.reply({ embeds: [mainCmd], ephemeral: true });
+                                return void await interaction.reply({ embeds: [mainCmd], ephemeral: true });
                             } else if (clientData?.maintenance) {
-                                return void interaction.reply({ embeds: [mainBot], ephemeral: true });
+                                return void await interaction.reply({ embeds: [mainBot], ephemeral: true });
                             } else if (clientData?.blacklist.some((x) => x == interaction.user.id)) {
-                                return void interaction.reply({ content: this.client.t('main:blacklist.user', { user: interaction.user }), ephemeral: true });
+                                return void await interaction.reply({ content: this.client.t('main:blacklist.user', { user: interaction.user }), ephemeral: true });
                             }
                         }
 
                         //===============> Comandos de desenvolvedor:
 
                         if (command.data.options.config.devOnly && !this.client.developers.some((id) => [id].includes(interaction.user.id))) {
-                            return void interaction.reply({ content: this.client.t('main:owner.reply', { client: this.client.user?.username }), ephemeral: true });
+                            return void await interaction.reply({ content: this.client.t('main:owner.reply', { client: this.client.user?.username }), ephemeral: true });
                         }
 
                         //===============> Comandos de DM:
 
                         if (interaction.channel?.type === ChannelType.DM && !command.data.options.config.isDMAllowed) {
-                            return void interaction.reply({ content: `${interaction.user}, este comando não pode ser executado em sua DM, tente executa-lo em um servidor.` });
+                            return void await interaction.reply({ content: `${interaction.user}, este comando não pode ser executado em sua DM, tente executa-lo em um servidor.` });
                         }
 
                         //===============> Execução dos comandos:
@@ -172,84 +172,86 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         const interactionExecute = new Promise(commandPromise);
 
-                        interactionExecute.catch((err) => {
-                            this.client.logger.error(err.message, command.data.options.name);
-                            this.client.logger.warn(err.stack, command.data.options.name);
+                        await interactionExecute
+                            .catch(async (err) => {
+                                this.client.logger.error(err.message, command.data.options.name);
+                                this.client.logger.warn(err.stack, command.data.options.name);
 
-                            const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
+                                const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
-                            const errorEmbed = new ClientEmbed(this.client)
-                                .setTitle(command.data.options.name)
-                                .setDescription('```js' + '\n' + err.stack + '\n' + '```');
+                                const errorEmbed = new ClientEmbed(this.client)
+                                    .setTitle(command.data.options.name)
+                                    .setDescription('```js' + '\n' + err.stack + '\n' + '```');
 
-                            errorChannel.send({ embeds: [errorEmbed] });
-                            return interaction.reply({ content: this.client.t('main:errors.interaction', { index: 0 }), ephemeral: true });
-                        });
+                                await errorChannel.send({ embeds: [errorEmbed] });
+                                return interaction.reply({ content: this.client.t('main:errors.interaction', { index: 0 }), ephemeral: true });
+                            });
 
-                        interactionExecute.then(async () => {
-                            if (![process.env.OWNER_ID].includes(interaction.user.id) && interaction.guild) {
-                                const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
+                        await interactionExecute
+                            .then(async () => {
+                                if (![process.env.OWNER_ID].includes(interaction.user.id) && interaction.channel) {
+                                    const webHook = new WebhookClient({ url: process.env.WEBHOOK_LOG_COMMAND_URL });
 
-                                const keyByValue = (enumObject: object, value: number): string | undefined => {
-                                    return Object.keys(enumObject).find(key => enumObject[key] === value);
-                                };
+                                    const getInteractionType = (enumObject: object, value: number): string | undefined => {
+                                        return Object.keys(enumObject).find(key => enumObject[key] === value);
+                                    };
 
-                                const whEmbed = new ClientEmbed(this.client)
-                                    .setThumbnail(interaction.user.displayAvatarURL({ extension: 'png', size: 4096 }))
-                                    .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                                    .addFields(
-                                        {
-                                            name: 'Guild:',
-                                            value: `\`${interaction.guild.name}\` \`(${interaction.guild.id})\``
-                                        },
-                                        {
-                                            name: 'Author:',
-                                            value: `\`${interaction.user.tag}\` \`(${interaction.user.id})\``
-                                        },
-                                        {
-                                            name: 'Command Type:',
-                                            value: `\`${keyByValue(InteractionType, interaction.type)}\``
-                                        },
-                                        {
-                                            name: 'What was executed:',
-                                            value: `**\`/${command.data.options.name}\`**`
-                                        });
+                                    const whEmbed = new ClientEmbed(this.client)
+                                        .setThumbnail(interaction.user.displayAvatarURL({ extension: 'png', size: 4096 }))
+                                        .setAuthor({ name: `${this.client.user?.username} Commands Log`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                                        .addFields(
+                                            {
+                                                name: 'Guild:',
+                                                value: interaction.channel.type === ChannelType.DM ? (`${interaction.user} \`(${interaction.user.id})\``) : (`\`${interaction.guild?.name}\` \`(${interaction.guild?.id})\``)
+                                            },
+                                            {
+                                                name: 'Author:',
+                                                value: `\`${interaction.user.tag}\` \`(${interaction.user.id})\``
+                                            },
+                                            {
+                                                name: 'Command Type:',
+                                                value: `\`${getInteractionType(InteractionType, interaction.type)}\``
+                                            },
+                                            {
+                                                name: 'What was executed:',
+                                                value: `**\`/${command.data.options.name}\`**`
+                                            });
 
-                                webHook.send({ embeds: [whEmbed] });
-                            }
+                                    await webHook.send({ embeds: [whEmbed] });
+                                }
 
-                            if (userData && commandData) {
-                                commandData.set({
-                                    'usages': commandData.usages + 1
-                                });
-
-                                userData.set({
-                                    'commands.usages': userData.commands.usages + 1,
-                                    'exp.xp': userData.exp.xp + Math.floor(Math.random() * 50) + 1
-                                });
-
-                                await commandData.save();
-                                await userData.save();
-
-                                const xp = userData.exp.xp;
-                                const level = userData.exp.level;
-                                const nextLevel = userData.exp.nextLevel * level;
-
-                                if (xp >= nextLevel) {
-                                    userData.set({
-                                        'exp.xp': 0,
-                                        'exp.level': level + 1
+                                if (userData && commandData) {
+                                    commandData.set({
+                                        'usages': commandData.usages + 1
                                     });
 
+                                    userData.set({
+                                        'commands.usages': userData.commands.usages + 1,
+                                        'exp.xp': userData.exp.xp + Math.floor(Math.random() * 50) + 1
+                                    });
+
+                                    await commandData.save();
                                     await userData.save();
 
-                                    return void message.reply({ content: `Você acaba de subir para o nível **${userData.exp.level}**.`, ephemeral: true });
+                                    const xp = userData.exp.xp;
+                                    const level = userData.exp.level;
+                                    const nextLevel = userData.exp.nextLevel * level;
+
+                                    if (xp >= nextLevel) {
+                                        userData.set({
+                                            'exp.xp': 0,
+                                            'exp.level': level + 1
+                                        });
+
+                                        await userData.save();
+
+                                        return void await message.reply({ content: `Você acaba de subir para o nível **${userData.exp.level}**.`, ephemeral: true });
+                                    }
                                 }
-                            }
-                        });
+                            });
                     } catch (err) {
                         this.client.logger.error((err as Error).message, interactionCreateListener.name);
-                        this.client.logger.warn((err as Error).stack!, interactionCreateListener.name);
+                        this.client.logger.warn((err as Error).stack, interactionCreateListener.name);
                     }
                 }
             }
@@ -259,12 +261,12 @@ export default class interactionCreateListener extends ListenerStructure {
             if (interaction.isButton()) {
                 if (interaction.customId === 'open') {
                     const { default: createTicketButton } = await import('../../Modules/Buttons/CreateTicket');
-                    new createTicketButton(this.client).moduleExecute(interaction);
+                    await new createTicketButton(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'close') {
                     const { default: closeTicketButton } = await import('../../Modules/Buttons/CloseTicket');
-                    new closeTicketButton(this.client).moduleExecute(interaction, language);
+                    await new closeTicketButton(this.client).moduleExecute(interaction, language);
                 }
             }
 
@@ -273,12 +275,12 @@ export default class interactionCreateListener extends ListenerStructure {
             if (interaction.isModalSubmit()) {
                 if (interaction.customId === 'aboutme') {
                     const { default: aboutModal } = await import('../../Modules/Modals/AboutModal');
-                    new aboutModal(this.client).moduleExecute(interaction);
+                    await new aboutModal(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'rep') {
                     const { default: repModal } = await import('../../Modules/Modals/RepModal');
-                    new repModal(this.client).moduleExecute(interaction);
+                    await new repModal(this.client).moduleExecute(interaction);
                 }
             }
 
@@ -299,7 +301,7 @@ export default class interactionCreateListener extends ListenerStructure {
                     }
                 } catch (err) {
                     this.client.logger.error((err as Error).message, interactionCreateListener.name);
-                    this.client.logger.warn((err as Error).stack!, interactionCreateListener.name);
+                    this.client.logger.warn((err as Error).stack, interactionCreateListener.name);
                 }
             }
 
@@ -307,7 +309,7 @@ export default class interactionCreateListener extends ListenerStructure {
             //==============================================//
         } catch (err) {
             this.client.logger.error((err as Error).message, interactionCreateListener.name);
-            this.client.logger.warn((err as Error).stack!, interactionCreateListener.name); return;
+            this.client.logger.warn((err as Error).stack, interactionCreateListener.name); return;
         }
     }
 }

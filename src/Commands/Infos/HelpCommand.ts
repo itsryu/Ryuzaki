@@ -151,6 +151,7 @@ export default class HelpCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, HelpCommand.name);
             this.client.logger.warn((err as Error).stack, HelpCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

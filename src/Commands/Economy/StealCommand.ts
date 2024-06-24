@@ -2,13 +2,14 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { Message } from 'discord.js';
 import { StealCommandData } from '../../Data/Commands/Economy/StealCommandData';
+import { Languages } from '../../Types/ClientTypes';
 
 export default class StealCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, StealCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
         try {
             const member = message.mentions.members?.first() ?? message.guild?.members.cache.get(args[0]);
             const userData = await this.client.getData(message.author.id, 'user');
@@ -61,7 +62,7 @@ export default class StealCommand extends CommandStructure {
 
                             const embed = new ClientEmbed(this.client)
                                 .setAuthor({ name: `${message.author.username} roubou ${member.user.username}`, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                                .setDescription(`Você roubou **${money.toLocaleString()}** de ${member}!`);
+                                .setDescription(`Você roubou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) de ${member}!`);
 
                             return void await message.reply({ embeds: [embed] });
                         } else {
@@ -70,6 +71,7 @@ export default class StealCommand extends CommandStructure {
                                 .setDescription(`Você falhou ao tentar roubar ${member}! Perdeu 10 de experiência.`);
 
                             userData.set({
+                                'steal.time': Date.now(),
                                 'exp.xp': userData.exp.xp - Math.floor(Math.random() * 20) + 1
                             });
                             await userData.save();
@@ -82,6 +84,7 @@ export default class StealCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, StealCommand.name);
             this.client.logger.warn((err as Error).stack, StealCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

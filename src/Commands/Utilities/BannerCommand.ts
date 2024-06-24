@@ -10,7 +10,7 @@ export default class BannerCommand extends CommandStructure {
 
     async commandExecute({ message, args }: { message: Message, args: string[] }) {
         try {
-            const user = message.mentions.users.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
+            const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
 
             await user.fetch()
                 .then(async (user) => {
@@ -38,6 +38,7 @@ export default class BannerCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, BannerCommand.name);
             this.client.logger.warn((err as Error).stack, BannerCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

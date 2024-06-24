@@ -9,6 +9,12 @@ export default class TestCommand extends CommandStructure {
     }
 
     public commandExecute({ message }: { message: Message, args: string[] }) {
-        this.client.logger.debug(message.content, TestCommand.name);
+        try {
+            this.client.logger.debug(message.content, TestCommand.name);
+        } catch (err) {
+            this.client.logger.error((err as Error).message, TestCommand.name);
+            this.client.logger.warn((err as Error).stack, TestCommand.name);
+            throw new Error((err as Error).message, { cause: err });
+        }
     }
 }

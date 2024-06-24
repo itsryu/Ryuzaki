@@ -52,6 +52,7 @@ export default class ShardCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, ShardCommand.name);
             this.client.logger.warn((err as Error).stack, ShardCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

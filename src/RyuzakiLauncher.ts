@@ -40,9 +40,8 @@ const client = new Ryuzaki({
     }
 });
 
-client.initialize();
-
 (async () => {
+    await client.initialize();
     extend((await import('dayjs/plugin/localizedFormat')).default);
     extend((await import('dayjs/plugin/duration')).default);
     extend((await import('dayjs/plugin/utc')).default);

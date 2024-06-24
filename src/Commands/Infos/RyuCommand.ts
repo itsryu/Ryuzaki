@@ -49,6 +49,7 @@ export default class RyuCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, RyuCommand.name);
             this.client.logger.warn((err as Error).stack, RyuCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

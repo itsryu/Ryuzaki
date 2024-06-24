@@ -32,6 +32,7 @@ export default class CatsCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, CatsCommand.name);
             this.client.logger.warn((err as Error).stack, CatsCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

@@ -76,6 +76,7 @@ export default class PayCommand extends CommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, PayCommand.name);
             this.client.logger.warn((err as Error).stack, PayCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

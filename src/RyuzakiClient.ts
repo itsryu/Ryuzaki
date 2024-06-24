@@ -42,17 +42,17 @@ export class Ryuzaki extends Client {
         await this.clientManager();
         await super.login(process.env.CLIENT_TOKEN);
         this.loadInvite();
-        this.registerSlashCommands();
-        this.loadWS();
+        await this.registerSlashCommands();
+        await this.loadWS();
 
-        process.on('warning', (warn) => { this.logger.warn(warn.stack!, 'warning'); });
-        process.on('uncaughtException', (err: Error) => { this.logger.error(err.stack!, 'uncaughtException'); });
-        process.on('unhandledRejection', (err: Error) => { this.logger.error(err.stack!, 'unhandledRejection'); });
+        process.on('warning', (warn) => this.logger.warn(warn.stack, 'warning'));
+        process.on('uncaughtException', (err: Error) => this.logger.error(err.stack, 'uncaughtException'));
+        process.on('unhandledRejection', (err: Error) => this.logger.error(err.stack, 'unhandledRejection'));
     }
 
     private async clientManager() {
         const { default: servicesIndex } = await import('./Services/index');
-        new servicesIndex(this).moduleExecute();
+        await new servicesIndex(this).moduleExecute();
     }
 
     private async loadWS() {
@@ -100,13 +100,13 @@ export class Ryuzaki extends Client {
             const guildData = await this.getData(guild.id, 'guild');
             const languages: Languages[] = ['pt-BR', 'en-US', 'es-ES'];
 
-            guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
+            await guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
 
             return guildData?.lang as Languages;
         } else {
             const userData = await this.getData(user?.id, 'user');
 
-            userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
+            await userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
 
             return userData?.lang as Languages;
         }
@@ -141,12 +141,14 @@ export class Ryuzaki extends Client {
                         if ((err as MongoError).code === 11000) {
                             this.logger.error(err as string, 'getData');
                         } else {
-                            this.logger.error((err as Error).stack!, 'getData');
+                            this.logger.error((err as Error).stack, 'getData');
                         }
                     }
                 } else {
                     return undefined;
                 }
+
+                break;
             }
             case 'guild': {
                 const guild = this.guilds.cache.get(id!);
@@ -161,11 +163,13 @@ export class Ryuzaki extends Client {
 
                         return data as any;
                     } catch (err) {
-                        this.logger.error((err as Error).stack!, 'getData');
+                        this.logger.error((err as Error).stack, 'getData');
                     }
                 } else {
                     return undefined;
                 }
+
+                break;
             }
             case 'client': {
                 const client = this.user;
@@ -180,11 +184,13 @@ export class Ryuzaki extends Client {
 
                         return data as any;
                     } catch (err) {
-                        this.logger.error((err as Error).stack!, 'getData');
+                        this.logger.error((err as Error).stack, 'getData');
                     }
                 } else {
                     return undefined;
                 }
+
+                break;
             }
             case 'command': {
                 const command = this.commands.get(id!);
@@ -201,11 +207,13 @@ export class Ryuzaki extends Client {
 
                         return data as any;
                     } catch (err) {
-                        this.logger.error((err as Error).stack!, 'getData');
+                        this.logger.error((err as Error).stack, 'getData');
                     }
                 } else {
                     return undefined;
                 }
+
+                break;
             }
             default: {
                 return {} as any;
