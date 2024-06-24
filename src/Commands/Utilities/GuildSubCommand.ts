@@ -20,7 +20,7 @@ export default class ServerSubCommand extends CommandStructure {
                     switch (args[1]) {
                         case 'icon': {
                             if (!icon) {
-                                return void void message.reply(this.client.t('utilities:servericon.!icon'));
+                                return void message.reply(this.client.t('utilities:servericon.!icon'));
                             } else {
 
                                 const embed = new ClientEmbed(this.client)

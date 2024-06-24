@@ -12,7 +12,7 @@ class InfoMiddleware extends RouteStructure {
 
         this.app.logger.info(`\nRoute: ${req.originalUrl}\nMethod: ${req.method}\nIP: ${ip}`, InfoMiddleware.name);
 
-        return next();
+        next();
     };
 }
 

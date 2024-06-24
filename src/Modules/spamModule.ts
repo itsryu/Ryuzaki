@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ModuleStructure, ClientEmbed } from '../Structures/';
+import { ModuleStructure, ClientEmbed } from '../Structures';
 import { Message, TextChannel } from 'discord.js';
 import ms from 'ms';
 

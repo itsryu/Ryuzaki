@@ -27,7 +27,7 @@ class DiscordUserController extends RouteStructure {
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, DiscordUserController.name);
-            this.app.logger.warn((err as Error).stack as string, DiscordUserController.name);
+            this.app.logger.warn((err as Error).stack!, DiscordUserController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
@@ -53,7 +53,7 @@ class DiscordUserController extends RouteStructure {
                 }
             } catch (err) {
                 this.app.logger.error((err as Error).message, DiscordUserController.name);
-                this.app.logger.warn((err as Error).stack as string, DiscordUserController.name);
+                this.app.logger.warn((err as Error).stack!, DiscordUserController.name);
 
                 resolve(null);
             }
@@ -63,4 +63,4 @@ class DiscordUserController extends RouteStructure {
     };
 }
 
-export { DiscordUserController }
+export { DiscordUserController };

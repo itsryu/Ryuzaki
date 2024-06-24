@@ -9,8 +9,8 @@ class DiscordOauthCallbackController extends RouteStructure {
 
     run = async (req: Request, res: Response) => {
         try {
-            const code = req.query['code'];
-            const discordState = req.query['state'];
+            const code = req.query.code;
+            const discordState = req.query.state;
             const { clientState } = req.signedCookies;
 
             if (clientState !== discordState) {
@@ -38,7 +38,7 @@ class DiscordOauthCallbackController extends RouteStructure {
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, DiscordOauthCallbackController.name);
-            this.app.logger.warn((err as Error).stack as string, DiscordOauthCallbackController.name);
+            this.app.logger.warn((err as Error).stack!, DiscordOauthCallbackController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

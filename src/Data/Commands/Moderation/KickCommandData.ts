@@ -70,7 +70,7 @@ class KickCommandDataConstructor extends CommandData {
                     required: false
                 }
             ]
-        })
+        });
     }
 }
 

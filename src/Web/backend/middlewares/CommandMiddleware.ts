@@ -16,14 +16,14 @@ class CommandMiddleware extends RouteStructure {
 
             if (command) {
                 this.app.logger.info(`\nCommand executed successfully:\nCommand name: ${command.data.options.name}\nCommand description: ${command.data.options.description}`, CommandMiddleware.name);
-                return next();
+                next(); return;
             } else {
                 this.app.logger.warn(`\nTried to execute a nonexistent command:\nCommand name: ${commandName}`, CommandMiddleware.name);
                 return res.status(404).json(new JSONResponse(404, 'Command not found').toJSON());
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, CommandMiddleware.name);
-            this.app.logger.warn((err as Error).stack as string, CommandMiddleware.name);
+            this.app.logger.warn((err as Error).stack!, CommandMiddleware.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

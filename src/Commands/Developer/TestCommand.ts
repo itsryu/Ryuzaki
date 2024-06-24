@@ -8,7 +8,7 @@ export default class TestCommand extends CommandStructure {
         super(client, TestCommandData);
     }
 
-    public async commandExecute({ message }: { message: Message, args: string[] }) {
+    public commandExecute({ message }: { message: Message, args: string[] }) {
         this.client.logger.debug(message.content, TestCommand.name);
     }
 }

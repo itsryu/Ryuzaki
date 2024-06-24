@@ -8,7 +8,7 @@ class AuthMiddleware extends RouteStructure {
     }
 
     run = (req: Request, res: Response, next: NextFunction) => {
-        const auth = req.headers['authorization'];
+        const auth = req.headers.authorization;
         const [bearer, token] = auth?.length ? (auth.split(' ')) : ['Bearer', ''];
 
         try {
@@ -19,11 +19,11 @@ class AuthMiddleware extends RouteStructure {
                 return res.status(401).json(new JSONResponse(401, 'Unauthorized').toJSON());
             } else {
                 this.app.logger.info(`Valid authorization key used: ${token}`, AuthMiddleware.name);
-                return next();
+                next(); return;
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, AuthMiddleware.name);
-            this.app.logger.warn((err as Error).stack as string, AuthMiddleware.name);
+            this.app.logger.warn((err as Error).stack!, AuthMiddleware.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

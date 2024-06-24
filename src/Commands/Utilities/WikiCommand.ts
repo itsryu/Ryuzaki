@@ -33,11 +33,9 @@ export default class wikiCommand extends CommandStructure {
                     })
                 .setFooter({ text: this.client.t('utilities:wiki:result.footer'), iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/800px-Wikipedia-logo-v2.svg.png' });
 
-            if (body.thumbnail) {
-                embed.setThumbnail(body.thumbnail.source);
-            }
+            if (body.thumbnail) embed.setThumbnail(body.thumbnail.source);
 
-            return void message.reply({ embeds: [embed] });
+            return void await message.reply({ embeds: [embed] });
         }
     }
 }

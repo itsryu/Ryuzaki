@@ -18,7 +18,7 @@ const userSchema = new Schema<UserDocument>({
         usages: {
             type: Schema.Types.Number,
             default: 0
-        },
+        }
     },
     about: {
         type: Schema.Types.String,

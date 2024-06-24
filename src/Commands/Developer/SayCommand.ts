@@ -8,10 +8,10 @@ export default class SayCommand extends CommandStructure {
         super(client, SayCommandData);
     }
 
-    public commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
         const msg = args.join(' ');
 
-        message.delete();
-        message.channel.send({ content: msg });
+        await message.delete();
+        return void await message.channel.send({ content: msg });
     }
 }

@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ModuleStructure } from '../Structures/';
+import { ModuleStructure } from '../Structures';
 import { Message } from 'discord.js';
 
 export default class AFKModule extends ModuleStructure {
@@ -17,7 +17,7 @@ export default class AFKModule extends ModuleStructure {
     }
 
     async mentionedAFK(message: Message) {
-        const user = message.mentions?.users.first() ?? message.mentions?.repliedUser;
+        const user = message.mentions.users.first() ?? message.mentions.repliedUser;
 
         if (user) {
             const userData = await this.client.getData(user.id, 'user');

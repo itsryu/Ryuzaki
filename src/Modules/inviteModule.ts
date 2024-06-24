@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ModuleStructure } from '../Structures/';
+import { ModuleStructure } from '../Structures';
 import { ChannelType, Message, PermissionFlagsBits } from 'discord.js';
 
 export default class InviteModule extends ModuleStructure {

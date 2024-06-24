@@ -22,7 +22,7 @@ export default class UserSubCommand extends CommandStructure {
     async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
         switch (args[0]) {
             case 'image': {
-                const user = message.mentions?.users.first() ?? await this.client.users.fetch(args[3]).catch(() => undefined) ?? message.author;
+                const user = message.mentions.users.first() ?? await this.client.users.fetch(args[3]).catch(() => undefined) ?? message.author;
 
                 switch (args[1]) {
                     case 'avatar': {
@@ -47,22 +47,25 @@ export default class UserSubCommand extends CommandStructure {
                             }
 
                             case 'guild': {
-                                const member = message.guild?.members.cache.get(user.id)!;
-                                const avatar = member.displayAvatarURL({ extension: 'png', size: 4096 });
+                                const member = message.guild?.members.cache.get(user.id) ?? message.member;
 
-                                const embed = new ClientEmbed(this.client)
-                                    .setTitle(this.client.t('utilities:avatar.title'))
-                                    .addFields({ name: this.client.t('utilities:avatar.field'), value: `\`${member.user.username}\``, inline: true })
-                                    .setImage(avatar);
+                                if (member) {
+                                    const avatar = member.displayAvatarURL({ extension: 'png', size: 4096 });
 
-                                const button = new ButtonBuilder()
-                                    .setEmoji('🔗')
-                                    .setLabel(this.client.t('utilities:avatar.button'))
-                                    .setURL(avatar)
-                                    .setStyle(ButtonStyle.Link);
+                                    const embed = new ClientEmbed(this.client)
+                                        .setTitle(this.client.t('utilities:avatar.title'))
+                                        .addFields({ name: this.client.t('utilities:avatar.field'), value: `\`${member.user.username}\``, inline: true })
+                                        .setImage(avatar);
 
-                                const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
-                                return void message.reply({ embeds: [embed], components: [row] });
+                                    const button = new ButtonBuilder()
+                                        .setEmoji('🔗')
+                                        .setLabel(this.client.t('utilities:avatar.button'))
+                                        .setURL(avatar)
+                                        .setStyle(ButtonStyle.Link);
+
+                                    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+                                    return void message.reply({ embeds: [embed], components: [row] });
+                                }
                             }
                         }
                         break;
@@ -101,7 +104,7 @@ export default class UserSubCommand extends CommandStructure {
             }
 
             case 'info': {
-                const user = message.mentions?.users.first() ?? await this.client.users.fetch(args[1]).catch(() => undefined) ?? message.author;
+                const user = message.mentions.users.first() ?? await this.client.users.fetch(args[1]).catch(() => undefined) ?? message.author;
                 const member = message.guild?.members.cache.get(user.id) ?? await message.guild?.members.fetch(user.id).catch(() => undefined);
                 const userData = await this.client.getData(user.id, 'user');
                 const pages: ClientEmbed[] = [];
@@ -109,7 +112,7 @@ export default class UserSubCommand extends CommandStructure {
 
                 const data = await fetch((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + '/api/discord/user/' + user.id, {
                     headers: {
-                        'Authorization': 'Bearer ' + process.env.AUTH_KEY,
+                        'Authorization': 'Bearer ' + process.env.AUTH_KEY
                     }
                 })
                     .then((res) => res.json())
@@ -124,10 +127,10 @@ export default class UserSubCommand extends CommandStructure {
 
                     const menuEmbed = new ClientEmbed(this.client)
                         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-                        .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
                         .setFields(
                             {
-                                name: `Nickname:`,
+                                name: 'Nickname:',
                                 value: `\`${member.user.tag}\` \`(${member.id})\``,
                                 inline: true
                             },
@@ -144,12 +147,12 @@ export default class UserSubCommand extends CommandStructure {
                         );
 
                     if (badges.length >= 1) {
-                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
+                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`);
                     }
 
-                    if (boostBadge && boostBadge.atualBadge && boostBadge.atualBadgeTime) {
+                    if (boostBadge?.atualBadge && boostBadge.atualBadgeTime) {
                         menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
-                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true })
+                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true });
                     }
 
                     if (userData && userData.call.totalCall > 0) {
@@ -165,7 +168,7 @@ export default class UserSubCommand extends CommandStructure {
                     pages.push(menuEmbed);
 
                     const embed = new ClientEmbed(this.client)
-                        .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
                         .setFields(
                             {
                                 name: '🛡️ Permissões:',
@@ -188,11 +191,11 @@ export default class UserSubCommand extends CommandStructure {
                 } else {
                     const menuEmbed = new ClientEmbed(this.client)
                         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-                        .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
                         .setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
                         .setFields(
                             {
-                                name: `Nickname:`,
+                                name: 'Nickname:',
                                 value: `\`${user.tag}\` \`(${user.id}\`)`,
                                 inline: true
                             },
@@ -204,12 +207,12 @@ export default class UserSubCommand extends CommandStructure {
                         );
 
                     if (badges.length >= 1) {
-                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
+                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`);
                     }
 
-                    if (boostBadge && boostBadge.atualBadge && boostBadge.atualBadgeTime) {
+                    if (boostBadge?.atualBadge && boostBadge.atualBadgeTime) {
                         menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
-                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true })
+                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '\`Atingiu o limite!\`', inline: true });
                     }
 
                     if (userData && userData.call.totalCall > 0) {
@@ -220,7 +223,7 @@ export default class UserSubCommand extends CommandStructure {
                     pages.push(menuEmbed);
 
                     const embed = new ClientEmbed(this.client)
-                        .setAuthor({ name: `Informações do Usuário`, iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
                         .setFields(
                             {
                                 name: '🚩 Flags:',
@@ -241,22 +244,22 @@ export default class UserSubCommand extends CommandStructure {
                 const filter = (i: MessageComponentInteraction) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
                 const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
 
-                collector.on('end', () => {
-                    msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [this.client.utils.button(current + 1, true, true)] });
+                collector.on('end', async () => {
+                    await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [this.client.utils.button(current + 1, true, true)] });
                 });
 
                 collector.on('collect', (i: StringSelectMenuInteraction) => {
                     if (i.customId === '-') current -= 1;
                     if (i.customId === '+') current += 1;
 
-                    return void void msg.edit({ embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
+                    return void msg.edit({ embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
                 });
             }
         }
     }
 
     private getUserFlags(user: User, language: Languages) {
-        const flags = user.flags
+        const flags = user.flags;
 
         if (flags) {
             return Object.entries(UserFlagsText)
@@ -371,12 +374,12 @@ export default class UserSubCommand extends CommandStructure {
                 case calculatedAtualBoostTime > (1000 * 60 * 60 * 24 * 730): {
                     return {
                         atualBadge: '<:24Months:1252347148381589574>',
-                        atualBadgeTime: calculatedAtualBoostTime,
+                        atualBadgeTime: calculatedAtualBoostTime
                     };
                 }
 
                 default: {
-                    return {}
+                    return {};
                 }
             }
         } else {

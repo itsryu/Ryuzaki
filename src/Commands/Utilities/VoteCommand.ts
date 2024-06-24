@@ -18,7 +18,7 @@ export default class voteCommand extends CommandStructure {
             const votes = userData.economy.votes;
             const cooldown = 60000 * 60 * 12 - (Date.now() - vote);
 
-            if (vote !== null && cooldown > 0) {
+            if (!vote && cooldown > 0) {
                 const reedemedEmbed = new ClientEmbed(this.client)
                     .setAuthor({ name: 'Discord Bot List', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
                     .setDescription(this.client.t('utilities:vote:embeds:reedemed.description', { author: message.author, firstTime: Math.floor((Date.now() + cooldown) / 1000), secondTime: Math.floor((Date.now() + cooldown) / 1000) }));
@@ -37,7 +37,7 @@ export default class voteCommand extends CommandStructure {
                     .setLabel(this.client.t('main:mentions:button.vote'));
 
                 const row = new ActionRowBuilder<ButtonBuilder>().addComponents(voteButton);
-                return void message.reply({ embeds: [voteEmbed], components: [row] });
+                return void await message.reply({ embeds: [voteEmbed], components: [row] });
             }
         }
     }

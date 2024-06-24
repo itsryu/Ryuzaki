@@ -10,12 +10,12 @@ class UpdateMetadataController extends RouteStructure {
     run = async (req: Request, res: Response) => {
         try {
             const userId = req.body.userId;
-            await this.app.updateMetadata(userId)
+            await this.app.updateMetadata(userId);
 
             res.status(204);
         } catch (err) {
             this.app.logger.error((err as Error).message, UpdateMetadataController.name);
-            this.app.logger.warn((err as Error).stack as string, UpdateMetadataController.name);
+            this.app.logger.warn((err as Error).stack!, UpdateMetadataController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

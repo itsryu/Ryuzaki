@@ -15,7 +15,7 @@ export default class guildMemberAddListener extends ListenerStructure {
             const guild = member.guild;
             const guildData = await this.client.getData(guild.id, 'guild');
 
-            if (guildData && guildData.antifake.status) {
+            if (guildData && guildData.antifake.status && this.client.user) {
                 const kick = new ClientEmbed(this.client)
                     .setThumbnail(member.user.displayAvatarURL({ extension: 'png', size: 4096 }))
                     .addFields(
@@ -35,11 +35,11 @@ export default class guildMemberAddListener extends ListenerStructure {
                         },
                         {
                             name: ':man_police_officer: Staffer:',
-                            value: `\`${this.client.user?.tag}\``
+                            value: `\`${this.client.user.tag}\``
                         },
                         {
                             name: ':scroll: Motivo(s):',
-                            value: `Membro expulso pelo sistema anti-fake, essa conta foi criada faz: ***\`${Day(new Date()).diff(member.user.createdAt, 'days')} dias\`***`
+                            value: `Membro expulso pelo sistema anti-fake, essa conta foi criada faz: **\`${Day(new Date()).diff(member.user.createdAt, 'days')} dias\`**`
                         });
 
                 const kickado = new ClientEmbed(this.client)
@@ -54,7 +54,7 @@ export default class guildMemberAddListener extends ListenerStructure {
                     if (guildData.logs.status && guildData.logs.moderation) {
                         const channel = guild.channels.cache.get(guildData.logs.channel) as TextChannel;
 
-                        channel.send({ embeds: [kick] });
+                        await channel.send({ embeds: [kick] });
                     }
 
                     member.send({ embeds: [kickado] }).catch(() => undefined);
@@ -75,7 +75,7 @@ export default class guildMemberAddListener extends ListenerStructure {
 
                         if (usedInvite) {
                             const embed = new ClientEmbed(this.client)
-                                .setURL(`https://discord.gg/${usedInvite?.code}`)
+                                .setURL(`https://discord.gg/${usedInvite.code}`)
                                 .setDescription(`Seja bem-vindo(a) \`${member.user.tag}\`, convidado(a) por \`${usedInvite.inviter?.username}\`.\nNº de usos: **${usedInvite.uses}**`)
                                 .setFooter({ text: guild.name });
 
@@ -83,7 +83,7 @@ export default class guildMemberAddListener extends ListenerStructure {
                             this.client.invites.set(guild.id, cachedInvites);
 
                             const channel = guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                            channel.send({ embeds: [embed] });
+                            await channel.send({ embeds: [embed] });
                         }
                     }
                 }
@@ -107,31 +107,31 @@ export default class guildMemberAddListener extends ListenerStructure {
                 const st = guildData.serverstats;
                 const ch = st.channels;
 
-                if (ch.total != null) {
+                if (!ch.total) {
                     const channel = guild.channels.cache.get(ch.total) as TextChannel;
 
-                    channel.setName(`Total: ${guild.memberCount.toLocaleString()}`);
+                    await channel.setName(`Total: ${guild.memberCount.toLocaleString()}`);
                 }
 
-                if (ch.bot != null) {
+                if (!ch.bot) {
                     const channel = guild.channels.cache.get(ch.bot) as TextChannel;
 
-                    channel.setName(`Bots: ${guild.members.cache.filter((x) => x.user.bot).size.toLocaleString()}`);
+                    await channel.setName(`Bots: ${guild.members.cache.filter((x) => x.user.bot).size.toLocaleString()}`);
                 }
 
-                if (ch.users != null) {
+                if (!ch.users) {
                     const channel = guild.channels.cache.get(ch.users) as TextChannel;
 
-                    channel.setName(`Membros: ${guild.members.cache.filter((x) => !x.user.bot).size.toLocaleString()}`);
+                    await channel.setName(`Membros: ${guild.members.cache.filter((x) => !x.user.bot).size.toLocaleString()}`);
                 }
             }
 
             if (guildData && guildData.counter.status) {
-                (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
+                await (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, guildMemberAddListener.name);
-            this.client.logger.warn((err as Error).stack!, guildMemberAddListener.name);
+            this.client.logger.warn((err as Error).stack, guildMemberAddListener.name);
         }
     }
 }

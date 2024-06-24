@@ -10,41 +10,51 @@ export default class WorkCommand extends CommandStructure {
     }
 
     public async commandExecute({ message, language }: { message: Message, language: Languages }) {
-        const userData = await this.client.getData(message.author.id, 'user');
+        try {
+            const userData = await this.client.getData(message.author.id, 'user');
 
-        if (!userData) {
-            return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
-        } else {
-            //================= Importações =================/
-
-            const money = this.client.utils.randomIntFromInterval(1000, 5000);
-            const extraMoney = this.client.utils.randomIntFromInterval(5000, 20000);
-            const totalReceived = userData.vip.status ? money + extraMoney : money;
-            const atual = userData.economy.coins;
-            const work = userData.economy.work;
-            const cooldown = 60000 * 60 * 12 - (Date.now() - work);
-
-            const embed = new ClientEmbed(this.client)
-                .setAuthor({ name: 'Trabalho!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                .setDescription(`Você trabalhou e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)} + R$ ${this.client.utils.toAbbrev(extraMoney)}) (VIP)!` : `\n**${totalReceived.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(totalReceived)})!`}`)
-                .setFooter({ text: 'Trabalhe novamente:' })
-                .setTimestamp(Date.now() + 60000 * 60 * 12);
-
-            const reedemed = new ClientEmbed(this.client)
-                .setAuthor({ name: 'Trabalho!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                .setDescription(`${message.author}, você já trabalhou hoje!\n\nTrabalhe novamente em: ||<t:${Math.floor((Date.now() + cooldown) / 1000)}:f> (<t:${Math.floor((Date.now() + cooldown) / 1000)}:R>)||`);
-
-            if (work !== null && cooldown > 0) {
-                return void message.reply({ embeds: [reedemed] });
+            if (!userData) {
+                return void await message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
             } else {
-                userData.set({
-                    'economy.coins': totalReceived + atual,
-                    'economy.work': Date.now()
-                });
-                await userData.save();
+                //================= Importações =================/
 
-                return void message.reply({ embeds: [embed] });
+                const money = this.client.utils.randomIntFromInterval(1000, 5000);
+                const extraMoney = this.client.utils.randomIntFromInterval(5000, 20000);
+                const totalReceived = userData.vip.status ? money + extraMoney : money;
+                const atual = userData.economy.coins;
+                const work = userData.economy.work;
+                const cooldown = (1000 * 60 * 60 * 12) - (Date.now() - work);
+
+                if (work !== null && cooldown > 0) {
+                    const reedemed = new ClientEmbed(this.client)
+                        .setAuthor({ name: 'Trabalho!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(`${message.author}, você já trabalhou hoje!\n\nTrabalhe novamente em: ||<t:${Math.floor((Date.now() + cooldown) / 1000)}:f> (<t:${Math.floor((Date.now() + cooldown) / 1000)}:R>)||`);
+
+
+                    return void await message.reply({ embeds: [reedemed] });
+                } else {
+                    const userExp = userData.exp.xp;
+                    const receivedExp = Math.floor(Math.random() * 20) + 1;
+
+                    const embed = new ClientEmbed(this.client)
+                        .setAuthor({ name: 'Trabalho!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(`Você trabalhou e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)} + R$ ${this.client.utils.toAbbrev(extraMoney)}) (VIP)!` : `\n**${totalReceived.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(totalReceived)})! \n\nVocê também recebeu: \n**${receivedExp}** de experiência!`}`)
+                        .setFooter({ text: 'Trabalhe novamente:' })
+                        .setTimestamp(Date.now() + 60000 * 60 * 12);
+
+                    userData.set({
+                        'economy.coins': totalReceived + atual,
+                        'economy.work': Date.now(),
+                        'exp.xp': userExp + receivedExp
+                    });
+                    await userData.save();
+
+                    return void await message.reply({ embeds: [embed] });
+                }
             }
+        } catch (err) {
+            this.client.logger.error((err as Error).message, WorkCommand.name);
+            this.client.logger.warn((err as Error).stack, WorkCommand.name);
         }
     }
 }

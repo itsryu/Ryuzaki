@@ -144,7 +144,7 @@ class Util {
                 [timeDuration.days(), ['dia', 'dias']],
                 [timeDuration.hours(), ['hora', 'horas']],
                 [timeDuration.minutes(), ['minuto', 'minutos']],
-                [timeDuration.seconds(), ['segundo', 'segundos']],
+                [timeDuration.seconds(), ['segundo', 'segundos']]
             ],
             'en-US': [
                 [timeDuration.years(), ['year', 'years']],
@@ -152,7 +152,7 @@ class Util {
                 [timeDuration.days(), ['day', 'days']],
                 [timeDuration.hours(), ['hour', 'hours']],
                 [timeDuration.minutes(), ['minute', 'minutes']],
-                [timeDuration.seconds(), ['second', 'seconds']],
+                [timeDuration.seconds(), ['second', 'seconds']]
             ]
         };
 
@@ -204,19 +204,19 @@ class Logger {
         });
     }
 
-    public debug(message: string, meta: any): void {
+    public debug(message: any, meta: any): void {
         this.logger.debug(message, { path: meta });
     }
 
-    public info(message: string, meta: any): void {
+    public info(message: any, meta: any): void {
         this.logger.info(message, { path: meta });
     }
 
-    public warn(message: string, meta: any): void {
+    public warn(message: any, meta: any): void {
         this.logger.warn(message, { path: meta });
     }
 
-    public error(message: string, meta: any): void {
+    public error(message: any, meta: any): void {
         this.logger.error(message, { path: meta });
     }
 }

@@ -22,7 +22,7 @@ export default class MessageDeleteListener extends ListenerStructure {
                         .setAuthor({ name: `Mensagem deletada - ${message.guild.name}`, iconURL: message.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
                         .addFields(
                             {
-                                name: `Autor:`,
+                                name: 'Autor:',
                                 value: `${message.author} \`(${message.author.id})\``,
                                 inline: true
                             },

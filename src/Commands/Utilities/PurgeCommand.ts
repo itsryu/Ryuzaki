@@ -18,12 +18,12 @@ export default class purgeCommand extends CommandStructure {
             const userMessage = await message.channel.messages.fetch().then((msg: Collection<string, Message>) => msg.filter(msg => msg.author.id === message.author.id).first(limit + 1));
 
             return void await Promise.all(
-                userMessage.map(async (msg) => await msg.delete().then(() => {
+                userMessage.map(async (msg) => { await msg.delete().then(() => {
                     message.channel.send({ content: this.client.t('utilities:purge.success', { size: userMessage.length - 1 }) })
                         .then((replyMessage: Message) => setTimeout(() => replyMessage.delete(), 5000));
-                })
+                }); }
                 )
-            )
+            );
         }
     }
 }

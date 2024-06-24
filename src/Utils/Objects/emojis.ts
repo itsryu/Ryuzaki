@@ -1,4 +1,4 @@
-import { CategoryEmojis } from "../../Types/ClientTypes";
+import { CategoryEmojis } from '../../Types/ClientTypes';
 
 const emojis = {
     errado: '❌',
@@ -61,7 +61,7 @@ const categoryEmojis: CategoryEmojis = {
         'Utilidades': '🔧',
         'Interação': '🤝',
         'Diversão': '🎉',
-        'Configurações': '⚙️',
+        'Configurações': '⚙️'
     },
     'en-US': {
         'Developer': '💻',
@@ -71,7 +71,7 @@ const categoryEmojis: CategoryEmojis = {
         'Utilities': '🔧',
         'Interaction': '🤝',
         'Fun': '🎉',
-        'Settings': '⚙️',
+        'Settings': '⚙️'
     },
     'es-ES': {
         'Desarrollador': '💻',
@@ -81,8 +81,8 @@ const categoryEmojis: CategoryEmojis = {
         'Utilidades': '🔧',
         'Interacción': '🤝',
         'Diversión': '🎉',
-        'Ajustes': '⚙️',
-    },
+        'Ajustes': '⚙️'
+    }
 };
 
 export { categoryEmojis, emojis };

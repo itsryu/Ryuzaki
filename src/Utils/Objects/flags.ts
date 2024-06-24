@@ -181,7 +181,7 @@ const PermissionsFlagsText: FlagText = {
     [PermissionsFlagsKeys.ManageNicknames]: {
         [Language.pt_BR]: 'Gerenciar apelidos',
         [Language.en_US]: 'Manage Nicknames'
-    },
+    }
 };
 
 const UserBadges: FlagBadge = {
@@ -191,7 +191,7 @@ const UserBadges: FlagBadge = {
     [UserBadgeKeys.HypeSquadOnlineHouse2]: '<:HypesquadHouseOfBrilliance:1252316108992675911>',
     [UserBadgeKeys.HypeSquadOnlineHouse3]: '<:HypesquadHouseOfBalance:1252316132506079404>',
     [UserBadgeKeys.EarlySupporter]: '<:EarlySupporter:1252315485870227518>'
-}
+};
 
 const UserFlagsText: FlagText = {
     [UserFlagsKeys.BugHunterLevel1]: {
@@ -199,16 +199,16 @@ const UserFlagsText: FlagText = {
         [Language.en_US]: 'Bug Hunter Level 1'
     },
     [UserFlagsKeys.HypeSquadOnlineHouse1]: {
-        [Language.pt_BR]: 'House of Bravery',
-        [Language.en_US]: 'House of Bravery'
+        [Language.pt_BR]: 'HypeSquad Bravery',
+        [Language.en_US]: 'HypeSquad Bravery'
     },
     [UserFlagsKeys.HypeSquadOnlineHouse2]: {
-        [Language.pt_BR]: 'House of Brilliance',
-        [Language.en_US]: 'House of Brilliance'
+        [Language.pt_BR]: 'HypeSquad Brilliance',
+        [Language.en_US]: 'HypeSquad Brilliance'
     },
     [UserFlagsKeys.HypeSquadOnlineHouse3]: {
-        [Language.pt_BR]: 'House of Balance',
-        [Language.en_US]: 'House of Balance'
+        [Language.pt_BR]: 'HypeSquad Balance',
+        [Language.en_US]: 'HypeSquad Balance'
     },
     [UserFlagsKeys.PremiumEarlySupporter]: {
         [Language.pt_BR]: 'Apoiador Inicial',
@@ -286,7 +286,7 @@ const UserFlagsText: FlagText = {
         [Language.pt_BR]: 'Desativar Premium',
         [Language.en_US]: 'Disable Premium'
     }
-}
+};
 
 type PermissionFlagKey = keyof typeof PermissionsFlagsKeys;
 type UserFlagKey = keyof typeof UserFlagsKeys;

@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../RyuzakiClient';
-import { ModuleStructure, ClientEmbed } from '../../Structures/';
+import { ModuleStructure, ClientEmbed } from '../../Structures';
 import { ButtonBuilder, ActionRowBuilder, ChannelType, PermissionFlagsBits, ButtonInteraction, ButtonStyle, TextChannel } from 'discord.js';
 
-export default class createTicketButton extends ModuleStructure {
+export default class CreateTicketButton extends ModuleStructure {
     constructor(client: Ryuzaki) {
         super(client);
     }
@@ -110,8 +110,8 @@ export default class createTicketButton extends ModuleStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, createTicketButton.name);
-            this.client.logger.warn((err as Error).stack!, createTicketButton.name);
+            this.client.logger.error((err as Error).message, CreateTicketButton.name);
+            this.client.logger.warn((err as Error).stack!, CreateTicketButton.name);
         }
     }
 }

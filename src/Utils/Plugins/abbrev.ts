@@ -21,7 +21,7 @@ function abbrev(num: number): string {
             return num.toString();
         }
     } else {
-        return '0'
+        return '0';
     }
 }
 
@@ -33,7 +33,7 @@ function convertAbbrev(string: string | number): number {
 
         return Number(numberStr) * multiplier;
     } else {
-        return 0
+        return 0;
     }
 }
 

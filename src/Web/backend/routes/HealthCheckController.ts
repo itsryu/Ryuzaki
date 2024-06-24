@@ -12,7 +12,7 @@ class HealthCheckController extends RouteStructure {
             return res.status(200).json(new JSONResponse(200, 'OK').toJSON());
         } catch (err) {
             this.app.logger.error((err as Error).message, HealthCheckController.name);
-            this.app.logger.warn((err as Error).stack as string, HealthCheckController.name);
+            this.app.logger.warn((err as Error).stack!, HealthCheckController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

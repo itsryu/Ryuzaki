@@ -22,7 +22,7 @@ export default class messageUpdateListener extends ListenerStructure {
                         .setAuthor({ name: `Mensagem editada - ${newMessage.guild.name}`, iconURL: newMessage.guild.iconURL({ extension: 'png', size: 4096 }) ?? undefined })
                         .addFields(
                             {
-                                name: `Autor:`,
+                                name: 'Autor:',
                                 value: `${newMessage.author} \`(${newMessage.author.id})\``,
                                 inline: true
                             },

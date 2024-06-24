@@ -45,9 +45,9 @@ export class Ryuzaki extends Client {
         this.registerSlashCommands();
         this.loadWS();
 
-        process.on('warning', (warn) => this.logger.warn(warn.stack!, 'warning'));
-        process.on('uncaughtException', (err: Error) => this.logger.error(err.stack!, 'uncaughtException'));
-        process.on('unhandledRejection', (err: Error) => this.logger.error(err.stack!, 'unhandledRejection'));
+        process.on('warning', (warn) => { this.logger.warn(warn.stack!, 'warning'); });
+        process.on('uncaughtException', (err: Error) => { this.logger.error(err.stack!, 'uncaughtException'); });
+        process.on('unhandledRejection', (err: Error) => { this.logger.error(err.stack!, 'unhandledRejection'); });
     }
 
     private async clientManager() {
@@ -97,10 +97,10 @@ export class Ryuzaki extends Client {
         const user = guild ? null : await this.users.fetch(id).catch(() => undefined);
 
         if (guild) {
-            const guildData = await this.getData(guild?.id, 'guild');
+            const guildData = await this.getData(guild.id, 'guild');
             const languages: Languages[] = ['pt-BR', 'en-US', 'es-ES'];
 
-            guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild?.preferredLocale) ? guild?.preferredLocale : 'en-US' } }, { new: true });
+            guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
 
             return guildData?.lang as Languages;
         } else {

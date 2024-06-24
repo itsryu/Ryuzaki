@@ -11,12 +11,12 @@ export default class pingCommand extends CommandStructure {
 
     async commandExecute({ message }: { message: Message }) {
         const created = Math.round(Date.now() - message.createdTimestamp);
-        const host = (await this.client.shard?.broadcastEval((client) => client.ws.ping))!;
+        const host = await this.client.shard?.broadcastEval((client) => client.ws.ping);
         const database = await this.databasePing();
         
         const embed = new ClientEmbed(this.client)
             .setTitle('Pong! 🏓')
-            .setDescription(`${this.client.t('utilities:ping.response')} \`${created}\`ms \n` + `${this.client.t('utilities:ping.host')} \`${host[message.guild?.shard.id ? message.guild.shard.id : 0]}\`ms \n` + `${this.client.t('utilities:ping.database')} \`${database}\`ms`);
+            .setDescription(`${this.client.t('utilities:ping.response')} \`${created}\`ms \n` + `${this.client.t('utilities:ping.host')} \`${host?.[message.guild?.shard.id ? message.guild.shard.id : 0] ?? 0}\`ms \n` + `${this.client.t('utilities:ping.database')} \`${database}\`ms`);
 
         switch (true) {
             case (created >= 500):
@@ -30,7 +30,7 @@ export default class pingCommand extends CommandStructure {
                 break;
         }
 
-        return void message.reply({ embeds: [embed] });
+        return void await message.reply({ embeds: [embed] });
     }
 
     private async databasePing() {

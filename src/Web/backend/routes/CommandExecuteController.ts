@@ -21,11 +21,11 @@ class CommandExecuteController extends RouteStructure {
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, CommandExecuteController.name);
-            this.app.logger.warn((err as Error).stack as string, CommandExecuteController.name);
+            this.app.logger.warn((err as Error).stack!, CommandExecuteController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
     };
 }
 
-export { CommandExecuteController }
+export { CommandExecuteController };

@@ -52,7 +52,7 @@ interface ConnectedAccount {
     nick: string | null;
   }
   
-  export interface DiscordUser {
+export interface DiscordUser {
     user: User;
     connected_accounts: ConnectedAccount[];
     premium_since: string;

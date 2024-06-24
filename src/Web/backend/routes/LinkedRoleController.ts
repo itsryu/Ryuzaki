@@ -16,7 +16,7 @@ class HomeController extends RouteStructure {
             res.redirect(url);
         } catch (err) {
             this.app.logger.error((err as Error).message, HomeController.name);
-            this.app.logger.warn((err as Error).stack as string, HomeController.name);
+            this.app.logger.warn((err as Error).stack!, HomeController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

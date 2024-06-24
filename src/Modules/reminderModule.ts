@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ModuleStructure, ClientEmbed } from '../Structures/';
+import { ModuleStructure, ClientEmbed } from '../Structures';
 import { TextChannel } from 'discord.js';
 
 export default class ReminderModule extends ModuleStructure {

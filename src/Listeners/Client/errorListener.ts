@@ -9,7 +9,7 @@ export default class errorListener extends ListenerStructure {
         });
     }
 
-    eventExecute(error: Error) {
+    async eventExecute(error: Error) {
         try {
             const webhook = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
@@ -19,10 +19,10 @@ export default class errorListener extends ListenerStructure {
                 .setDescription('```js' + '\n' + error.stack + '\n' + '```')
                 .setFooter({ text: `Cause: ${error.cause}`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
-            webhook.send({ embeds: [errorEmbed] });
+            await webhook.send({ embeds: [errorEmbed] });
         } catch (err) {
             this.client.logger.error((err as Error).message, errorListener.name);
-            this.client.logger.warn((err as Error).stack!, errorListener.name);
+            this.client.logger.warn((err as Error).stack, errorListener.name);
         }
     }
 }

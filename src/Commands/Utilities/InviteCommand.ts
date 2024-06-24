@@ -8,7 +8,7 @@ export default class inviteCommand extends CommandStructure {
         super(client, InviteCommandData);
     }
 
-    commandExecute({ message }: { message: Message}) {
+    async commandExecute({ message }: { message: Message}) {
         const link = this.client.url;
 
         const embed = new ClientEmbed(this.client)
@@ -22,6 +22,6 @@ export default class inviteCommand extends CommandStructure {
             .setStyle(ButtonStyle.Link);
 
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(invite);
-        return void message.reply({ embeds: [embed], components: [row] });
+        return void await message.reply({ embeds: [embed], components: [row] });
     }
 }

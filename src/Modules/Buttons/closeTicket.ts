@@ -1,10 +1,10 @@
 import { Ryuzaki } from '../../RyuzakiClient';
-import { ModuleStructure } from '../../Structures/';
+import { ModuleStructure } from '../../Structures';
 import { ActionRowBuilder, ButtonBuilder, ChannelType, ButtonInteraction, ButtonStyle, TextChannel, MessageComponentInteraction } from 'discord.js';
 import { writeFileSync, readdirSync, statSync } from 'node:fs';
 import { Languages } from '../../Types/ClientTypes';
 
-export default class closeTicketButton extends ModuleStructure {
+export default class CloseTicketButton extends ModuleStructure {
     constructor(client: Ryuzaki) {
         super(client);
     }
@@ -72,8 +72,8 @@ export default class closeTicketButton extends ModuleStructure {
 
                                     await interaction.channel?.delete();
                                 } catch (err) {
-                                    this.client.logger.error((err as Error).message, closeTicketButton.name);
-                                    this.client.logger.warn((err as Error).stack!, closeTicketButton.name);
+                                    this.client.logger.error((err as Error).message, CloseTicketButton.name);
+                                    this.client.logger.warn((err as Error).stack!, CloseTicketButton.name);
                                 }
                             }, 15000);
                         } else {
@@ -114,8 +114,8 @@ export default class closeTicketButton extends ModuleStructure {
 
                                     await interaction.channel?.delete();
                                 } catch (err) {
-                                    this.client.logger.error((err as Error).message, closeTicketButton.name);
-                                    this.client.logger.warn((err as Error).stack!, closeTicketButton.name);
+                                    this.client.logger.error((err as Error).message, CloseTicketButton.name);
+                                    this.client.logger.warn((err as Error).stack!, CloseTicketButton.name);
                                 }
                             }, 5000);
                         } else {
@@ -139,8 +139,8 @@ export default class closeTicketButton extends ModuleStructure {
                 });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, closeTicketButton.name);
-            this.client.logger.warn((err as Error).stack!, closeTicketButton.name);
+            this.client.logger.error((err as Error).message, CloseTicketButton.name);
+            this.client.logger.warn((err as Error).stack!, CloseTicketButton.name);
         }
     }
 }

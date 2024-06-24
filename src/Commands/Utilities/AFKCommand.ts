@@ -9,21 +9,28 @@ export default class AFKCommand extends CommandStructure {
     }
 
     async commandExecute({ message, args }: { message: Message, args: string[] }) {
-        const userData = await this.client.getData(message.author.id, 'user');
+        try {
+            const userData = await this.client.getData(message.author.id, 'user');
 
-        if (!userData) {
-            return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
-        } else {
-            const reason = args.join(' ') || null;
+            if (!userData) {
+                return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+            } else {
+                const reason = args.join(' ') || null;
 
-            await userData.set({
-                'AFK.away': true,
-                'AFK.lastNickname': message.member?.nickname ? message.member.nickname : message.author.username,
-                'AFK.reason': reason
-            }).save();
+                userData.set({
+                    'AFK.away': true,
+                    'AFK.lastNickname': message.member?.nickname ? message.member.nickname : message.author.username,
+                    'AFK.reason': reason
+                });
 
-            message.member?.setNickname(`[AFK] ${message.member.nickname ?? message.author.username}`).catch(() => { });
-            return void message.reply({ content: this.client.t('utilities:AFK.success') });
+                await userData.save();
+
+                message.member?.setNickname(`[AFK] ${message.member.nickname ?? message.author.username}`).catch(() => undefined);
+                return void await message.reply({ content: this.client.t('utilities:AFK.success') });
+            }
+        } catch (err) {
+            this.client.logger.error((err as Error).message, AFKCommand.name);
+            this.client.logger.warn((err as Error).stack, AFKCommand.name);
         }
     }
 }

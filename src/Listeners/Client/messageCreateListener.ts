@@ -21,8 +21,8 @@ export default class messageCreateListener extends ListenerStructure {
 
             //===============> Módulo de tradução <===============//
 
-            const language = message.guild ? await this.client.getLanguage(message.guild?.id) : await this.client.getLanguage(message.author.id);
-            await this.client.getTranslate(message.guild ? message.guild?.id : message.author.id);
+            const language = message.guild ? await this.client.getLanguage(message.guild.id) : await this.client.getLanguage(message.author.id);
+            await this.client.getTranslate(message.guild ? message.guild.id : message.author.id);
 
             //===============> Menções <===============//
 
@@ -58,7 +58,7 @@ export default class messageCreateListener extends ListenerStructure {
 
             if (message.content.startsWith(prefix)) {
                 const [name, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
-                const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases ? command.data.options.aliases[language] && command.data.options.aliases[language].includes(name) : undefined);
+                const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases ? command.data.options.aliases[language]?.includes(name) : undefined);
 
                 if (!command) {
                     if (message.content === prefix) return;
@@ -80,7 +80,7 @@ export default class messageCreateListener extends ListenerStructure {
                     if (!this.client.cooldowns.has(command.data.options.name)) {
                         this.client.cooldowns.set(command.data.options.name, new Collection());
                     }
-                    
+
                     const now = Date.now();
                     const timestamps = this.client.cooldowns.get(command.data.options.name);
                     const cooldownAmount = (command.data.options.config.cooldown || 2) * 1000;
@@ -206,7 +206,7 @@ export default class messageCreateListener extends ListenerStructure {
                         } catch (err) {
                             reject(err);
                         }
-                    }
+                    };
 
                     const commandExecute = new Promise(commandPromise);
 
@@ -260,16 +260,34 @@ export default class messageCreateListener extends ListenerStructure {
                                 webHook.send({ embeds: [whEmbed] });
                             }
 
-                            commandData && commandData.set({
-                                'usages': commandData.usages + 1
-                            });
+                            if (userData && commandData) {
+                                commandData.set({
+                                    'usages': commandData.usages + 1
+                                });
 
-                            userData && userData.set({
-                                'commands.usages': userData.commands.usages + 1
-                            });
+                                userData.set({
+                                    'commands.usages': userData.commands.usages + 1,
+                                    'exp.xp': userData.exp.xp + Math.floor(Math.random() * 50) + 1
+                                });
 
-                            commandData && await commandData.save();
-                            userData && await userData.save();
+                                await commandData.save();
+                                await userData.save();
+
+                                const xp = userData.exp.xp;
+                                const level = userData.exp.level;
+                                const nextLevel = userData.exp.nextLevel * level;
+                                
+                                if (xp >= nextLevel) {
+                                    userData.set({
+                                        'exp.xp': 0,
+                                        'exp.level': level + 1
+                                    });
+
+                                    await userData.save();
+
+                                    return void message.reply({ content: `Você acaba de subir para o nível **${userData.exp.level}**.` });
+                                }
+                            }
                         } catch (err) {
                             this.client.logger.error((err as Error).message, messageCreateListener.name);
                             this.client.logger.warn((err as Error).stack!, messageCreateListener.name);
@@ -282,19 +300,19 @@ export default class messageCreateListener extends ListenerStructure {
 
             if (message.guild) {
                 //===============> AFK:
-                const { default: afkModule } = await import('../../Modules/afkModule');
+                const { default: afkModule } = await import('../../Modules/AFKModule');
                 new afkModule(this.client).moduleExecute(message);
 
                 //===============> Levels:
-                const { default: xpModule } = await import('../../Modules/xpModule');
+                const { default: xpModule } = await import('../../Modules/XPModule');
                 new xpModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Convites:
-                const { default: inviteModule } = await import('../../Modules/inviteModule');
+                const { default: inviteModule } = await import('../../Modules/InviteModule');
                 new inviteModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Spam:
-                const { default: spamModule } = await import('../../Modules/spamModule');
+                const { default: spamModule } = await import('../../Modules/SpamModule');
                 new spamModule(this.client).moduleExecute(message);
             }
 

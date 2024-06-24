@@ -29,7 +29,7 @@ class InteractionController extends RouteStructure {
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, InteractionController.name);
-            this.app.logger.warn((err as Error).stack as string, InteractionController.name);
+            this.app.logger.warn((err as Error).stack!, InteractionController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

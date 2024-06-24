@@ -145,7 +145,7 @@ export default class interactionCreateListener extends ListenerStructure {
                             author: interaction.user,
                             reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch(console.error),
                             edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch(console.error),
-                            delete: async (message?: MessageResolvable) => await interaction.deleteReply(message)
+                            delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
                         }) as ChatInputCommandInteraction;
 
                         //===============> Checando permissões dos membros e do cliente:
@@ -168,7 +168,7 @@ export default class interactionCreateListener extends ListenerStructure {
                             } catch (err) {
                                 reject(err);
                             }
-                        }
+                        };
 
                         const interactionExecute = new Promise(commandPromise);
 
@@ -218,16 +218,34 @@ export default class interactionCreateListener extends ListenerStructure {
                                 webHook.send({ embeds: [whEmbed] });
                             }
 
-                            commandData && commandData.set({
-                                'usages': commandData.usages + 1
-                            });
+                            if (userData && commandData) {
+                                commandData.set({
+                                    'usages': commandData.usages + 1
+                                });
 
-                            userData && userData.set({
-                                'commands.usages': userData.commands.usages + 1
-                            });
+                                userData.set({
+                                    'commands.usages': userData.commands.usages + 1,
+                                    'exp.xp': userData.exp.xp + Math.floor(Math.random() * 50) + 1
+                                });
 
-                            commandData && await commandData.save();
-                            userData && await userData.save();
+                                await commandData.save();
+                                await userData.save();
+
+                                const xp = userData.exp.xp;
+                                const level = userData.exp.level;
+                                const nextLevel = userData.exp.nextLevel * level;
+
+                                if (xp >= nextLevel) {
+                                    userData.set({
+                                        'exp.xp': 0,
+                                        'exp.level': level + 1
+                                    });
+
+                                    await userData.save();
+
+                                    return void message.reply({ content: `Você acaba de subir para o nível **${userData.exp.level}**.`, ephemeral: true });
+                                }
+                            }
                         });
                     } catch (err) {
                         this.client.logger.error((err as Error).message, interactionCreateListener.name);
@@ -240,12 +258,12 @@ export default class interactionCreateListener extends ListenerStructure {
 
             if (interaction.isButton()) {
                 if (interaction.customId === 'open') {
-                    const { default: createTicketButton } = await import('../../Modules/Buttons/createTicket');
+                    const { default: createTicketButton } = await import('../../Modules/Buttons/CreateTicket');
                     new createTicketButton(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'close') {
-                    const { default: closeTicketButton } = await import('../../Modules/Buttons/closeTicket');
+                    const { default: closeTicketButton } = await import('../../Modules/Buttons/CloseTicket');
                     new closeTicketButton(this.client).moduleExecute(interaction, language);
                 }
             }
@@ -254,12 +272,12 @@ export default class interactionCreateListener extends ListenerStructure {
 
             if (interaction.isModalSubmit()) {
                 if (interaction.customId === 'aboutme') {
-                    const { default: aboutModal } = await import('../../Modules/Modals/aboutModal');
+                    const { default: aboutModal } = await import('../../Modules/Modals/AboutModal');
                     new aboutModal(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'rep') {
-                    const { default: repModal } = await import('../../Modules/Modals/repModal');
+                    const { default: repModal } = await import('../../Modules/Modals/RepModal');
                     new repModal(this.client).moduleExecute(interaction);
                 }
             }

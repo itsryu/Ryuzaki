@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ModuleStructure } from '../Structures/';
+import { ModuleStructure } from '../Structures';
 import { Message } from 'discord.js';
 
-export default class xpModule extends ModuleStructure {
+export default class XPModule extends ModuleStructure {
     constructor(client: Ryuzaki) {
         super(client);
     }
@@ -22,17 +22,21 @@ export default class xpModule extends ModuleStructure {
                         const xpExtra = Math.floor(Math.random() * 20);
                         const xpTotalReceived = userData.vip.status ? (xpGive + xpExtra) : xpGive;
 
-                        await userData.set({
+                        userData.set({
                             'exp.xp': xp + xpTotalReceived,
                             'exp.id': message.author.id,
                             'exp.user': message.author.tag
-                        }).save();
+                        });
+                        
+                        await userData.save();
 
                         if (xp >= nextLevel) {
-                            await userData.set({
+                            userData.set({
                                 'exp.xp': 0,
                                 'exp.level': level + 1
-                            }).save();
+                            });
+                            
+                            await userData.save();
 
                             if (guildData.exp.status) {
                                 return void message.reply({ content: `Você acaba de subir para o nível **${level}**.` })
@@ -40,8 +44,8 @@ export default class xpModule extends ModuleStructure {
                             }
                         }
                     } catch (err) {
-                        this.client.logger.error((err as Error).message, xpModule.name);
-                        this.client.logger.warn((err as Error).stack!, xpModule.name);
+                        this.client.logger.error((err as Error).message, XPModule.name);
+                        this.client.logger.warn((err as Error).stack!, XPModule.name);
                     }
                 }
             }

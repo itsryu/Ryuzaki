@@ -3,11 +3,11 @@ import { GuildDocument, UserDocument, ClientDocument, CommandDocument } from './
 type DataType = 'user' | 'guild' | 'client' | 'command';
 type Languages = 'pt-BR' | 'en-US' | 'es-ES';
 
-type CategoryNames = {
+interface CategoryNames {
     'pt-BR': 'Desenvolvedor' | 'Informações' | 'Moderação' | 'Economia' | 'Utilidades' | 'Interação' | 'Diversão' | 'Configurações';
     'en-US': 'Developer' | 'Infos' | 'Moderation' | 'Economy' | 'Utilities' | 'Interaction' | 'Fun' | 'Settings';
     'es-ES': 'Desarrollador' | 'Infos' | 'Moderación' | 'Economía' | 'Utilidades' | 'Interacción' | 'Diversión' | 'Ajustes';
-};
+}
 
 type Categories = CategoryNames[Languages];
 
@@ -17,9 +17,9 @@ type CategoryValidation<T extends keyof CategoryNames> = {
 
 type CategoryEmojis = {
     [key in Languages]: {
-      [category in CategoryNames[key]]: string;
+        [category in CategoryNames[key]]: string;
     };
-  };
+};
 
 type DataDocument<T extends DataType> = T extends 'guild'
     ? GuildDocument & Required<{ _id: string }>

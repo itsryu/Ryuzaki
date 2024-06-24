@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { AppStructure } from '../../Structures';
 import express, { Express, Router } from 'express';
-import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake, } from 'discord.js';
+import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, CommandMiddleware, AuthMiddleware } from './middlewares/index';
 import { Logger } from '../../Utils/util';
@@ -15,7 +15,7 @@ import { JSONResponse } from '../../Structures/RouteStructure';
 export default class App extends AppStructure {
     private readonly app: Express = express();
     public readonly logger: Logger = new Logger();
-    public store: Map<string, RESTPostOAuth2AccessTokenResult> = new Map();
+    public store = new Map<string, RESTPostOAuth2AccessTokenResult>();
 
     constructor(client: Ryuzaki) {
         super(client);
@@ -94,7 +94,7 @@ export default class App extends AppStructure {
                                 return handler.run(req, res, next, vote, this.client);
                             })(req, res, next);
                         } else if (path.includes('/command') || path.includes('/api/interactions')) {
-                            const commandMiddleware = new CommandMiddleware(this)
+                            const commandMiddleware = new CommandMiddleware(this);
 
                             commandMiddleware.run(req, res, () => {
                                 return handler.run(req, res, next, this.client);
@@ -116,8 +116,8 @@ export default class App extends AppStructure {
         return router;
     }
 
-    private loadRoutes(): Array<Route> {
-        const routes: Array<Route> = [
+    private loadRoutes(): Route[] {
+        const routes: Route[] = [
             { method: 'GET', path: '/', handler: new HomeController(this) },
             { method: 'GET', path: '/health', handler: new HealthCheckController(this) },
             { method: 'GET', path: '/api/discord/user/:id', handler: new DiscordUserController(this) },
@@ -168,15 +168,15 @@ export default class App extends AppStructure {
             client_secret: process.env.CLIENT_SECRET,
             grant_type: 'authorization_code',
             code,
-            redirect_uri: process.env.DOMAIN_URL + '/discord-oauth-callback',
+            redirect_uri: process.env.DOMAIN_URL + '/discord-oauth-callback'
         });
 
         const response = await fetch(url, {
             body,
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
         });
 
         if (response.ok) {
@@ -195,16 +195,16 @@ export default class App extends AppStructure {
                 client_id: process.env.CLIENT_ID,
                 client_secret: process.env.CLIENT_SECRET,
                 grant_type: 'refresh_token',
-                refresh_token: tokens.refresh_token,
+                refresh_token: tokens.refresh_token
             });
 
             const response = await fetch(url, {
                 body,
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            })
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
 
             if (response.ok) {
                 const tokens = await response.json() as RESTPostOAuth2AccessTokenResult;
@@ -226,8 +226,8 @@ export default class App extends AppStructure {
 
             const response = await fetch(url, {
                 headers: {
-                    Authorization: `Bearer ${tokens.access_token}`,
-                },
+                    Authorization: `Bearer ${tokens.access_token}`
+                }
             });
 
             if (response.ok) {
@@ -238,7 +238,7 @@ export default class App extends AppStructure {
             }
         } catch (err) {
             this.logger.error((err as Error).message, 'getUserData');
-            this.logger.warn((err as Error).stack as string, 'getUserData');
+            this.logger.warn((err as Error).stack!, 'getUserData');
         }
     }
 
@@ -247,15 +247,15 @@ export default class App extends AppStructure {
         const accessToken = await this.getAccessToken(userId, tokens);
         const body = {
             platform_name: 'Example Linked Role Discord Bot',
-            metadata,
+            metadata
         };
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify(body),
             headers: {
                 Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
+                'Content-Type': 'application/json'
+            }
         });
         if (!response.ok) {
             throw new Error(`Error pushing discord metadata: [${response.status}] ${response.statusText}`);
@@ -267,8 +267,8 @@ export default class App extends AppStructure {
         const accessToken = await this.getAccessToken(userId, tokens);
         const response = await fetch(url, {
             headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+                Authorization: `Bearer ${accessToken}`
+            }
         });
 
         if (response.ok) {
@@ -287,7 +287,7 @@ export default class App extends AppStructure {
             metadata = {
                 cookieseaten: 1483,
                 allergictonuts: false,
-                firstcookiebaked: '2003-12-20',
+                firstcookiebaked: '2003-12-20'
             };
         } catch (e: any) {
             e.message = `Error fetching external data: ${e.message}`;

@@ -9,30 +9,35 @@ export default class BannerCommand extends CommandStructure {
     }
 
     async commandExecute({ message, args }: { message: Message, args: string[] }) {
-        const user = message.mentions?.users.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
+        try {
+            const user = message.mentions.users.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
 
-        user.fetch()
-            .then((user) => {
-                const banner = user.bannerURL({ extension: 'png', size: 4096 });
+            await user.fetch()
+                .then(async (user) => {
+                    const banner = user.bannerURL({ extension: 'png', size: 4096 });
 
-                if (!banner) {
-                    return void message.reply(this.client.t('utilities:banner:errors.!banner'));
-                } else {
-                    const embed = new ClientEmbed(this.client)
-                        .setTitle(this.client.t('utilities:banner.title'))
-                        .addFields({ name: this.client.t('utilities:banner.field'), value: `\`${user.username}\``, inline: true })
-                        .setImage(banner);
+                    if (!banner) {
+                        return void message.reply(this.client.t('utilities:banner:errors.!banner'));
+                    } else {
+                        const embed = new ClientEmbed(this.client)
+                            .setTitle(this.client.t('utilities:banner.title'))
+                            .addFields({ name: this.client.t('utilities:banner.field'), value: `\`${user.username}\``, inline: true })
+                            .setImage(banner);
 
-                    const button = new ButtonBuilder()
-                        .setEmoji('🔗')
-                        .setLabel(this.client.t('utilities:banner.button'))
-                        .setURL(banner)
-                        .setStyle(ButtonStyle.Link);
+                        const button = new ButtonBuilder()
+                            .setEmoji('🔗')
+                            .setLabel(this.client.t('utilities:banner.button'))
+                            .setURL(banner)
+                            .setStyle(ButtonStyle.Link);
 
-                    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
-                    return void message.reply({ embeds: [embed], components: [row] });
-                }
-            })
-            .catch(() => message.reply(this.client.t('utilities:banner:errors.!banner')));
+                        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+                        return void await message.reply({ embeds: [embed], components: [row] });
+                    }
+                })
+                .catch(() => message.reply(this.client.t('utilities:banner:errors.!banner')));
+        } catch (err) {
+            this.client.logger.error((err as Error).message, BannerCommand.name);
+            this.client.logger.warn((err as Error).stack, BannerCommand.name);
+        }
     }
 }

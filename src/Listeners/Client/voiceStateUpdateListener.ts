@@ -51,7 +51,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                     });
 
                             const channel = newState.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                            channel.send({ embeds: [embed] });
+                            await channel.send({ embeds: [embed] });
                         }
                     }
 
@@ -87,7 +87,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                     });
 
                             const channel = newState.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                            channel.send({ embeds: [embed] });
+                            await channel.send({ embeds: [embed] });
                         }
                     }
 
@@ -128,7 +128,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                     });
 
                             const channel = newState.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                            channel.send({ embeds: [embed] });
+                            await channel.send({ embeds: [embed] });
                         }
                     }
 
@@ -148,7 +148,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, VoiceStateUpdateListener.name);
-            this.client.logger.warn((err as Error).stack!, VoiceStateUpdateListener.name);
+            this.client.logger.warn((err as Error).stack, VoiceStateUpdateListener.name);
         }
     }
 }

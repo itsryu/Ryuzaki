@@ -1,17 +1,17 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ModuleStructure } from '../Structures/';
+import { ModuleStructure } from '../Structures';
 
 export default class VipModule extends ModuleStructure {
     constructor(client: Ryuzaki) {
         super(client);
     }
 
-    async moduleExecute() {
+    moduleExecute() {
         try {
             this.vipUsers();
         } catch (err) {
             this.client.logger.error((err as Error).message, VipModule.name);
-            this.client.logger.warn((err as Error).stack!, VipModule.name);
+            this.client.logger.warn((err as Error).stack, VipModule.name);
         }
     }
 

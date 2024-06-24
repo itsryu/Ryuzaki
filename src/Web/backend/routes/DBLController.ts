@@ -43,7 +43,7 @@ class DBLController extends RouteStructure {
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, DBLController.name);
-            this.app.logger.warn((err as Error).stack as string, DBLController.name);
+            this.app.logger.warn((err as Error).stack!, DBLController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

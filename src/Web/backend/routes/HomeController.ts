@@ -12,7 +12,7 @@ class LinkedRoleController extends RouteStructure {
             return res.status(200).json(new JSONResponse(200, 'Hello, world!').toJSON());
         } catch (err) {
             this.app.logger.error((err as Error).message, LinkedRoleController.name);
-            this.app.logger.warn((err as Error).stack as string, LinkedRoleController.name);
+            this.app.logger.warn((err as Error).stack!, LinkedRoleController.name);
 
             return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
