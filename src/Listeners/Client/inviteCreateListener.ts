@@ -26,7 +26,7 @@ export default class inviteCreateListener extends ListenerStructure {
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, inviteCreateListener.name);
-            this.client.logger.warn((err as Error).stack!, inviteCreateListener.name);
+            this.client.logger.warn((err as Error).stack, inviteCreateListener.name);
         }
     }
 }
