@@ -304,26 +304,26 @@ export default class messageCreateListener extends ListenerStructure {
             if (message.guild) {
                 //===============> AFK:
                 const { default: afkModule } = await import('../../Modules/AFKModule');
-                new afkModule(this.client).moduleExecute(message);
+                await new afkModule(this.client).moduleExecute(message);
 
                 //===============> Levels:
                 const { default: xpModule } = await import('../../Modules/XPModule');
-                new xpModule(this.client).moduleExecute(message);
+                await new xpModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Convites:
                 const { default: inviteModule } = await import('../../Modules/InviteModule');
-                new inviteModule(this.client).moduleExecute(message);
+                await new inviteModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Spam:
                 const { default: spamModule } = await import('../../Modules/SpamModule');
-                new spamModule(this.client).moduleExecute(message);
+                await new spamModule(this.client).moduleExecute(message);
             }
 
             //========================================//
 
         } catch (err) {
             this.client.logger.error((err as Error).message, messageCreateListener.name);
-            this.client.logger.warn((err as Error).stack!, messageCreateListener.name);
+            this.client.logger.warn((err as Error).stack, messageCreateListener.name);
         }
     }
 }

@@ -25,7 +25,7 @@ export default class DatabaseConnectionService extends ServiceStructure {
             });
         } catch (err) {
             this.client.logger.error((err as Error).message, DatabaseConnectionService.name);
-            this.client.logger.warn((err as Error).stack!, DatabaseConnectionService.name);
+            this.client.logger.warn((err as Error).stack, DatabaseConnectionService.name);
         }
     }
 }

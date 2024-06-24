@@ -2,13 +2,9 @@ import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure, ServiceStructure } from '../Structures/';
 import { Status } from 'discord.js';
 import { readdirSync } from 'fs';
-import { join } from 'path'; 
+import { join } from 'path';
 
 export default class Services extends ModuleStructure {
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
     async moduleExecute() {
         try {
             const serviceFolder = readdirSync(join(__dirname, 'Modules'), { withFileTypes: true }).filter((dirent) => dirent.isFile() && dirent.name.endsWith('.js')).map((dirent) => dirent.name);
@@ -45,7 +41,7 @@ export default class Services extends ModuleStructure {
             }, 1000);
         } catch (err) {
             this.client.logger.error((err as Error).message, Services.name);
-            this.client.logger.warn((err as Error).stack!, Services.name);
+            this.client.logger.warn((err as Error).stack, Services.name);
         }
     }
 }

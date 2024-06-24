@@ -11,7 +11,7 @@ export default class StealCommand extends CommandStructure {
 
     public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
         try {
-            const member = message.mentions.members?.first() ?? message.guild?.members.cache.get(args[0]);
+            const member = message.mentions?.members?.first() ?? message.guild?.members.cache.get(args[0]);
             const userData = await this.client.getData(message.author.id, 'user');
 
             if (!userData) {

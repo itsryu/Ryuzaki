@@ -153,11 +153,11 @@ export default class interactionCreateListener extends ListenerStructure {
                         const checkPermissions = this.client.services.get('checkPermissions');
 
                         // Verificando permissões do membro:
-                        const memberPermissions = checkPermissions?.serviceExecute({ message, command, language });
+                        const memberPermissions = await checkPermissions?.serviceExecute({ message, command, language });
                         if (!memberPermissions) return;
 
                         // Verificando permissões do client:
-                        const clientPermissions = checkPermissions?.serviceExecute({ message, command, language });
+                        const clientPermissions = await checkPermissions?.serviceExecute({ message, command, language });
                         if (!clientPermissions) return;
 
                         //===============> Execução do comando:

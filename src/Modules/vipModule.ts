@@ -1,11 +1,6 @@
-import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure } from '../Structures';
 
 export default class VipModule extends ModuleStructure {
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
     moduleExecute() {
         try {
             this.vipUsers();

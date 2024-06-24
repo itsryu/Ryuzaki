@@ -1,18 +1,13 @@
-import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure, ClientEmbed } from '../Structures';
 import { TextChannel } from 'discord.js';
 
 export default class ReminderModule extends ModuleStructure {
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
     moduleExecute() {
         try {
             this.reminderInterval();
         } catch (err) {
             this.client.logger.error((err as Error).message, ReminderModule.name);
-            this.client.logger.warn((err as Error).stack!, ReminderModule.name);
+            this.client.logger.warn((err as Error).stack, ReminderModule.name);
         }
     }
 

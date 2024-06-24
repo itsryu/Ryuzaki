@@ -38,7 +38,7 @@ export default class setActivityService extends ServiceStructure {
             this.client.logger.info(`${this.client.user?.username} presence has been successfully set.`, `Presence - ${this.client.shard?.ids[0]}`);
         } catch (err) {
             this.client.logger.error((err as Error).message, setActivityService.name);
-            this.client.logger.warn((err as Error).stack!, setActivityService.name);
+            this.client.logger.warn((err as Error).stack, setActivityService.name);
         }
     }
 }

@@ -11,7 +11,7 @@ export default class MarryCommand extends CommandStructure {
 
     public async commandExecute({ message, args }: { message: Message, args: string[] }) {
         try {
-            const user = message.mentions.users.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined);
+            const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined);
             const userData = await this.client.getData(message.author.id, 'user');
 
             if (!userData) {

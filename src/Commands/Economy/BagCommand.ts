@@ -12,7 +12,7 @@ export default class BagCommand extends CommandStructure {
 
     public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
         try {
-            const user = message.mentions.users.first() ?? await this.client.users.fetch(args[0]).catch(() => { }) ?? message.author;
+            const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => { }) ?? message.author;
             const userData = await this.client.getData(user.id, 'user');
 
             if (!userData) {

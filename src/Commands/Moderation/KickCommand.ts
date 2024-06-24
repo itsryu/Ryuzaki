@@ -12,7 +12,7 @@ export default class KickCommand extends CommandStructure {
     public async commandExecute({ message, args }: { message: Message, args: string[] }): Promise<void> {
         try {
             const guildData = await this.client.getData(message.guild?.id, 'guild');
-            const member = message.mentions.members?.first() ?? await message.guild?.members.fetch(args[0]).catch(() => undefined);
+            const member = message.mentions?.members?.first() ?? await message.guild?.members.fetch(args[0]).catch(() => undefined);
 
             if (message.guild && message.member && message.guild.members.me) {
                 if (!member) {

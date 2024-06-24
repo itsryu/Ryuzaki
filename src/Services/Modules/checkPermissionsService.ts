@@ -11,24 +11,24 @@ export default class checkPermissionsService extends ServiceStructure {
         });
     }
 
-    serviceExecute({ message, command, language }: { message: Message, command: CommandStructure, language: string }) {
+    async serviceExecute({ message, command, language }: { message: Message, command: CommandStructure, language: string }) {
         try {
             if (message.channel.type === ChannelType.DM) {
                 return true;
             } else if (command.data.options.permissions.client.length > 0 && !message.guild?.members.me?.permissions.has(command.data.options.permissions.client)) {
-                return this.sendPermissionError(message, language, command, true);
+                return await this.sendPermissionError(message, language, command, true);
             } else if (command.data.options.permissions.member.length > 0 && !message.member?.permissions.has(command.data.options.permissions.member)) {
-                return this.sendPermissionError(message, language, command, false);
+                return await this.sendPermissionError(message, language, command, false);
             } else {
                 return true;
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, checkPermissionsService.name);
-            this.client.logger.warn((err as Error).stack!, checkPermissionsService.name);
+            this.client.logger.warn((err as Error).stack, checkPermissionsService.name);
         }
     }
 
-    private sendPermissionError(message: Message, language: string, command: CommandStructure, isBotPermission: boolean) {
+    private async sendPermissionError(message: Message, language: string, command: CommandStructure, isBotPermission: boolean) {
         const permissions = isBotPermission ?
             new PermissionsBitField(command.data.options.permissions.client) :
             new PermissionsBitField(command.data.options.permissions.member);
@@ -41,7 +41,7 @@ export default class checkPermissionsService extends ServiceStructure {
             .setAuthor({ name: this.client.t('main:permissions.title'), iconURL: isBotPermission ? this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) : message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
             .setDescription(`${isBotPermission ? this.client.t('main:permissions.alert', { user: message.author, index: 0 }) : this.client.t('main:permissions.alert', { user: message.author, index: 1 })} ${this.client.t('main:permissions.alert', { index: 2, permissions: array.join(', ').replace(/,([^,]*)$/, ' e$1') })}`);
 
-        message.reply({ embeds: [embed] });
+        await message.reply({ embeds: [embed] });
 
         return false;
     };

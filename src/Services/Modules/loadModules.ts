@@ -16,10 +16,10 @@ export default class loadModulesService extends ServiceStructure {
         try {
             await this.loadEvents();
             await this.loadCommands();
-            this.loadFonts();
+            await this.loadFonts();
         } catch (err) {
             this.client.logger.error((err as Error).message, loadModulesService.name);
-            this.client.logger.warn((err as Error).stack!, loadModulesService.name);
+            this.client.logger.warn((err as Error).stack, loadModulesService.name);
         }
     }
 

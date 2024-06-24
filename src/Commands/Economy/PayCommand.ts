@@ -11,7 +11,7 @@ export default class PayCommand extends CommandStructure {
 
     public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
         try {
-            const member = message.mentions.members?.first() ?? message.guild?.members.cache.get(args[0]);
+            const member = message.mentions?.members?.first() ?? message.guild?.members.cache.get(args[0]);
             const amount = args[1];
             const userData = await this.client.getData(message.author.id, 'user');
 
