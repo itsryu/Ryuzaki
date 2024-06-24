@@ -134,6 +134,13 @@ class Util {
         return days + (days == 1 ? ' dia' : ' dias') + ' atrás';
     }
 
+    public nextLevelExp = (level: number): number => {
+        const baseXP = 100;
+        const multiplier = 1.5;
+
+        return Math.floor(baseXP * Math.pow(level, multiplier));
+    };
+
     public static formatDuration(ms: number, language: Languages): string {
         const timeDuration = duration(ms);
 

@@ -283,7 +283,8 @@ export default class messageCreateListener extends ListenerStructure {
                                     if (xp >= nextLevel) {
                                         userData.set({
                                             'exp.xp': 0,
-                                            'exp.level': level + 1
+                                            'exp.level': level + 1,
+                                            'exp.nextLevel': this.client.utils.nextLevelExp(level + 1)
                                         });
 
                                         await userData.save();
