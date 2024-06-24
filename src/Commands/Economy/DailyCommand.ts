@@ -23,21 +23,22 @@ export default class DailyCommand extends CommandStructure {
                 const time = userData.economy.daily;
                 const cooldown = 60000 * 60 * 12 - (Date.now() - time);
 
-                const embed = new ClientEmbed(this.client)
-                    .setAuthor({ name: 'Recompensa diária!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                    .setDescription(`Você resgatou a sua recompensa diária e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)} + R$ ${this.client.utils.toAbbrev(extraMoney)}) (VIP)!` : `\n**${addedMoney.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(addedMoney)})!`}`)
-                    .setFooter({ text: 'Pegue a sua recompensa diária:' })
-                    .setTimestamp(Date.now() + 60000 * 60 * 12);
-
-                const reedemed = new ClientEmbed(this.client)
-                    .setAuthor({ name: 'Recompensa diária!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                    .setDescription(`${message.author}, você já resgatou a sua recompensa diária hoje!\n\nPegue-a novamente em: ||<t:${Math.floor((Date.now() + cooldown) / 1000)}:f> (<t:${Math.floor((Date.now() + cooldown) / 1000)}:R>)||`);
-
                 //================= Verificação do tempo =================//
 
-                if (time !== null && cooldown > 0) {
+                if (time && cooldown > 0) {
+                    const reedemed = new ClientEmbed(this.client)
+                        .setAuthor({ name: 'Recompensa diária!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(`${message.author}, você já resgatou a sua recompensa diária hoje!\n\nPegue-a novamente em: ||<t:${Math.floor((Date.now() + cooldown) / 1000)}:f> (<t:${Math.floor((Date.now() + cooldown) / 1000)}:R>)||`);
+
                     return void await message.reply({ embeds: [reedemed] });
                 } else {
+                    const embed = new ClientEmbed(this.client)
+                        .setAuthor({ name: 'Recompensa diária!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(`Você resgatou a sua recompensa diária e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)} + R$ ${this.client.utils.toAbbrev(extraMoney)}) (VIP)!` : `\n**${addedMoney.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(addedMoney)})!`}`)
+                        .setFooter({ text: 'Pegue a sua recompensa diária:' })
+                        .setTimestamp(Date.now() + 60000 * 60 * 12);
+
+
                     userData.set({
                         'economy.coins': atual + addedMoney,
                         'economy.daily': Date.now(),

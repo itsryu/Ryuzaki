@@ -193,19 +193,19 @@ export default class messageCreateListener extends ListenerStructure {
 
                     const checkPermissions = this.client.services.get('checkPermissions');
 
-                    const memberPermissions = checkPermissions?.serviceExecute({ message, command, language });
+                    const memberPermissions = await checkPermissions?.serviceExecute({ message, command, language });
                     if (!memberPermissions) return;
 
-                    const clientPermissions = checkPermissions?.serviceExecute({ message, command, language });
+                    const clientPermissions = await checkPermissions?.serviceExecute({ message, command, language });
                     if (!clientPermissions) return;
 
                     await message.channel.sendTyping();
 
-                    const commandPromise = async (resolve: (value: void) => void, reject: (reason?: any) => void) => {
+                    const commandPromise = async (resolve: <T = never>(value: T) => void, reject: <T = never>(reason: T) => void) => {
                         try {
-                            resolve(await command.commandExecute({ message, args, language, prefix }));
+                            resolve<void>(await command.commandExecute({ message, args, language, prefix }));
                         } catch (err) {
-                            reject(err);
+                            reject<Error>(err as Error);
                         }
                     };
 

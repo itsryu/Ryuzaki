@@ -68,7 +68,7 @@ export default class interactionCreateListener extends ListenerStructure {
                     }
                 });
 
-                const command = this.client.commands.get(interaction.commandName) || this.client.contexts.get(interaction.commandName);
+                const command = this.client.commands.get(interaction.commandName) ?? this.client.contexts.get(interaction.commandName);
 
                 if (command) {
                     try {
@@ -162,11 +162,11 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         //===============> Execução do comando:
 
-                        const commandPromise = async (resolve: (value: void) => void, reject: (reason?: any) => void) => {
+                        const commandPromise = async () => {
                             try {
-                                resolve(await command.commandExecute({ message, args, language, prefix }));
+                                await Promise.resolve<void>(await command.commandExecute({ message, args, language, prefix }));
                             } catch (err) {
-                                reject(err);
+                                await Promise.reject<Error>(err);
                             }
                         };
 

@@ -36,7 +36,7 @@ export default class StealCommand extends CommandStructure {
                 } else if (target.steal.protection > Date.now()) {
                     return void await message.reply({ content: 'Este usuário está protegido contra roubos.' });
                 } else {
-                    if (time !== null && cooldown > 0) {
+                    if (time && cooldown > 0) {
                         const embed = new ClientEmbed(this.client)
                             .setAuthor({ name: `${message.author.username} tentou roubar ${member.user.username}`, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
                             .setDescription(`Você já roubou alguém hoje!\n\nTente novamente em: ||<t:${Math.floor((Date.now() + cooldown) / 1000)}:f> (<t:${Math.floor((Date.now() + cooldown) / 1000)}:R>)||`);
@@ -46,12 +46,14 @@ export default class StealCommand extends CommandStructure {
                         const chance = Math.floor(Math.random() * 100) + 1;
 
                         if (chance >= 50) {
+                            const receivedExp = Math.floor(Math.random() * 20) + 1;
+
                             const money = Math.floor(Math.random() * target.economy.coins) + 1;
 
                             userData.set({
                                 'economy.coins': userData.economy.coins + money,
                                 'steal.time': Date.now(),
-                                'exp.xp': userData.exp.xp + Math.floor(Math.random() * 20) + 1
+                                'exp.xp': userData.exp.xp + receivedExp
                             });
                             await userData.save();
 
@@ -62,17 +64,19 @@ export default class StealCommand extends CommandStructure {
 
                             const embed = new ClientEmbed(this.client)
                                 .setAuthor({ name: `${message.author.username} roubou ${member.user.username}`, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                                .setDescription(`Você roubou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) de ${member}!`);
+                                .setDescription(`Você roubou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) de ${member}! \n\nVocê também recebeu: **${receivedExp}** de experiência.`);
 
                             return void await message.reply({ embeds: [embed] });
                         } else {
+                            const removedExp = Math.floor(Math.random() * 20) + 1;
+
                             const embed = new ClientEmbed(this.client)
                                 .setAuthor({ name: `${message.author.username} tentou roubar ${member.user.username}`, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                                .setDescription(`Você falhou ao tentar roubar ${member}! Perdeu 10 de experiência.`);
+                                .setDescription(`Você falhou ao tentar roubar ${member}! Perdeu ${removedExp} de experiência.`);
 
                             userData.set({
                                 'steal.time': Date.now(),
-                                'exp.xp': userData.exp.xp - Math.floor(Math.random() * 20) + 1
+                                'exp.xp': userData.exp.xp - removedExp
                             });
                             await userData.save();
 

@@ -25,7 +25,7 @@ export default class WorkCommand extends CommandStructure {
                 const work = userData.economy.work;
                 const cooldown = (1000 * 60 * 60 * 12) - (Date.now() - work);
 
-                if (work !== null && cooldown > 0) {
+                if (work && cooldown > 0) {
                     const reedemed = new ClientEmbed(this.client)
                         .setAuthor({ name: 'Trabalho!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
                         .setDescription(`${message.author}, você já trabalhou hoje!\n\nTrabalhe novamente em: ||<t:${Math.floor((Date.now() + cooldown) / 1000)}:f> (<t:${Math.floor((Date.now() + cooldown) / 1000)}:R>)||`);
