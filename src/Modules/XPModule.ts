@@ -13,7 +13,7 @@ export default class XPModule extends ModuleStructure {
                         try {
                             const xp = userData.exp.xp;
                             const level = userData.exp.level;
-                            const nextLevel = userData.exp.nextLevel * level;
+                            const nextLevel = userData.exp.nextLevel;
                             const xpGive = Math.floor(Math.random() * 5);
                             const xpExtra = Math.floor(Math.random() * 20);
                             const xpTotalReceived = userData.vip.status ? (xpGive + xpExtra) : xpGive;
@@ -29,7 +29,8 @@ export default class XPModule extends ModuleStructure {
                             if (xp >= nextLevel) {
                                 userData.set({
                                     'exp.xp': 0,
-                                    'exp.level': level + 1
+                                    'exp.level': level + 1,
+                                    'exp.nextLevel': this.client.utils.nextLevelExp(level + 1)
                                 });
 
                                 await userData.save();

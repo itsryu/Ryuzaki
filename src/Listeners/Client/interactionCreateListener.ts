@@ -235,7 +235,7 @@ export default class interactionCreateListener extends ListenerStructure {
 
                                     const xp = userData.exp.xp;
                                     const level = userData.exp.level;
-                                    const nextLevel = userData.exp.nextLevel * level;
+                                    const nextLevel = userData.exp.nextLevel;
 
                                     if (xp >= nextLevel) {
                                         userData.set({
