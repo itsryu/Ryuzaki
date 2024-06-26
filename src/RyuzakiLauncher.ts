@@ -1,10 +1,11 @@
-import { GatewayIntentBits, Partials } from 'discord.js';
-import { Ryuzaki } from './RyuzakiClient';
 import { extend } from 'dayjs';
 import 'dayjs/locale/pt';
 import 'dayjs/locale/en';
+import { GatewayIntentBits, Partials } from 'discord.js';
+import { Ryuzaki } from './RyuzakiClient';
 
-const client = new Ryuzaki({
+
+const client = new Ryuzaki  ({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
@@ -41,9 +42,14 @@ const client = new Ryuzaki({
 });
 
 (async () => {
+    await client.login(process.env.CLIENT_TOKEN);
     await client.initialize();
     extend((await import('dayjs/plugin/localizedFormat')).default);
     extend((await import('dayjs/plugin/duration')).default);
     extend((await import('dayjs/plugin/utc')).default);
     extend((await import('dayjs/plugin/relativeTime')).default);
-})();
+})()
+    .catch((err: unknown) => {
+        client.logger.error((err as Error).message, 'unhandledRejection');
+        client.logger.warn((err as Error).stack, 'unhandledRejection');
+    });

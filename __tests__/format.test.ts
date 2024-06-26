@@ -1,9 +1,9 @@
+import Dayjs from 'dayjs';
 import { Util } from '../src/Utils/util';
-
 
 describe('formatDuration', () => {
     it('should format milliseconds into duration string', () => {
-        const dayjs = jest.requireActual('dayjs');
+        const dayjs: typeof Dayjs = jest.requireActual('dayjs');
         dayjs.extend(jest.requireActual('dayjs/plugin/duration'));
 
         expect(Util.formatDuration(86400000, 'pt-BR')).toBe('1 dia');

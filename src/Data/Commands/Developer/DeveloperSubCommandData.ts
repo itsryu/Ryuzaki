@@ -22,11 +22,13 @@ class DeveloperSubCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['desenvolvedor'],
-                'en-US': ['developer']
+                'en-US': ['developer'],
+                'es-ES': ['desarrollador']
             },
             usage: {
                 'pt-BR': ['eval <código>'],
-                'en-US': ['eval <code>']
+                'en-US': ['eval <code>'],
+                'es-ES': ['eval <código>']
             },
             permissions: {
                 client: ['EmbedLinks'],

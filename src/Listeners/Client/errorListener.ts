@@ -16,7 +16,7 @@ export default class errorListener extends ListenerStructure {
             const errorEmbed = new ClientEmbed(this.client)
                 .setColor(Colors.Red)
                 .setTitle(`Error: [${error.name}]`)
-                .setDescription('```js' + '\n' + error.stack + '\n' + '```')
+                .setDescription('```js' + '\n' + (error.stack ?? error.message) + '\n' + '```')
                 .setFooter({ text: `Cause: ${error.cause}`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
             await webhook.send({ embeds: [errorEmbed] });

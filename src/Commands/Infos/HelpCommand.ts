@@ -20,7 +20,7 @@ export default class HelpCommand extends CommandStructure {
 
             if (args[0]) {
                 const name = args[0].toLowerCase();
-                const command = commands.get(name) ?? commands.find((command) => command.data.options.aliases[language].includes(name));
+                const command = commands.get(name) ?? commands.find((command) => command.data.options.aliases[language]?.includes(name));
 
                 if (!command) {
                     return void await message.reply({ content: this.client.t('infos:help.!command', { name }) });
@@ -51,21 +51,29 @@ export default class HelpCommand extends CommandStructure {
 
                     embed.addFields({ name: this.client.t('infos:help.fields', { index: 0 }), value: `\`${command.data.options.name.replace(/^\w/, (c) => c.toUpperCase())}\``, inline: true });
 
-                    if (command.data.options.aliases[language]) {
-                        embed.addFields({ name: this.client.t('infos:help.fields', { index: 1 }), value: `\`${!command.data.options.aliases[language].length ? this.client.t('infos:help.fields_1', { index: 0 }) : command.data.options.aliases[language].join(', ')}\``, inline: true });
+                    if (command.data.options.aliases[language]?.length) {
+                        embed.addFields({ name: this.client.t('infos:help.fields', { index: 1 }), value: `\`${!command.data.options.aliases[language]?.length ? this.client.t('infos:help.fields_1', { index: 0 }) : command.data.options.aliases[language]?.join(', ')}\``, inline: true });
                     }
-                    if (command.data.options.category[language]) {
+                    if (command.data.options.category[language].length) {
                         embed.addFields({ name: this.client.t('infos:help.fields', { index: 2 }), value: `\`${command.data.options.category[language]}\``, inline: true });
                     }
                     if (command.data.options.description_localizations?.[language]) {
                         embed.addFields({ name: this.client.t('infos:help.fields', { index: 3 }), value: `\`${!commandData ? this.client.t('infos:help.values', { index: 0 }) : commandData.usages === 0 ? this.client.t('infos:help.values', { index: 1 }) : `${commandData.usages}`}\``, inline: true });
                         embed.addFields({ name: this.client.t('infos:help.fields', { index: 4 }), value: `\`${command.data.options.description_localizations[language]?.length ? command.data.options.description_localizations[language] : this.client.t('infos:help.fields_1', { index: 1 })}\``, inline: true });
                     }
-                    if (command.data.options.usage[language]) {
-                        embed.addFields({ name: this.client.t('infos:help.fields', { index: 5 }), value: command.data.options.usage[language].length ? command.data.options.usage[language].map((usage) => `\`${command.data.options.name_localizations ? prefix + command.data.options.name_localizations[language] : prefix + command.data.options.name} ${usage}\``).join('\n') : `\`${command.data.options.name_localizations ? prefix + command.data.options.name_localizations[language] : prefix + command.data.options.name}\``, inline: true });
+                    if (command.data.options.usage[language]?.length) {
+                        embed.addFields({
+                            name: this.client.t('infos:help.fields', { index: 5 }),
+                            value: `\`${command.data.options.usage[language]?.map((usage) => prefix + command.data.options.name + ' ' + usage).join('\n')}\``,
+                            inline: true
+                        });
                     }
                     if (command.data.options.config.cooldown) {
-                        embed.addFields({ name: this.client.t('infos:help.fields', { index: 6 }), value: `\`${command.data.options.config.cooldown} ${this.client.t('infos:help.fields_1', { index: 2 })}\``, inline: true });
+                        embed.addFields({
+                            name: this.client.t('infos:help.fields', { index: 6 }),
+                            value: `\`${command.data.options.config.cooldown} ${this.client.t('infos:help.fields_1', { index: 2 })}\``,
+                            inline: true
+                        });
                     }
 
                     return void await message.reply({ embeds: [embed] });

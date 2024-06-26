@@ -18,11 +18,13 @@ class RyuCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['ryuzaki'],
-                'en-US': ['ryuzaki']
+                'en-US': ['ryuzaki'],
+                'es-ES': ['ryuzaki']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: ['EmbedLinks'],

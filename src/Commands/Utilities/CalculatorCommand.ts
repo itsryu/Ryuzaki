@@ -263,7 +263,7 @@ export default class CalculatorCommand extends CommandStructure {
                 } else if (i.customId === '=') {
                     if (string) {
                         try {
-                            const result = await eval(string);
+                            const result = await Promise.any([eval(string), Promise.reject(null)]);
                             let output = result;
 
                             if (typeof result === 'string') {

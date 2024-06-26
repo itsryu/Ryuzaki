@@ -42,7 +42,7 @@ export default class guildCreateListener extends ListenerStructure {
                         inline: true
                     });
 
-            guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } });
+            await guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
 
             if (!guild.members.me?.permissions.has(PermissionFlagsBits.ManageGuild)) {
                 const channels = await guild.channels.fetch();
@@ -59,10 +59,10 @@ export default class guildCreateListener extends ListenerStructure {
                 }
             }
 
-            webhook.send({ embeds: [embed] });
+            await webhook.send({ embeds: [embed] });
         } catch (err) {
             this.client.logger.error((err as Error).message, guildCreateListener.name);
-            this.client.logger.warn((err as Error).stack!, guildCreateListener.name);
+            this.client.logger.warn((err as Error).stack, guildCreateListener.name);
         }
     }
 }

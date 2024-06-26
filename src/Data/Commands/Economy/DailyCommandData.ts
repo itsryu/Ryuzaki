@@ -22,11 +22,13 @@ class DailyCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['diário', 'diario'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['diario']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: [],

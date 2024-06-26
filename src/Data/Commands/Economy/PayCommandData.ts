@@ -22,11 +22,13 @@ class PayCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['pagar', 'enviar', 'dar'],
-                'en-US': ['send', 'give']
+                'en-US': ['send', 'give'],
+                'es-ES': ['enviar', 'dar']
             },
             usage: {
                 'pt-BR': ['<usuário> <quantia>'],
-                'en-US': ['<user> <amount>']
+                'en-US': ['<user> <amount>'],
+                'es-ES': ['<usuario> <cantidad>']
             },
             permissions: {
                 client: ['AddReactions', 'ReadMessageHistory'],

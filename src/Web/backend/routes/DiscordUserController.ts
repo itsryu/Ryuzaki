@@ -1,40 +1,34 @@
 import { Request, Response } from 'express';
-import App from '../server';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
-import { NextFunction } from 'express-serve-static-core';
 import { Snowflake } from 'discord-api-types/v10';
 import { DiscordUser } from '../../../Types/GatewayTypes';
 
 class DiscordUserController extends RouteStructure {
-    constructor(app: App) {
-        super(app);
-    }
-
-    run = async (req: Request, res: Response, _: NextFunction) => {
+    run = async (req: Request, res: Response) => {
         try {
             const id = req.params.id;
 
             if (!id) {
-                return res.status(400).json(new JSONResponse(400, 'Bad Request').toJSON());
+                return void res.status(400).json(new JSONResponse(400, 'Bad Request').toJSON());
             } else {
                 const user = await this.getUser(req.params.id);
 
                 if (!user) {
-                    return res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
+                    return void res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
                 } else {
-                    return res.status(200).json(user);
+                    return void res.status(200).json(user);
                 }
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, DiscordUserController.name);
-            this.app.logger.warn((err as Error).stack!, DiscordUserController.name);
+            this.app.logger.warn((err as Error).stack, DiscordUserController.name);
 
-            return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
+            return void res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
     };
 
     private getUser = async (id: Snowflake): Promise<DiscordUser | null> => {
-        const fetchUser = async (resolve: any) => {
+        const fetchUser = async (resolve: (value: DiscordUser | PromiseLike<DiscordUser | null> | null) => void): Promise<void> => {
             try {
                 const response = await fetch(process.env.DISCORD_API + '/' + id + '/' + 'profile', {
                     headers: {
@@ -42,9 +36,9 @@ class DiscordUserController extends RouteStructure {
                         'Content-Type': 'application/json; charset=UTF-8'
                     }
                 });
-
-                const data = await response.json();
-
+    
+                const data = await response.json() as DiscordUser;
+    
                 if (!response.ok) {
                     this.app.logger.error(JSON.stringify(data), DiscordUserController.name);
                     resolve(null);
@@ -53,12 +47,12 @@ class DiscordUserController extends RouteStructure {
                 }
             } catch (err) {
                 this.app.logger.error((err as Error).message, DiscordUserController.name);
-                this.app.logger.warn((err as Error).stack!, DiscordUserController.name);
-
+                this.app.logger.warn((err as Error).stack, DiscordUserController.name);
+    
                 resolve(null);
             }
         };
-
+    
         return await new Promise<DiscordUser | null>(fetchUser);
     };
 }

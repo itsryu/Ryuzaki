@@ -36,7 +36,7 @@ export default class XPModule extends ModuleStructure {
                                 await userData.save();
 
                                 if (guildData.exp.status) {
-                                    return void message.reply({ content: `Você acaba de subir para o nível **${level}**.` })
+                                    return void message.reply({ content: `Você acaba de subir para o nível **${level.toString()}**.` })
                                         .then(message => message.react('⬆️'));
                                 }
                             }

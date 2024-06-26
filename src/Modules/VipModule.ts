@@ -37,7 +37,7 @@ export default class VipModule extends ModuleStructure {
                     if (userData) {
                         await userData.set({ 'vip.date': 0, 'vip.hasVip': false }).save();
 
-                        user.send({ content: `${user}, o seu VIP foi removido.` }).catch(() => undefined);
+                        user.send({ content: user.toString() + ', o seu VIP foi removido.' }).catch(() => undefined);
                         this.client.logger.info(`Retirado o VIP de ${user.tag}`, 'VIP');
                     }
                 }

@@ -22,11 +22,13 @@ class CatsCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['gato', 'gatos'],
-                'en-US': ['cat']
+                'en-US': ['cat'],
+                'es-ES': ['gato', 'gatos']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: ['AttachFiles', 'EmbedLinks'],

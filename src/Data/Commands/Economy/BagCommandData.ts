@@ -22,11 +22,13 @@ class BagCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['carteira'],
-                'en-US': ['balance']
+                'en-US': ['balance'],
+                'es-ES': ['balance']
             },
             usage: {
                 'pt-BR': ['[usuário]'],
-                'en-US': ['[user]']
+                'en-US': ['[user]'],
+                'es-ES': ['[usuario]']
             },
             permissions: {
                 client: [],

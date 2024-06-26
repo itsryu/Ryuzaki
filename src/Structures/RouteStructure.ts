@@ -45,7 +45,7 @@ class JSONResponse {
     }
 }
 
-abstract class RouteStructure<T = Request, K = Response, N = NextFunction, V = void | any> {
+abstract class RouteStructure<T = Request, K = Response, N = NextFunction, V = void> {
     public readonly app: App;
 
     public constructor(app: App) {

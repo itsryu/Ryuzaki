@@ -2,8 +2,6 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import * as winston from 'winston';
 import { abbrev, convertAbbrev } from './Plugins/abbrev';
 import { renderEmoji } from './Plugins/renderEmoji';
-import { setTimeout as sleep } from 'timers/promises';
-import { ServiceStructure } from '../Structures/';
 import { SKRSContext2D } from '@napi-rs/canvas';
 import { duration } from 'dayjs';
 import { Language } from './Objects/flags';
@@ -17,7 +15,7 @@ enum LogLevel {
 }
 
 class Util {
-    public getTime(timestamp: number | Date, language: string): string {
+    public getTime(timestamp: number | Date, language: string | string[]): string {
         const date = new Date(timestamp || Date.now());
         return new Date(date).toLocaleString(language, { timeZone: 'America/Sao_Paulo' });
     }
@@ -51,7 +49,7 @@ class Util {
     }
 
     public zeroFill(num: number) {
-        return ('0' + num).slice(-2);
+        return ('0' + num.toString()).slice(-2);
     }
 
     public counter(num: number): string {
@@ -86,7 +84,7 @@ class Util {
     public bytesToSize(input: number, precision?: number): string {
         const index = Math.floor(Math.log(input) / Math.log(1024));
         const unit = ['', 'K', 'M', 'G', 'T', 'P'];
-        return (index >= unit.length ? input + 'B' : `${(input / 1024 ** index).toFixed(precision ?? 2)} ${unit[index]}B`);
+        return (index >= unit.length ? (input.toString() + 'B') : `${(input / 1024 ** index).toFixed(precision ?? 2)} ${unit[index]}B`);
     }
 
     public clean(string: unknown): string {
@@ -103,7 +101,7 @@ class Util {
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('page')
-                    .setLabel(`Pag: ${num}`)
+                    .setLabel(`Pag: ${num.toString()}`)
                     .setDisabled(true)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
@@ -114,24 +112,12 @@ class Util {
             );
     }
 
-    public async executeService(service: ServiceStructure) {
-        const { amount = 1, interval = 0, wait = 0 } = service.data;
-
-        for (let i = 0; i < amount; i++) {
-            await sleep(wait);
-            service.serviceExecute();
-            if (i < amount - 1) {
-                await sleep(interval);
-            }
-        }
-    }
-
     public checkDays(date: Date) {
         const now = new Date();
         const diff = now.getTime() - date.getTime();
         const days = Math.floor(diff / 86400000);
 
-        return days + (days == 1 ? ' dia' : ' dias') + ' atrás';
+        return days.toString() + (days == 1 ? ' dia' : ' dias') + ' atrás';
     }
 
     public nextLevelExp = (level: number): number => {
@@ -144,7 +130,7 @@ class Util {
     public static formatDuration(ms: number, language: Languages): string {
         const timeDuration = duration(ms);
 
-        const arrays: Record<Language, [number, string[]][]> = { 
+        const arrays: Record<Language, [number, string[]][]> = {
             'pt-BR': [
                 [timeDuration.years(), ['ano', 'anos']],
                 [timeDuration.months(), ['mês', 'meses']],
@@ -163,7 +149,7 @@ class Util {
             ]
         };
 
-        const components = arrays[language];
+        const components: [number, string[]][] = arrays[language];
 
         const result = components
             .filter(([value]) => value > 0)
@@ -183,10 +169,10 @@ class Util {
 class Logger {
     private logger: winston.Logger;
 
-    constructor(private level: LogLevel = LogLevel.INFO, private environment: string = process.env.STATE) {
+    constructor(level: LogLevel = LogLevel.INFO, environment: string = process.env.STATE) {
         this.logger = winston.createLogger({
-            level: this.level,
-            defaultMeta: { environment: this.environment },
+            level,
+            defaultMeta: { environment },
             transports: [
                 new winston.transports.Console()
             ],
@@ -211,19 +197,35 @@ class Logger {
         });
     }
 
-    public debug(message: any, meta: any): void {
+    public debug(message: string | string[] | undefined, meta: string | string[] | undefined): void {
+        if (message && Array.isArray(message)) message = message.join(' ');
+        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
+        if (!message) message = '';
+
         this.logger.debug(message, { path: meta });
     }
 
-    public info(message: any, meta: any): void {
+    public info(message: string | string[] | undefined, meta: string | string[] | undefined): void {
+        if (message && Array.isArray(message)) message = message.join(' ');
+        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
+        if (!message) message = '';
+
         this.logger.info(message, { path: meta });
     }
 
-    public warn(message: any, meta: any): void {
+    public warn(message: string | string[] | undefined, meta: string | string[] | undefined): void {
+        if (message && Array.isArray(message)) message = message.join(' ');
+        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
+        if (!message) message = '';
+
         this.logger.warn(message, { path: meta });
     }
 
-    public error(message: any, meta: any): void {
+    public error(message: string | string[] | undefined, meta: string | string[] | undefined): void {
+        if (message && Array.isArray(message)) message = message.join(' ');
+        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
+        if (!message) message = '';
+
         this.logger.error(message, { path: meta });
     }
 }

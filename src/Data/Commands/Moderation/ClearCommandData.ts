@@ -22,11 +22,13 @@ class ClearCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['deletar', 'limpar'],
-                'en-US': ['delete', 'clean']
+                'en-US': ['delete', 'clean'],
+                'es-ES': ['borrar', 'limpiar']  
             },
             usage: {
                 'pt-BR': ['<número>'],
-                'en-US': ['<number>']
+                'en-US': ['<number>'],
+                'es-ES': ['<número>']
             },
             permissions: {
                 client: ['ManageMessages', 'ReadMessageHistory'],

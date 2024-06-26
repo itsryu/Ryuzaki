@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../../RyuzakiClient';
-import { ListenerStructure, ClientEmbed } from '../../Structures/';
+import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../Structures/';
 import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType } from 'discord.js';
 
 export default class interactionCreateListener extends ListenerStructure {
@@ -143,14 +143,14 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         const message = Object.assign(interaction, {
                             author: interaction.user,
-                            reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch(console.error),
-                            edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch(console.error),
+                            reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, interactionCreateListener.name); }),
+                            edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, interactionCreateListener.name); }),
                             delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
                         }) as ChatInputCommandInteraction;
 
                         //===============> Checando permissões dos membros e do cliente:
 
-                        const checkPermissions = this.client.services.get('checkPermissions');
+                        const checkPermissions = this.client.services.get('CheckPermissions');
 
                         // Verificando permissões do membro:
                         const memberPermissions = await checkPermissions?.serviceExecute({ message, command, language });
@@ -162,26 +162,28 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         //===============> Execução do comando:
 
-                        const commandPromise = async () => {
+                        const commandPromise = async (resolve: (value: CommandStructure | ContextCommandStructure | PromiseLike<CommandStructure | ContextCommandStructure>) => void, reject: (reason?: any) => void) => {
                             try {
-                                await Promise.resolve<void>(await command.commandExecute({ message, args, language, prefix }));
+                                await command.commandExecute({ message, args, language, prefix });
+
+                                resolve(command);
                             } catch (err) {
-                                await Promise.reject<Error>(err);
+                                reject(err);
                             }
                         };
 
-                        const interactionExecute = new Promise(commandPromise);
+                        const interactionExecute = new Promise<CommandStructure | ContextCommandStructure>(commandPromise);
 
                         await interactionExecute
-                            .catch(async (err) => {
-                                this.client.logger.error(err.message, command.data.options.name);
-                                this.client.logger.warn(err.stack, command.data.options.name);
+                            .catch(async (err: unknown) => {
+                                this.client.logger.error((err as Error).message, command.data.options.name);
+                                this.client.logger.warn((err as Error).stack, command.data.options.name);
 
                                 const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
                                 const errorEmbed = new ClientEmbed(this.client)
                                     .setTitle(command.data.options.name)
-                                    .setDescription('```js' + '\n' + err.stack + '\n' + '```');
+                                    .setDescription('```js' + '\n' + ((err as Error).stack ?? (err as Error).message) + '\n' + '```');
 
                                 await errorChannel.send({ embeds: [errorEmbed] });
                                 return interaction.reply({ content: this.client.t('main:errors.interaction', { index: 0 }), ephemeral: true });

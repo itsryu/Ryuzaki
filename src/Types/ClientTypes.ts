@@ -1,3 +1,4 @@
+import { Collection, Emoji, PartialEmoji } from 'discord.js';
 import { GuildDocument, UserDocument, ClientDocument, CommandDocument } from './SchemaTypes';
 
 type DataType = 'user' | 'guild' | 'client' | 'command';
@@ -17,9 +18,19 @@ type CategoryValidation<T extends keyof CategoryNames> = {
 
 type CategoryEmojis = {
     [key in Languages]: {
-        [category in CategoryNames[key]]: string;
+        [category in CategoryNames[key]]: PartialEmoji | Emoji | string;
     };
 };
+
+interface Shards {
+    shardMemory: number;
+    servers: Collection<string, { memory: number }>;
+}
+
+interface ShardMemory {
+    totalMemory: number;
+    shards: Record<number, Shards>;
+}
 
 type DataDocument<T extends DataType> = T extends 'guild'
     ? GuildDocument & Required<{ _id: string }>
@@ -37,5 +48,6 @@ export type {
     Categories,
     CategoryValidation,
     CategoryEmojis,
-    DataDocument
+    DataDocument,
+    ShardMemory
 };

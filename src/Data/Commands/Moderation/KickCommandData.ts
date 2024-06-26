@@ -22,7 +22,8 @@ class KickCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['expulsar'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['expulsar']
             },
             usage: {
                 'pt-BR': ['<user|ID> [motivo]'],

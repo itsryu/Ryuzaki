@@ -22,11 +22,13 @@ class HelpCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['ajuda', 'comandos', 'comando'],
-                'en-US': ['commands']
+                'en-US': ['commands'],
+                'es-ES': ['ayuda', 'comandos', 'comando']
             },
             usage: {
                 'pt-BR': ['[comando]'],
-                'en-US': ['[command]']
+                'en-US': ['[command]'],
+                'es-ES': ['[comando]']
             },
             permissions: {
                 client: ['ReadMessageHistory', 'SendMessages'],

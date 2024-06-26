@@ -14,7 +14,7 @@ function abbrev(num: number): string {
                         num = 1;
                         i++;
                     }
-                    return num + abbrev[i - 1];
+                    return num.toString() + abbrev[i - 1];
                 }
             }
 
@@ -27,7 +27,7 @@ function abbrev(num: number): string {
 
 function convertAbbrev(string: string | number): number {
     if (string) {
-        const [numberStr, unit] = `${string}`.match(/^(\d*\.?\d+)([a-zA-Z]*)$/) ?? [`${string}`, ''];
+        const [numberStr, unit] = string.toString().match(/^(\d*\.?\d+)([a-zA-Z]*)$/) ?? [string.toString(), ''];
         const zeros: Record<string, number> = { K: 1e3, k: 1e3, M: 1e6, m: 1e6 };
         const multiplier = zeros[unit] ?? 1;
 

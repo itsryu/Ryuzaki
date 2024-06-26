@@ -1,4 +1,3 @@
-import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure } from '../Structures';
 import { UserDocument } from '../Types/SchemaTypes';
 import { Interaction, Message, User } from 'discord.js';
@@ -7,10 +6,6 @@ import { emojis } from './Objects/emojis';
 import Day from 'dayjs';
 
 class profileConstructor extends ModuleStructure {
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
     async moduleExecute({ user, data, message }: { user: User, data: UserDocument, message: Message | Interaction }) {
         //========================// Criando canvas //========================//
 
@@ -34,7 +29,7 @@ class profileConstructor extends ModuleStructure {
         ctx.textAlign = 'left';
         ctx.font = '35px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
-        this.client.utils.renderEmoji(ctx, this.client.utils.trim(user.username, 20), 172, 510);
+        await this.client.utils.renderEmoji(ctx, this.client.utils.trim(user.username, 20), 172, 510);
 
         // Medalhas:
 
@@ -102,7 +97,7 @@ class profileConstructor extends ModuleStructure {
             const renderedFlags = filteredFlags.join(' ');
 
             ctx.font = '30px KGWhattheTeacherWants';
-            this.client.utils.renderEmoji(ctx, renderedFlags, 200, 473);
+            await this.client.utils.renderEmoji(ctx, renderedFlags, 200, 473);
         }
 
 

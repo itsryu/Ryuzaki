@@ -4,10 +4,10 @@ import { readdirSync } from 'node:fs';
 import { GlobalFonts } from '@napi-rs/canvas';
 import { join } from 'node:path';
 
-export default class loadModulesService extends ServiceStructure {
+export default class LoadModulesService extends ServiceStructure {
     constructor(client: Ryuzaki) {
         super(client, {
-            name: 'loadModules',
+            name: 'LoadModules',
             initialize: true
         });
     }
@@ -18,8 +18,8 @@ export default class loadModulesService extends ServiceStructure {
             await this.loadCommands();
             await this.loadFonts();
         } catch (err) {
-            this.client.logger.error((err as Error).message, loadModulesService.name);
-            this.client.logger.warn((err as Error).stack, loadModulesService.name);
+            this.client.logger.error((err as Error).message, LoadModulesService.name);
+            this.client.logger.warn((err as Error).stack, LoadModulesService.name);
         }
     }
 
@@ -27,50 +27,44 @@ export default class loadModulesService extends ServiceStructure {
         const commandFolders = readdirSync(join(__dirname, '../../Commands'), { withFileTypes: true }).filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
         const contextCommandsFolders = readdirSync(join(__dirname, '../../Context'), { withFileTypes: true }).filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
 
-        const commands = await Promise.all(
+        await Promise.all(
             commandFolders.map(async (folder) => {
                 const commandFiles = readdirSync(join(__dirname, '../../Commands/', folder), { withFileTypes: true }).filter((dirent) => dirent.isFile() && dirent.name.endsWith('.js')).map((dirent) => dirent.name);
 
-                const folderCommands = await Promise.all(
+                await Promise.all(
                     commandFiles.map(async (file) => {
-                        const { default: CommandClass }: { default: new (client: Ryuzaki) => CommandStructure } = await import(join(__dirname, '../../Commands', folder, file));
-                        const command = new CommandClass(this.client);
+                        const { default: ContextCommandClass }: { default: new (client: Ryuzaki) => CommandStructure } = await import(join(__dirname, '../../Commands', folder, file));
+                        const command = new ContextCommandClass(this.client);
 
                         this.client.commands.set(command.data.options.name, command);
                     })
                 );
-
-                return folderCommands;
             })
         );
 
-        const contextCommands = await Promise.all(
+        await Promise.all(
             contextCommandsFolders.map(async (folder) => {
                 const subContextFolder = readdirSync(join(__dirname, '../../Context/', folder), { withFileTypes: true }).filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
 
-                const folderCommands = await Promise.all(
+                await Promise.all(
                     subContextFolder.map(async (subFolder) => {
                         const contextFiles = readdirSync(join(__dirname, '../../Context/', folder, subFolder), { withFileTypes: true }).filter((dirent) => dirent.isFile() && dirent.name.endsWith('.js')).map((dirent) => dirent.name);
 
-                        const fileCommands = await Promise.all(
+                        await Promise.all(
                             contextFiles.map(async (file) => {
-                                const { default: commandClass }: { default: new (client: Ryuzaki) => ContextCommandStructure } = await import(join(__dirname, '../../Context/', folder, subFolder, file));
-                                const command = new commandClass(this.client);
+                                const { default: CommandClass }: { default: new (client: Ryuzaki) => ContextCommandStructure } = await import(join(__dirname, '../../Context/', folder, subFolder, file));
+                                const command = new CommandClass(this.client);
 
                                 this.client.contexts.set(command.data.options.name, command);
                             })
                         );
-
-                        return fileCommands;
                     })
                 );
-
-                return folderCommands;
             })
         );
 
-        this.client.logger.info(`${commands.flat().length} commands loaded successfully.`, 'Commands');
-        this.client.logger.info(`${contextCommands.flat().length} context commands loaded successfully.`, 'Context Commands');
+        this.client.logger.info(`${this.client.commands.size} commands loaded successfully.`, 'Commands');
+        this.client.logger.info(`${this.client.contexts.size} context commands loaded successfully.`, 'Context Commands');
     }
 
     private async loadEvents(): Promise<void> {

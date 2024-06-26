@@ -22,11 +22,13 @@ class SayCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['falar', 'dizer'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['decir']
             },
             usage: {
                 'pt-BR': ['<mensagem>'],
-                'en-US': ['<message>']
+                'en-US': ['<message>'],
+                'es-ES': ['<mensaje>']
             },
             permissions: {
                 client: [],

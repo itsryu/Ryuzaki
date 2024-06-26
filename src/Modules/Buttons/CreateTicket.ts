@@ -1,12 +1,7 @@
-import { Ryuzaki } from '../../RyuzakiClient';
 import { ModuleStructure, ClientEmbed } from '../../Structures';
 import { ButtonBuilder, ActionRowBuilder, ChannelType, PermissionFlagsBits, ButtonInteraction, ButtonStyle, TextChannel } from 'discord.js';
 
 export default class CreateTicketButton extends ModuleStructure {
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
     async moduleExecute(interaction: ButtonInteraction) {
         try {
             if (interaction.guild) {
@@ -14,21 +9,21 @@ export default class CreateTicketButton extends ModuleStructure {
                 const guildData = await this.client.getData(interaction.guild.id, 'guild');
 
                 if (!userData || !guildData) {
-                    return void interaction.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
+                    return void await interaction.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
                 } else if (userData.ticket.have) {
-                    return void interaction.reply({ content: `${interaction.user}, você já possui um **ticket** aberto.`, ephemeral: true });
+                    return void await interaction.reply({ content: `${interaction.user}, você já possui um **ticket** aberto.`, ephemeral: true });
                 } else if (!guildData.ticket.staff) {
-                    return void interaction.reply({ content: 'Não é possível utilizar este comando pois não há um cargo de ticket definido neste servidor.', ephemeral: true });
+                    return void await interaction.reply({ content: 'Não é possível utilizar este comando pois não há um cargo de ticket definido neste servidor.', ephemeral: true });
                 } else if (!guildData.ticket.category) {
-                    return void interaction.reply({ content: 'Não é possível utilizar este comando pois não há uma categoria de ticket definida neste servidor.', ephemeral: true });
+                    return void await interaction.reply({ content: 'Não é possível utilizar este comando pois não há uma categoria de ticket definida neste servidor.', ephemeral: true });
                 } else {
                     const categoryID = interaction.customId.split('-')[1];
                     const tch = interaction.guild.channels.cache.get(guildData.ticket.category);
 
                     if (!tch) {
-                        return void interaction.reply({ content: 'Há uma categoria de ticket definida neste servidor porém ela não existe mais, peça para algum administrador atualiza-la no BOT.' });
+                        return void await interaction.reply({ content: 'Há uma categoria de ticket definida neste servidor porém ela não existe mais, peça para algum administrador atualiza-la no BOT.' });
                     } else {
-                        interaction.reply({ content: `${interaction.user}, estou criando seu ticket, aguarde um momento..`, ephemeral: true });
+                        await interaction.reply({ content: `${interaction.user}, estou criando seu ticket, aguarde um momento..`, ephemeral: true });
 
                         const channel = await interaction.guild.channels.create({
                             name: `${guildData.ticket.size + 1}-${interaction.user.tag}`,
@@ -67,7 +62,7 @@ export default class CreateTicketButton extends ModuleStructure {
 
                         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(close);
 
-                        channel.send({ content: `${interaction.user} ${roleStaff}`, embeds: [criado], components: [row] });
+                        await channel.send({ content: `${interaction.user} ${roleStaff}`, embeds: [criado], components: [row] });
 
                         userData.set({
                             'ticket.have': true,
@@ -77,7 +72,7 @@ export default class CreateTicketButton extends ModuleStructure {
                         await userData.save();
 
                         guildData.set('ticket.size', guildData.ticket.size + 1);
-                        guildData.save();
+                        await guildData.save();
 
                         const opened = new ClientEmbed(this.client)
                             .setTitle('Um novo ticket foi aberto')
@@ -94,10 +89,10 @@ export default class CreateTicketButton extends ModuleStructure {
 
                         if (guildData.logs.status && guildData.logs.moderation) {
                             const channel = interaction.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                            channel.send({ embeds: [opened], components: [to] }).catch(() => undefined);
+                            await channel.send({ embeds: [opened], components: [to] }).catch(() => undefined);
                         }
 
-                        interaction.followUp({ content: `${interaction.user}, o seu ticket foi criado com sucesso no canal: ${channel}`, ephemeral: true });
+                        await interaction.followUp({ content: `${interaction.user}, o seu ticket foi criado com sucesso no canal: ${channel}`, ephemeral: true });
                     }
 
                     guildData.set({
@@ -111,7 +106,7 @@ export default class CreateTicketButton extends ModuleStructure {
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, CreateTicketButton.name);
-            this.client.logger.warn((err as Error).stack!, CreateTicketButton.name);
+            this.client.logger.warn((err as Error).stack, CreateTicketButton.name);
         }
     }
 }

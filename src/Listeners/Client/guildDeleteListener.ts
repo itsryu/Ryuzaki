@@ -39,10 +39,10 @@ export default class guildDeleteListener extends ListenerStructure {
                         inline: true
                     });
 
-            webhook.send({ embeds: [embed] });
+            await webhook.send({ embeds: [embed] });
         } catch (err) {
             this.client.logger.error((err as Error).message, guildDeleteListener.name);
-            this.client.logger.warn((err as Error).stack!, guildDeleteListener.name);
+            this.client.logger.warn((err as Error).stack, guildDeleteListener.name);
         }
     }
 }

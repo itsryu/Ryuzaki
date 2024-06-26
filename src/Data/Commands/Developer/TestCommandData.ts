@@ -22,11 +22,13 @@ class TestCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['t', 'teste'],
-                'en-US': ['t']
+                'en-US': ['t'],
+                'es-ES': ['t']
             },
             usage: {
                 'pt-BR': ['<null>'],
-                'en-US': ['<null>']
+                'en-US': ['<null>'],
+                'es-ES': ['<null>']
             },
             permissions: {
                 client: [],

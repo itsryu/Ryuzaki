@@ -22,11 +22,13 @@ class MarryCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['casar'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['casarse']
             },
             usage: {
                 'pt-BR': ['[usuário]'],
-                'en-US': ['[user]']
+                'en-US': ['[user]'],
+                'es-ES': ['[usuario]']
             },
             permissions: {
                 client: ['AddReactions', 'ReadMessageHistory'],

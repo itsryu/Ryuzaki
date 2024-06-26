@@ -18,11 +18,13 @@ class ShardCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['shards'],
-                'en-US': ['shards']
+                'en-US': ['shards'],
+                'es-ES': ['shards']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: [],

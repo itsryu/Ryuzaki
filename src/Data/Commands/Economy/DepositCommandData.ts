@@ -22,11 +22,13 @@ class DepositCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['dep', 'depositar'],
-                'en-US': ['dep']
+                'en-US': ['dep'],
+                'es-ES': ['dep']
             },
             usage: {
                 'pt-BR': ['<quantia|tudo>'],
-                'en-US': ['<amount|all>']
+                'en-US': ['<amount|all>'],
+                'es-ES': ['<cantidad|todo>']
             },
             permissions: {
                 client: [],

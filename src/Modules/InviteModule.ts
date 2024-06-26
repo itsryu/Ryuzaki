@@ -7,7 +7,7 @@ export default class InviteModule extends ModuleStructure {
             if (message.guild && message.channel.type === ChannelType.GuildText) {
                 const guildData = await this.client.getData(message.guild.id, 'guild');
 
-                if (guildData && guildData.antinvite.status && message.channel.permissionsFor(message.guild.members.me!).has(PermissionFlagsBits.ManageGuild)) {
+                if (guildData && guildData.antinvite.status && message.guild.members.me && message.channel.permissionsFor(message.guild.members.me).has(PermissionFlagsBits.ManageGuild)) {
                     const regex = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|(discord|discordapp)\.com\/invite)\/.+[a-z]/g;
                     const invites = await message.guild.invites.fetch();
                     const filter = invites.filter(i => i.inviter);
@@ -20,8 +20,8 @@ export default class InviteModule extends ModuleStructure {
                             const roles = guildData.antinvite.roles.some((x) => message.member?.roles.cache.has(x));
 
                             if (!message.member?.permissions.has(PermissionFlagsBits.Administrator) && !channels && !roles) {
-                                message.delete();
-                                return void message.reply({ content: guildData.antinvite.msg === null ? `${message.author}, convites para outros servidores sem permissão são estritamente proibidos.` : guildData.antinvite.msg.replace(/{user}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{guild}/g, message.guild.name) });
+                                await message.delete();
+                                return void message.reply({ content: !guildData.antinvite.msg ? `${message.author}, convites para outros servidores sem permissão são estritamente proibidos.` : guildData.antinvite.msg.replace(/{user}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{guild}/g, message.guild.name) });
                             }
                         }
                     }

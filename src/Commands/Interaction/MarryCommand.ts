@@ -68,7 +68,7 @@ export default class MarryCommand extends CommandStructure {
                             if (collected.size === 0) {
                                 wantMarryEmbed.setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
-                                msg.edit({ embeds: [wantMarryEmbed] });
+                                await msg.edit({ embeds: [wantMarryEmbed] });
                             }
                             await msg.reactions.removeAll();
                         });

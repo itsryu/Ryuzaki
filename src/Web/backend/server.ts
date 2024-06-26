@@ -1,4 +1,3 @@
-import { Ryuzaki } from '../../RyuzakiClient';
 import { AppStructure } from '../../Structures';
 import express, { Express, Router } from 'express';
 import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake } from 'discord.js';
@@ -17,13 +16,9 @@ export default class App extends AppStructure {
     public readonly logger: Logger = new Logger();
     public store = new Map<string, RESTPostOAuth2AccessTokenResult>();
 
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
-    async serverExecute(): Promise<void> {
+    serverExecute(){
         this.configServer();
-        await this.listen(process.env.PORT);
+        this.listen(process.env.PORT);
     }
 
     private configServer(): void {
@@ -34,39 +29,27 @@ export default class App extends AppStructure {
         this.app.use(this.initRoutes());
     }
 
-    private async listen(port: string | number) {
-        const shardIds = this.client.shard?.ids || [];
+    private listen(port: string | number) {
+        setInterval(async () => {
+            try {
+                const guildsArray = await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size);
+                const totalGuilds = guildsArray?.reduce((prev: number, count: number) => prev + count, 0) ?? 0;
 
-        for (const shardId of shardIds) {
-            const shardClient = await this.client.shard?.broadcastEval(
-                (client, { shardId }) => client.shard?.ids.includes(shardId) ? shardId : null,
-                { context: { shardId } }
-            );
+                await this.client.stats.postStats({
+                    serverCount: totalGuilds,
+                    shardCount: this.client.shard?.ids.length,
+                    shards: this.client.shard?.ids
+                });
 
-            if (shardClient?.length && shardClient.length > 0) {
-                setInterval(async () => {
-                    try {
-                        const guildsArray = await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size);
-                        const totalGuilds = guildsArray?.reduce((prev: number, count: number) => prev + count, 0) || 0;
-
-                        await this.client.stats.postStats({
-                            serverCount: totalGuilds,
-                            shardCount: this.client.shard?.ids.length,
-                            shardId: shardId,
-                            shards: this.client.shard?.ids
-                        });
-
-                        this.client.logger.info('Updated stats on Top.gg website.', 'DBL');
-                    } catch (err) {
-                        this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
-                    }
-                }, 30 * 60 * 1000); // Updating every 30 minutes;
+                this.client.logger.info('Updated stats on Top.gg website.', 'DBL');
+            } catch (err) {
+                this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
             }
-        }
+        }, 30 * 60 * 1000); // Updating every 30 minutes;
 
         this.app.listen(port, () => {
-            this.client.logger.info(`[WEB Socket] Server started on port: ${port}`, 'Server');
-            this.client.logger.info(`[WEB Socket] http://localhost:${port}`, 'Server');
+            this.client.logger.info(`[WEB Socket] Server started on port: ${port.toString()}`, 'Server');
+            this.client.logger.info(`[WEB Socket] http://localhost:${port.toString()}`, 'Server');
         });
     }
 
@@ -80,27 +63,24 @@ export default class App extends AppStructure {
             switch (method) {
                 case 'GET': {
                     router.get(path, new InfoMiddleware(this).run, new AuthMiddleware(this).run, async (req, res, next) => {
-                        return await handler.run(req, res, next);
+                        await handler.run(req, res, next);
                     });
 
                     break;
                 }
+
                 case 'POST': {
                     router.post(path, new InfoMiddleware(this).run, async (req, res, next) => {
                         if (path.includes('/dblwebhook')) {
                             const webhook = new Webhook(process.env.AUTH_KEY);
 
-                            webhook.listener(async (vote) => {
-                                return handler.run(req, res, next, vote, this.client);
-                            })(req, res, next);
+                            await webhook.listener((vote) => handler.run(req, res, next, vote, this.client))(req, res, next);
                         } else if (path.includes('/command') || path.includes('/api/interactions')) {
                             const commandMiddleware = new CommandMiddleware(this);
 
-                            commandMiddleware.run(req, res, () => {
-                                return handler.run(req, res, next, this.client);
-                            }, this.client);
+                            commandMiddleware.run(req, res, () => handler.run(req, res, next, this.client), this.client);
                         } else {
-                            return await handler.run(req, res, next);
+                            await handler.run(req, res, next);
                         }
                     });
 
@@ -133,16 +113,21 @@ export default class App extends AppStructure {
     }
 
     private verifyDiscordRequest(clientKey: string) {
-        return function (req, res, buffer: Buffer) {
+        return async function (req: express.Request, res: express.Response, buffer: Buffer) {
             const signature = req.get('X-Signature-Ed25519');
             const timestamp = req.get('X-Signature-Timestamp');
 
-            const isValidRequest = verifyKey(buffer, signature, timestamp, clientKey);
-
-            if (!isValidRequest) {
-                res.status(401).json(new JSONResponse(401, 'Bad request signature').toJSON());
+            if (!signature || !timestamp) {
+                res.status(401).json(new JSONResponse(401, 'Unauthorized').toJSON());
+                return;
             } else {
-                res.status(200);
+                const isValidRequest = await verifyKey(buffer, signature, timestamp, clientKey);
+
+                if (!isValidRequest) {
+                    res.status(401).json(new JSONResponse(401, 'Bad request signature').toJSON());
+                } else {
+                    res.status(200).send();
+                }
             }
         };
     }
@@ -161,7 +146,7 @@ export default class App extends AppStructure {
         return { state, url: url.toString() };
     }
 
-    public async getOAuthTokens(code) {
+    public async getOAuthTokens(code: string) {
         const url = 'https://discord.com/api/v10/oauth2/token';
         const body = new URLSearchParams({
             client_id: process.env.CLIENT_ID,
@@ -184,12 +169,12 @@ export default class App extends AppStructure {
 
             return data;
         } else {
-            throw new Error(`Error fetching OAuth tokens: [${response.status}] ${response.statusText}`);
+            throw new Error(`Error fetching OAuth tokens: [${response.status.toString()}] ${response.statusText}`);
         }
     }
 
-    private async getAccessToken(userId, tokens) {
-        if (Date.now() > tokens.expires_at) {
+    private async getAccessToken(userId: Snowflake, tokens: RESTPostOAuth2AccessTokenResult) {
+        if (Date.now() > tokens.expires_in) {
             const url = 'https://discord.com/api/v10/oauth2/token';
             const body = new URLSearchParams({
                 client_id: process.env.CLIENT_ID,
@@ -210,14 +195,14 @@ export default class App extends AppStructure {
                 const tokens = await response.json() as RESTPostOAuth2AccessTokenResult;
                 tokens.access_token = tokens.access_token;
                 tokens.expires_in = Date.now() + tokens.expires_in * 1000;
-                await this.storeDiscordTokens(userId, tokens);
+                this.storeDiscordTokens(userId, tokens);
                 return tokens.access_token;
             } else {
-                throw new Error(`Error refreshing access token: [${response.status}] ${response.statusText}`);
+                throw new Error(`Error refreshing access token: [${response.status.toString()}] ${response.statusText}`);
             }
         }
 
-        return tokens.access_token as string;
+        return tokens.access_token;
     }
 
     public async getUserData(tokens: RESTPostOAuth2AccessTokenResult) {
@@ -234,15 +219,15 @@ export default class App extends AppStructure {
                 const data = await response.json() as RESTGetAPIUserResult;
                 return data;
             } else {
-                this.logger.error(`Error fetching user data: [${response.status}] ${response.statusText}`, 'getUserData');
+                this.logger.error(`Error fetching user data: [${response.status.toString()}] ${response.statusText}`, 'getUserData');
             }
         } catch (err) {
             this.logger.error((err as Error).message, 'getUserData');
-            this.logger.warn((err as Error).stack!, 'getUserData');
+            this.logger.warn((err as Error).stack, 'getUserData');
         }
     }
 
-    private async pushMetadata(userId: Snowflake, tokens: RESTPostOAuth2AccessTokenResult, metadata) {
+    private async pushMetadata(userId: Snowflake, tokens: RESTPostOAuth2AccessTokenResult, metadata: Record<string, unknown>) {
         const url = `https://discord.com/api/v10/users/@me/applications/${process.env.CLIENT_ID}/role-connection`;
         const accessToken = await this.getAccessToken(userId, tokens);
         const body = {
@@ -258,7 +243,7 @@ export default class App extends AppStructure {
             }
         });
         if (!response.ok) {
-            throw new Error(`Error pushing discord metadata: [${response.status}] ${response.statusText}`);
+            throw new Error(`Error pushing discord metadata: [${response.status.toString()}] ${response.statusText}`);
         }
     }
 
@@ -275,23 +260,24 @@ export default class App extends AppStructure {
             const data = await response.json();
             return data;
         } else {
-            throw new Error(`Error getting discord metadata: [${response.status}] ${response.statusText}`);
+            throw new Error(`Error getting discord metadata: [${response.status.toString()}] ${response.statusText}`);
         }
     }
 
     public async updateMetadata(userId: Snowflake) {
         const tokens = this.getDiscordTokens(userId);
 
-        let metadata = {};
+        let metadata: Record<string, unknown> = {};
+
         try {
             metadata = {
                 cookieseaten: 1483,
                 allergictonuts: false,
                 firstcookiebaked: '2003-12-20'
             };
-        } catch (e: any) {
-            e.message = `Error fetching external data: ${e.message}`;
-            console.error(e);
+        } catch (err: unknown) {
+            (err as Error).message = `Error fetching external data: ${(err as Error).message}`;
+            console.error(err);
         }
 
         tokens && await this.pushMetadata(userId, tokens, metadata);

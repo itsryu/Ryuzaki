@@ -7,14 +7,8 @@ interface RawCommandData extends RESTPostAPIChatInputApplicationCommandsJSONBody
     name: string;
     type: ApplicationCommandType.ChatInput;
     category: CategoryValidation<Languages>;
-    aliases: {
-        'pt-BR': string[],
-        'en-US': string[]
-    };
-    usage: {
-        'pt-BR': string[],
-        'en-US': string[]
-    };
+    aliases: Partial<Record<Languages, string[]>>;
+    usage: Partial<Record<Languages, string[]>>;
     permissions: {
         client: PermissionResolvable[],
         member: PermissionResolvable[]

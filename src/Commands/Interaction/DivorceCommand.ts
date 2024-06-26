@@ -42,7 +42,7 @@ export default class DivorceCommand extends CommandStructure {
                         if (collected.size === 0) {
                             const footer = { text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) };
 
-                            msg.edit({ embeds: [wantDivorceEmbed.setFooter(footer)] });
+                            await msg.edit({ embeds: [wantDivorceEmbed.setFooter(footer)] });
                         }
 
                         await msg.reactions.removeAll();

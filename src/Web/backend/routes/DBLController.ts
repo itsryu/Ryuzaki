@@ -1,16 +1,10 @@
 import { WebhookPayload } from '@top-gg/sdk';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
-import App from '../server';
-import { NextFunction } from 'express-serve-static-core';
 import { ClientEmbed } from '../../../Structures';
 import { Ryuzaki } from '../../../RyuzakiClient';
 
 class DBLController extends RouteStructure {
-    constructor(app: App) {
-        super(app);
-    }
-
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, client: Ryuzaki) => {
         try {
             const user = await client.users.fetch(vote.user).catch(() => undefined);
@@ -18,7 +12,7 @@ class DBLController extends RouteStructure {
             const addedMoney = client.utils.randomIntFromInterval(2000, 5000);
 
             if (!userData) {
-                return res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
+                return void res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
             } else {
                 const money = userData.economy.coins;
                 const votes = userData.economy.votes;
@@ -43,9 +37,9 @@ class DBLController extends RouteStructure {
             }
         } catch (err) {
             this.app.logger.error((err as Error).message, DBLController.name);
-            this.app.logger.warn((err as Error).stack!, DBLController.name);
+            this.app.logger.warn((err as Error).stack, DBLController.name);
 
-            return res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
+            return void res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
     };
 }

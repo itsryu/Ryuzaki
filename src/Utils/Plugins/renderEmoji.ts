@@ -1,5 +1,5 @@
 import { loadImage, SKRSContext2D } from '@napi-rs/canvas';
-import { parseEmoji } from 'discord.js';
+import { parseEmoji, PartialEmoji } from 'discord.js';
 
 export async function renderEmoji(
     ctx: SKRSContext2D,
@@ -30,15 +30,13 @@ export async function renderEmoji(
 
             for (const char of characters) {
                 if (/<:[a-zA-Z0-9_]+:\d+>/.test(char)) {
-                    const customEmoji = parseEmoji(char);
+                    const customEmoji: PartialEmoji | null = parseEmoji(char);
 
                     if (customEmoji?.id) {
                         const link = `https://cdn.discordapp.com/emojis/${customEmoji.id}.${customEmoji.animated ? 'gif' : 'png'}`;
                         const image = await loadImage(link);
 
-                        if (image) {
-                            ctx.drawImage(image, x + currentWidth, y);
-                        }
+                        ctx.drawImage(image, x + currentWidth, y);
                     }
                 }
 

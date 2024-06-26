@@ -1,11 +1,11 @@
 import { Ryuzaki } from '../../RyuzakiClient';
-import { ServiceStructure } from '../../Structures/';
+import { ServiceStructure } from '../../Structures';
 import { connect, connection } from 'mongoose';
 
 export default class DatabaseConnectionService extends ServiceStructure {
     constructor(client: Ryuzaki) {
         super(client, {
-            name: 'dbConnection',
+            name: 'DatabaseConnection',
             initialize: true
         });
     }
@@ -17,7 +17,7 @@ export default class DatabaseConnectionService extends ServiceStructure {
             this.client.logger.info('Pinged your deployment. You successfully connected to MongoDB!', 'Database');
 
             connection.on('error', (err) => {
-                this.client.logger.error(err.stack, 'Database');
+                this.client.logger.error((err as Error).stack, 'Database');
             });
 
             connection.once('open', () => {

@@ -39,7 +39,7 @@ export default class AFKModule extends ModuleStructure {
                 await userData.set({
                     'AFK.away': false,
                     'AFK.reason': null,
-                    'AFK.lastNickname': AFK.lastNickname ?? null
+                    'AFK.lastNickname': AFK.lastNickname
                 }).save();
 
                 message.member?.setNickname(userData.AFK.lastNickname ?? message.author.username).catch(() => undefined);

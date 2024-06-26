@@ -1,12 +1,13 @@
-import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, ClientOptions, Snowflake, Invite } from 'discord.js';
+import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
 import { Util, Logger } from './Utils/util';
 import { Translate } from '../Lib/Translate';
 import { Api } from '@top-gg/sdk';
 import { CommandStructure, ContextCommandStructure, ServiceStructure } from './Structures';
 import { Collections } from './Utils/collection';
-import { DataType, Languages, DataDocument } from './Types/ClientTypes';
-import { MongoError } from 'mongodb';
+import { DataType, Languages, DataDocument, ShardMemory } from './Types/ClientTypes';
+import { config } from 'dotenv';
+config();
 
 export class Ryuzaki extends Client {
     public readonly logger: Logger = new Logger();
@@ -36,18 +37,19 @@ export class Ryuzaki extends Client {
 
     public constructor(options: ClientOptions) {
         super(options);
+
+        process.on('warning', (warn) => { this.logger.warn(warn.stack, 'warning'); });
+        process.on('uncaughtException', (err: Error) => { this.logger.error(err.stack, 'uncaughtException'); });
+        process.on('unhandledRejection', (err: Error) => { this.logger.error(err.stack, 'unhandledRejection'); });
     }
 
     public async initialize() {
-        await this.clientManager();
-        await super.login(process.env.CLIENT_TOKEN);
-        this.loadInvite();
-        await this.registerSlashCommands();
-        await this.loadWS();
-
-        process.on('warning', (warn) => this.logger.warn(warn.stack, 'warning'));
-        process.on('uncaughtException', (err: Error) => this.logger.error(err.stack, 'uncaughtException'));
-        process.on('unhandledRejection', (err: Error) => this.logger.error(err.stack, 'unhandledRejection'));
+        try {
+            await this.clientManager();
+        } catch (err) {
+            this.logger.error((err as Error).message, [Ryuzaki.name, this.initialize.name]);
+            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.initialize.name]);
+        }
     }
 
     private async clientManager() {
@@ -55,18 +57,18 @@ export class Ryuzaki extends Client {
         await new servicesIndex(this).moduleExecute();
     }
 
-    private async loadWS() {
+    protected async loadWS() {
         const { default: App } = await import('./Web/backend/server');
-        await new App(this).serverExecute();
+        new App(this).serverExecute();
     }
 
-    private async registerSlashCommands() {
-        const { default: registerSlash } = await import('../registerSlash');
-        return new registerSlash(this).registerSlash();
+    protected async registerSlashCommands() {
+        const { default: registerSlash } = await import('../RegisterSlashCommands');
+        return new registerSlash(this).moduleExecute();
     }
 
-    public loadInvite() {
-        this.url = this.generateInvite({
+    public getInvite(): string {
+        return this.generateInvite({
             permissions: [
                 PermissionFlagsBits.ManageGuild,
                 PermissionFlagsBits.ManageRoles,
@@ -123,101 +125,143 @@ export class Ryuzaki extends Client {
     public async getData<T extends DataType>(
         id: string | undefined,
         type: T
-    ): Promise<DataDocument<T> | undefined> {
+    ) {
         switch (type) {
             case 'user': {
-                const user = await this.users.fetch(id!).catch(() => undefined);
+                if (id) {
+                    const user = await this.users.fetch(id).catch(() => undefined);
 
-                if (user) {
-                    let data = await this.database.users.findOne({ _id: user.id });
+                    if (user) {
+                        let data = await this.database.users.findOne({ _id: user.id });
 
-                    try {
-                        if (!data) {
-                            data = await this.database.users.create({ _id: user.id });
+                        try {
+                            if (!data) {
+                                data = await this.database.users.create({ _id: user.id });
+                            }
+
+                            return data as DataDocument<T>;
+                        } catch (err) {
+                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
-
-                        return data as any;
-                    } catch (err) {
-                        if ((err as MongoError).code === 11000) {
-                            this.logger.error(err as string, 'getData');
-                        } else {
-                            this.logger.error((err as Error).stack, 'getData');
-                        }
+                    } else {
+                        return undefined;
                     }
-                } else {
-                    return undefined;
                 }
 
                 break;
             }
+
             case 'guild': {
-                const guild = this.guilds.cache.get(id!);
+                if (id) {
+                    const guild = await this.guilds.fetch(id).catch(() => undefined);
 
-                if (guild) {
-                    try {
-                        let data = await this.database.guilds.findOne({ _id: guild.id });
+                    if (guild) {
+                        try {
+                            let data = await this.database.guilds.findOne({ _id: guild.id });
 
-                        if (!data) {
-                            data = await this.database.guilds.create({ _id: guild.id });
+                            if (!data) {
+                                data = await this.database.guilds.create({ _id: guild.id });
+                            }
+
+                            return data as DataDocument<T>;
+                        } catch (err) {
+                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
-
-                        return data as any;
-                    } catch (err) {
-                        this.logger.error((err as Error).stack, 'getData');
+                    } else {
+                        return undefined;
                     }
-                } else {
-                    return undefined;
                 }
 
                 break;
             }
+
             case 'client': {
-                const client = this.user;
+                if (id) {
+                    const user = await this.users.fetch(id).catch(() => undefined);
 
-                if (client?.id === id!) {
-                    try {
-                        let data = await this.database.client.findOne({ _id: id });
+                    if (user && user.id === id) {
+                        try {
+                            let data = await this.database.client.findOne({ _id: user.id });
 
-                        if (!data) {
-                            data = await this.database.client.create({ _id: id });
+                            if (!data) {
+                                data = await this.database.client.create({ _id: user.id });
+                            }
+
+                            return data as DataDocument<T>;
+                        } catch (err) {
+                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
-
-                        return data as any;
-                    } catch (err) {
-                        this.logger.error((err as Error).stack, 'getData');
+                    } else {
+                        return undefined;
                     }
-                } else {
-                    return undefined;
                 }
 
                 break;
             }
+
             case 'command': {
-                const command = this.commands.get(id!);
+                if (id) {
+                    const command = this.commands.get(id);
 
-                if (command) {
-                    try {
-                        let data = await this.database.commands.findOne({ _id: id });
+                    if (command) {
+                        try {
+                            let data = await this.database.commands.findOne({ _id: id });
 
-                        if (!data) {
-                            data = await this.database.commands.create({ _id: id });
+                            if (!data) {
+                                data = await this.database.commands.create({ _id: id });
 
-                            console.log(`The command: (${data._id}) had his documentation create successfully!`);
+                                console.log(`The command: (${data._id}) had his documentation create successfully!`);
+                            }
+
+                            return data as DataDocument<T>;
+                        } catch (err) {
+                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
-
-                        return data as any;
-                    } catch (err) {
-                        this.logger.error((err as Error).stack, 'getData');
+                    } else {
+                        return undefined;
                     }
-                } else {
-                    return undefined;
                 }
 
                 break;
             }
+
             default: {
-                return {} as any;
+                return undefined;
             }
         }
+    }
+
+    public async getMemoryUsage() {
+        const shardsCount = this.shard?.count ?? 0;
+        const shardMemoryPromises = this.shard?.broadcastEval(() => process.memoryUsage().heapUsed) ?? [];
+        const shardGuildsPromises = this.shard?.broadcastEval((client: Client) => client.guilds.cache.map(guild => guild.id)) ?? [];
+        const [shardMemoryValues, shardGuildsValues] = await Promise.all([shardMemoryPromises, shardGuildsPromises]);
+
+        const memoryUsage: ShardMemory = {
+            totalMemory: shardMemoryValues.reduce((total, shardMemory) => total + shardMemory, 0) / 1024 / 1024,
+            shards: {}
+        };
+
+        for (let shardId = 0; shardId < shardsCount; shardId++) {
+            const shardMemory = shardMemoryValues[shardId] / 1024 / 1024;
+            const shardGuilds = shardGuildsValues[shardId];
+
+            memoryUsage.shards[shardId] = {
+                shardMemory,
+                servers: new Collection<string, { memory: number }>()
+            };
+
+            const avgMemoryPerGuild = shardMemory / shardGuilds.length;
+
+            for (const guildId of shardGuilds) {
+                memoryUsage.shards[shardId].servers.set(guildId, { memory: avgMemoryPerGuild });
+            }
+        }
+
+        return memoryUsage;
     }
 }

@@ -22,11 +22,13 @@ class WithdrawCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['retirar', 'sacar'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['retirar', 'sacar']
             },
             usage: {
                 'pt-BR': ['<quantia|tudo>'],
-                'en-US': ['<amount|all>']
+                'en-US': ['<amount|all>'],
+                'es-ES': ['<cantidad|todo>']
             },
             permissions: {
                 client: [],

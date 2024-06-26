@@ -42,12 +42,12 @@ export default class MessageDeleteListener extends ListenerStructure {
                     }
 
                     const channel = message.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                    channel.send({ embeds: [embed] });
+                    await channel.send({ embeds: [embed] });
                 }
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, MessageDeleteListener.name);
-            this.client.logger.warn((err as Error).stack!, MessageDeleteListener.name);
+            this.client.logger.warn((err as Error).stack, MessageDeleteListener.name);
         }
     }
 }

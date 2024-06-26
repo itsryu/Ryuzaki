@@ -3,15 +3,15 @@ import { PermissionsFlagsText, PermissionFlagKey } from '../../Utils/Objects/fla
 import { ServiceStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { ChannelType, Message, PermissionsBitField } from 'discord.js';
 
-export default class checkPermissionsService extends ServiceStructure {
+export default class CheckPermissionsService extends ServiceStructure<boolean> {
     constructor(client: Ryuzaki) {
         super(client, {
-            name: 'checkPermissions',
+            name: 'CheckPermissions',
             initialize: false
         });
     }
 
-    async serviceExecute({ message, command, language }: { message: Message, command: CommandStructure, language: string }) {
+    async serviceExecute({ message, command, language }: { message: Message, command: CommandStructure, language: string }): Promise<boolean> {
         try {
             if (message.channel.type === ChannelType.DM) {
                 return true;
@@ -23,8 +23,9 @@ export default class checkPermissionsService extends ServiceStructure {
                 return true;
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, checkPermissionsService.name);
-            this.client.logger.warn((err as Error).stack, checkPermissionsService.name);
+            this.client.logger.error((err as Error).message, CheckPermissionsService.name);
+            this.client.logger.warn((err as Error).stack, CheckPermissionsService.name);
+            return false;
         }
     }
 

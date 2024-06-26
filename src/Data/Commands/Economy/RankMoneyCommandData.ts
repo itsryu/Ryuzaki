@@ -22,11 +22,13 @@ class RankMoneyCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['rankcoin', 'coinrank', 'coinsrank'],
-                'en-US': ['rankcoin', 'coinrank', 'coinsrank']
+                'en-US': ['rankcoin', 'coinrank', 'coinsrank'],
+                'es-ES': ['rankcoin', 'coinrank', 'coinsrank']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: ['EmbedLinks'],

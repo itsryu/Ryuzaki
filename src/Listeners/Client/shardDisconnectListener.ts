@@ -15,9 +15,9 @@ export default class shardDisconnectListener extends ListenerStructure {
 
             const errorEmbed = new ClientEmbed(this.client)
                 .setColor(Colors.Red)
-                .setTitle(`Shard: [${id}]`)
+                .setTitle(`Shard: [${id.toString()}]`)
                 .setDescription('```js' + '\n' + event.reason + '\n' + '```')
-                .setFooter({ text: `Code: ${event.code}`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
+                .setFooter({ text: `Code: ${event.code.toString()}`, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
             await webhook.send({ embeds: [errorEmbed] });
         } catch (err) {

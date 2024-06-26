@@ -17,35 +17,38 @@ export default class RyuCommand extends CommandStructure {
             const thumbnail = this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 });
             const helpCommand = this.client.commands.get('help');
 
-            const embed = new ClientEmbed(this.client)
-                .setTitle(this.client.t('infos:ryu:embed.title', { client: username }))
-                .setThumbnail(thumbnail ?? null)
-                .addFields(
-                    {
-                        name: this.client.t('infos:ryu:embed:fields.name', { index: 0 }),
-                        value: this.client.t('infos:ryu:embed:fields.value', { index: 0, author: message.author, tag: owner?.tag, id: owner?.id, help: helpCommand?.data.options.name_localizations ? prefix + helpCommand.data.options.name_localizations[language] : prefix + helpCommand?.data.options.name, usage: helpCommand?.data.options.usage[language].length ? helpCommand.data.options.usage[language].map((usage) => (helpCommand.data.options.name_localizations ? (prefix + helpCommand.data.options.name_localizations[language]) : (prefix + helpCommand.data.options.name)) + ' ' + usage).join('\n') : helpCommand?.data.options.name_localizations ? prefix + helpCommand.data.options.name_localizations[language] : prefix + helpCommand?.data.options.name })
-                    });
+            if (helpCommand) {
 
-            const row = new ActionRowBuilder<ButtonBuilder>()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setURL('https://github.com/itsryu/Ryuzaki')
-                        .setStyle(ButtonStyle.Link)
-                        .setEmoji(emojis.github)
-                        .setLabel(this.client.t('main:mentions:button.github')),
-                    new ButtonBuilder()
-                        .setURL(this.client.url)
-                        .setStyle(ButtonStyle.Link)
-                        .setEmoji(emojis.pin)
-                        .setLabel(this.client.t('main:mentions:button.add')),
-                    new ButtonBuilder()
-                        .setURL('https://discord.gg/R23XkNvRH2')
-                        .setStyle(ButtonStyle.Link)
-                        .setEmoji(emojis.partner)
-                        .setLabel(this.client.t('main:mentions:button.support'))
-                );
+                const embed = new ClientEmbed(this.client)
+                    .setTitle(this.client.t('infos:ryu:embed.title', { client: username }))
+                    .setThumbnail(thumbnail ?? null)
+                    .addFields(
+                        {
+                            name: this.client.t('infos:ryu:embed:fields.name', { index: 0 }),
+                            value: this.client.t('infos:ryu:embed:fields.value', { index: 0, author: message.author, tag: owner?.tag, id: owner?.id, help: helpCommand?.data.options.name_localizations ? (prefix + helpCommand.data.options.name_localizations[language]) : prefix + helpCommand?.data.options.name, usage: helpCommand?.data.options.usage[language]?.length ? helpCommand.data.options.usage[language]?.map((usage) => (helpCommand.data.options.name_localizations ? (prefix + helpCommand.data.options.name_localizations[language]) : (prefix + helpCommand.data.options.name)) + ' ' + usage).join('\n') : helpCommand?.data.options.name_localizations ? (prefix + helpCommand.data.options.name_localizations[language]) : (prefix + helpCommand?.data.options.name) })
+                        });
 
-            return void await message.reply({ embeds: [embed], components: [row] });
+                const row = new ActionRowBuilder<ButtonBuilder>()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setURL('https://github.com/itsryu/Ryuzaki')
+                            .setStyle(ButtonStyle.Link)
+                            .setEmoji(emojis.github)
+                            .setLabel(this.client.t('main:mentions:button.github')),
+                        new ButtonBuilder()
+                            .setURL(this.client.url)
+                            .setStyle(ButtonStyle.Link)
+                            .setEmoji(emojis.pin)
+                            .setLabel(this.client.t('main:mentions:button.add')),
+                        new ButtonBuilder()
+                            .setURL('https://discord.gg/R23XkNvRH2')
+                            .setStyle(ButtonStyle.Link)
+                            .setEmoji(emojis.partner)
+                            .setLabel(this.client.t('main:mentions:button.support'))
+                    );
+
+                return void await message.reply({ embeds: [embed], components: [row] });
+            }
         } catch (err) {
             this.client.logger.error((err as Error).message, RyuCommand.name);
             this.client.logger.warn((err as Error).stack, RyuCommand.name);

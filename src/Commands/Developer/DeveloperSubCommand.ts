@@ -3,14 +3,14 @@ import { CommandStructure, ClientEmbed } from '../../Structures';
 import { DeveloperSubCommandData } from '../../Data/Commands/Developer/DeveloperSubCommandData';
 import { Message, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
 import { inspect } from 'node:util';
+import { Languages } from '../../Types/ClientTypes';
 
 export default class DeveloperSubCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, DeveloperSubCommandData);
     }
 
-    // @ts-expect-error - This method is not being used in the code.
-    async commandExecute({ message, args, prefix, language }: { message: Message, args: string[], prefix: string, language: string }) {
+    async commandExecute({ message, args, language }: { message: Message, args: string[], prefix: string, language: Languages }) {
         try {
             switch (args[0]) {
                 case 'eval': {
@@ -19,11 +19,11 @@ export default class DeveloperSubCommand extends CommandStructure {
                     const res = args.slice(1).join(' ');
 
                     try {
-                        const result = await Promise.all([eval(res)]);
+                        const result: unknown = await Promise.any([eval(res), Promise.reject(new Error('Nenhum resultado retornado.'))]);
                         const evaled = inspect(result);
 
                         for (let i = 0; i < evaled.length; i += 1000) {
-                            const certo = new ClientEmbed(this.client)
+                            const embed = new ClientEmbed(this.client)
                                 .setTitle('📩 Entrada:')
                                 .setDescription('```js' + '\n' + res + '\n' + '```')
                                 .addFields(
@@ -36,11 +36,11 @@ export default class DeveloperSubCommand extends CommandStructure {
                                         value: '```diff' + '\n' + '- ' + typeof (result) + '\n' + '```'
                                     });
 
-                            pages.push(certo);
+                            pages.push(embed);
                         }
                     } catch (err) {
                         for (let i = 0; i < (err as Error).message.length; i += 256) {
-                            const errado = new ClientEmbed(this.client)
+                            const embed = new ClientEmbed(this.client)
                                 .setTitle('📩 Entrada:')
                                 .setDescription('```js' + '\n' + res + '\n' + '```')
                                 .addFields(
@@ -49,7 +49,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                                         value: '```js' + '\n' + this.client.utils.clean((err as Error).message).substring(i, Math.min((err as Error).message.length, i + 256)) + '\n' + '```'
                                     });
 
-                            pages.push(errado);
+                            pages.push(embed);
                         }
                     }
 
@@ -77,7 +77,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                             switch (args[2]) {
                                 case 'command': {
                                     const name = args[3];
-                                    const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases[language].includes(name));
+                                    const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases[language]?.includes(name));
 
                                     if (!command) {
                                         return void await message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });
@@ -115,7 +115,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                             switch (args[2]) {
                                 case 'command': {
                                     const name = args[3];
-                                    const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases[language].includes(name));
+                                    const command = this.client.commands.get(name) ?? this.client.commands.find((command) => command.data.options.aliases[language]?.includes(name));
 
                                     if (!command) {
                                         return void await message.reply({ content: `Não encontrei nenhum comando chamado ${name}.` });

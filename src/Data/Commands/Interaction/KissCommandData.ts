@@ -1,29 +1,29 @@
 import { CommandData } from '../../../Structures';
-import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
+import { ApplicationCommandType, ApplicationCommandOptionType } from 'discord.js';
 
-class StealCommandDataConstructor extends CommandData {
+class KissCommandDataConstructor extends CommandData {
     constructor() {
         super({
-            name: 'steal',
+            name: 'kiss',
             type: ApplicationCommandType.ChatInput,
-            description: 'Steals money from a specific user.',
+            description: 'Kiss the mentioned user.',
             name_localizations: {
-                'pt-BR': 'roubar',
-                'en-US': 'steal'
+                'pt-BR': 'beijar',
+                'en-US': 'kiss'
             },
             description_localizations: {
-                'pt-BR': 'Rouba dinheiro de um usuário específico.',
-                'en-US': 'Steals money from a specific user.'
+                'pt-BR': 'Beija o usuário mencionado.',
+                'en-US': 'Kiss the mentioned user.'
             },
             category: {
-                'pt-BR': 'Economia',
-                'en-US': 'Economy',
-                'es-ES': 'Economía'
+                'pt-BR': 'Interação',
+                'en-US': 'Interaction',
+                'es-ES': 'Interacción'
             },
             aliases: {
-                'pt-BR': ['roubar', 'assaltar', 'furtar'],
-                'en-US': ['steal', 'rob'],
-                'es-ES': ['robar', 'asaltar', 'furtar']
+                'pt-BR': ['beijo', 'beijar'],
+                'en-US': [],
+                'es-ES': ['beso', 'besar']
             },
             usage: {
                 'pt-BR': ['<usuário>'],
@@ -31,7 +31,7 @@ class StealCommandDataConstructor extends CommandData {
                 'es-ES': ['<usuario>']
             },
             permissions: {
-                client: ['EmbedLinks'],
+                client: ['AddReactions', 'ReadMessageHistory', 'EmbedLinks'],
                 member: []
             },
             config: {
@@ -45,15 +45,15 @@ class StealCommandDataConstructor extends CommandData {
             options: [
                 {
                     name: 'user',
-                    description: 'The user you want to steal the money:',
+                    description: 'Select an user:',
                     type: ApplicationCommandOptionType.User,
                     name_localizations: {
                         'pt-BR': 'usuário',
                         'en-US': 'user'
                     },
                     description_localizations: {
-                        'pt-BR': 'O usuário que você deseja roubar o dinheiro:',
-                        'en-US': 'The user you want to steal the money:'
+                        'pt-BR': 'Selecione um usuário:',
+                        'en-US': 'Select an user:'
                     },
                     required: true
                 }
@@ -62,4 +62,4 @@ class StealCommandDataConstructor extends CommandData {
     }
 }
 
-export const StealCommandData = new StealCommandDataConstructor();
+export const KissCommandData = new KissCommandDataConstructor();

@@ -1,21 +1,15 @@
 import { join } from 'node:path';
 import { Ryuzaki } from './src/RyuzakiClient';
-import { CommandStructure, RawCommandData } from './src/Structures';
+import { CommandStructure, ContextCommandStructure, ModuleStructure, RawCommandData, RawContextCommandData } from './src/Structures';
 import { ApplicationCommand, PermissionsBitField, REST, Routes } from 'discord.js';
 import { readdirSync } from 'node:fs';
 
-export default class RegisterSlashCommands {
-    readonly client: Ryuzaki;
-
-    constructor(client: Ryuzaki) {
-        this.client = client;
-    }
-
-    async registerSlash() {
+export default class RegisterSlashCommands extends ModuleStructure {
+    async moduleExecute() {
         const rest = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
 
         //===============> Pegando todos os comandos das pastas <===============//
-        const commands: RawCommandData[] = [];
+        const commands: RawContextCommandData[] & RawCommandData[] = [];
         const commandFolders = readdirSync(join(__dirname, 'src/Commands'));
         const contextFolders = readdirSync(join(__dirname, 'src/Context'));
 
@@ -26,8 +20,8 @@ export default class RegisterSlashCommands {
                 const contextFiles = readdirSync(join(__dirname, `./src/Context/${folder}/${subFolder}`), { withFileTypes: true }).filter((dirent) => dirent.isFile() && dirent.name.endsWith('.js')).map((dirent) => dirent.name);
 
                 for (const file of contextFiles) {
-                    const { default: contextCommandClass } = await import(`./src/Context/${folder}/${subFolder}/${file}`);
-                    const command = new contextCommandClass(this);
+                    const { default: ContextCommandClass }: { default: new (client: Ryuzaki) => ContextCommandStructure }  = await import(`./src/Context/${folder}/${subFolder}/${file}`);
+                    const command = new ContextCommandClass(this.client);
 
                     commands.push(command.data.options);
                 }
@@ -38,8 +32,8 @@ export default class RegisterSlashCommands {
             const commandFiles = readdirSync(join(__dirname, './src/Commands/', folder), { withFileTypes: true }).filter((dirent) => dirent.isFile() && dirent.name.endsWith('.js')).map((dirent) => dirent.name);
 
             for (const file of commandFiles) {
-                const { default: commandClass }: { default: new (client: Ryuzaki) => CommandStructure } = await import(`./src/Commands/${folder}/${file}`);
-                const command = new commandClass(this.client);
+                const { default: CommandClass }: { default: new (client: Ryuzaki) => CommandStructure } = await import(`./src/Commands/${folder}/${file}`);
+                const command: CommandStructure = new CommandClass(this.client);
 
                 if (command.data.options.config.registerSlash) {
                     if (command.data.options.permissions.member.length) {

@@ -23,7 +23,7 @@ export default class channelDeleteListener extends ListenerStructure {
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, channelDeleteListener.name);
-            this.client.logger.warn((err as Error).stack!, channelDeleteListener.name);
+            this.client.logger.warn((err as Error).stack, channelDeleteListener.name);
         }
     }
 }

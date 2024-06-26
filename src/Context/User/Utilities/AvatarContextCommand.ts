@@ -34,6 +34,7 @@ export default class AvatarContextCommand extends ContextCommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, AvatarContextCommand.name);
             this.client.logger.warn((err as Error).stack, AvatarContextCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

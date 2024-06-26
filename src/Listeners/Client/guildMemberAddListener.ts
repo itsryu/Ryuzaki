@@ -107,19 +107,19 @@ export default class guildMemberAddListener extends ListenerStructure {
                 const st = guildData.serverstats;
                 const ch = st.channels;
 
-                if (!ch.total) {
+                if (ch.total) {
                     const channel = guild.channels.cache.get(ch.total) as TextChannel;
 
                     await channel.setName(`Total: ${guild.memberCount.toLocaleString()}`);
                 }
 
-                if (!ch.bot) {
+                if (ch.bot) {
                     const channel = guild.channels.cache.get(ch.bot) as TextChannel;
 
                     await channel.setName(`Bots: ${guild.members.cache.filter((x) => x.user.bot).size.toLocaleString()}`);
                 }
 
-                if (!ch.users) {
+                if (ch.users) {
                     const channel = guild.channels.cache.get(ch.users) as TextChannel;
 
                     await channel.setName(`Membros: ${guild.members.cache.filter((x) => !x.user.bot).size.toLocaleString()}`);

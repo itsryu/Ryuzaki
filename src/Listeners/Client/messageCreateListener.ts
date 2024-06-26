@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../../RyuzakiClient';
-import { ListenerStructure, ClientEmbed } from '../../Structures';
+import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 
@@ -31,7 +31,7 @@ export default class messageCreateListener extends ListenerStructure {
                     .catch(() => undefined);
             }
 
-            if (message.content.match(this.client.utils.GetMention(this.client.user?.id!))) {
+            if (this.client.user && message.content.match(this.client.utils.GetMention(this.client.user.id))) {
                 const row = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
                         new ButtonBuilder()
@@ -115,7 +115,7 @@ export default class messageCreateListener extends ListenerStructure {
                                 if (guildData.cmdblock.cmds.some((x) => x === command.data.options.name || guildData.cmdblock.channels.some((x) => x === message.channel.id))) {
                                     return void await message.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
                                         .then((sent) => setTimeout(() => sent.delete(), 10000))
-                                        .catch((err) => { this.client.logger.warn(err.stack, messageCreateListener.name); });
+                                        .catch((err: unknown) => { this.client.logger.warn((err as Error).stack, messageCreateListener.name); });
                                 }
                             }
                         }
@@ -142,14 +142,14 @@ export default class messageCreateListener extends ListenerStructure {
                             .setAuthor({ name: prefix + command.data.options.name, iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
                             .setThumbnail(this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) ?? null);
 
-                        if (command.data.options.description) {
-                            embedHelp.setDescription(command.data.options.description_localizations?.[language] as string);
+                        if (command.data.options.description && command.data.options.description_localizations) {
+                            embedHelp.setDescription(command.data.options.description_localizations[language]!);
                         }
                         if (command.data.options.usage) {
-                            embedHelp.addFields({ name: '❔ ' + this.client.t('main:args:help:embed:fields.title', { index: 0 }), value: command.data.options.usage[language].length ? command.data.options.usage[language].map((usage, index) => `**${index + 1}.** \`${prefix + command.data.options.name} ${usage}\`.`).join('\n') : `\`${prefix + command.data.options.name}\`` });
+                            embedHelp.addFields({ name: '❔ ' + this.client.t('main:args:help:embed:fields.title', { index: 0 }), value: `\`${command.data.options.usage[language]?.map((usage, index) => `**${index + 1}.** \`${prefix + command.data.options.name} ${usage}\`.`).join('\n')}\`` });
                         }
                         if (command.data.options.aliases) {
-                            embedHelp.addFields({ name: '🔄 ' + this.client.t('main:args:help:embed:fields.title', { index: 1 }), value: `\`${command.data.options.aliases[language].join(', ')}\`` });
+                            embedHelp.addFields({ name: '🔄 ' + this.client.t('main:args:help:embed:fields.title', { index: 1 }), value: `\`${command.data.options.aliases[language]?.join(', ')}\`` });
                         }
 
                         let currentEmbed = embedHelp;
@@ -191,7 +191,7 @@ export default class messageCreateListener extends ListenerStructure {
                         return;
                     }
 
-                    const checkPermissions = this.client.services.get('checkPermissions');
+                    const checkPermissions = this.client.services.get('CheckPermissions');
 
                     const memberPermissions = await checkPermissions?.serviceExecute({ message, command, language });
                     if (!memberPermissions) return;
@@ -201,35 +201,37 @@ export default class messageCreateListener extends ListenerStructure {
 
                     await message.channel.sendTyping();
 
-                    const commandPromise = async (resolve: <T = never>(value: T) => void, reject: <T = never>(reason: T) => void) => {
+                    const commandPromise = async (resolve: (value: CommandStructure | PromiseLike<CommandStructure>) => void, reject: (reason?: any) => void) => {
                         try {
-                            resolve<void>(await command.commandExecute({ message, args, language, prefix }));
+                            await command.commandExecute({ message, args, language, prefix });
+
+                            resolve(command);
                         } catch (err) {
-                            reject<Error>(err as Error);
+                            reject(err);
                         }
                     };
 
-                    const commandExecute = new Promise(commandPromise);
+                    const commandExecute = new Promise<CommandStructure>(commandPromise);
 
                     await commandExecute
-                        .catch(async (err) => {
+                        .catch(async (err: unknown) => {
                             try {
-                                this.client.logger.error(err.message, command.data.options.name);
-                                this.client.logger.warn(err.stack, command.data.options.name);
+                                this.client.logger.error((err as Error).message, command.data.options.name);
+                                this.client.logger.warn((err as Error).stack, command.data.options.name);
 
                                 const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
                                 const errorEmbed = new ClientEmbed(this.client)
                                     .setColor(Colors.Red)
                                     .setTitle(`Command: ${command.data.options.name}`)
-                                    .setDescription('```js' + '\n' + err.stack + '\n' + '```');
+                                    .setDescription('```js' + '\n' + ((err as Error).stack ?? (err as Error).message) + '\n' + '```');
 
                                 await errorChannel.send({ embeds: [errorEmbed] });
                                 return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
                                     .then((message) => setTimeout(() => message.delete(), 1000 * 10));
                             } catch (err) {
                                 this.client.logger.error((err as Error).message, messageCreateListener.name);
-                                this.client.logger.warn((err as Error).stack!, messageCreateListener.name);
+                                this.client.logger.warn((err as Error).stack, messageCreateListener.name);
                             }
                         });
 

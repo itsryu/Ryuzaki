@@ -42,6 +42,7 @@ export default class BannerContextCommand extends ContextCommandStructure {
         } catch (err) {
             this.client.logger.error((err as Error).message, BannerContextCommand.name);
             this.client.logger.warn((err as Error).stack, BannerContextCommand.name);
+            throw new Error((err as Error).message, { cause: err });
         }
     }
 }

@@ -22,11 +22,13 @@ class WorkCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['trabalhar', 'trabalho'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['trabajar', 'trabajo']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: [],

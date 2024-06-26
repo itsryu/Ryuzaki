@@ -18,32 +18,32 @@ export default class guildMemberRemoveListener extends ListenerStructure {
                 const st = guildData.serverstats;
                 const ch = st.channels;
 
-                if (ch.total != null) {
+                if (ch.total) {
                     const channel = guild.channels.cache.get(ch.total) as TextChannel;
 
-                    channel.setName(`Total: ${guild.memberCount.toLocaleString()}`);
+                    await channel.setName(`Total: ${guild.memberCount.toLocaleString()}`);
                 }
 
-                if (ch.bot != null) {
+                if (ch.bot) {
                     const channel = guild.channels.cache.get(ch.bot) as TextChannel;
 
-                    channel.setName(`Bots: ${guild.members.cache.filter((x) => x.user.bot).size.toLocaleString()}`);
+                    await channel.setName(`Bots: ${guild.members.cache.filter((x) => x.user.bot).size.toLocaleString()}`);
                 }
 
-                if (ch.users != null) {
+                if (ch.users) {
                     const channel = guild.channels.cache.get(ch.users) as TextChannel;
 
-                    channel.setName(`Members: ${guild.members.cache.filter((x) => !x.user.bot).size.toLocaleString()}`);
+                    await channel.setName(`Members: ${guild.members.cache.filter((x) => !x.user.bot).size.toLocaleString()}`);
                 }
             }
 
             if (guildData && guildData.counter.status) {
-                (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
+                await (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
 
         } catch (err) {
             this.client.logger.error((err as Error).message, guildMemberRemoveListener.name);
-            this.client.logger.warn((err as Error).stack!, guildMemberRemoveListener.name);
+            this.client.logger.warn((err as Error).stack, guildMemberRemoveListener.name);
         }
     }
 }

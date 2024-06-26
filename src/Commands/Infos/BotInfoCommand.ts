@@ -25,7 +25,7 @@ export default class BotInfoCommand extends CommandStructure {
             const clientUsers = usersArray?.reduce((acc, userCount) => acc + userCount, 0);
             const guildsArray = await this.client.shard?.fetchClientValues('guilds.cache.size').catch(() => undefined) as number[] | undefined;
             const clientGuilds = guildsArray?.reduce((acc, guildCount) => acc + guildCount, 0);
-            const clientShards = this.client.shard?.ids.length;
+            const clientShards = this.client.shard?.count;
             const clientCommands = this.client.commands.size;
             const clientUptime = Day.duration(process.uptime() * 1000).locale(language).humanize();
             const clientMemory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) + 'MB';
@@ -62,7 +62,7 @@ export default class BotInfoCommand extends CommandStructure {
                 .setFooter({ text: `${this.client.user?.username} criado pelo ${clientOwner.tag}`, iconURL: clientOwner.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
             const addMeButton = new ButtonBuilder()
-                .setURL(this.client.url)
+                .setURL(this.client.getInvite())
                 .setStyle(ButtonStyle.Link)
                 .setEmoji(emojis.pin)
                 .setLabel(this.client.t('main:mentions:button.add'));

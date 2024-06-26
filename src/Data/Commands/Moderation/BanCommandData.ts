@@ -22,11 +22,13 @@ class BanCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['banir'],
-                'en-US': ['banishment']
+                'en-US': ['banishment'],
+                'es-ES': ['expulsión']
             },
             usage: {
                 'pt-BR': ['<user|ID> [motivo]'],
-                'en-US': ['<user|ID> [reason]']
+                'en-US': ['<user|ID> [reason]'],
+                'es-ES': ['<usuario|ID> [motivo]']
             },
             permissions: {
                 client: ['BanMembers', 'ReadMessageHistory'],

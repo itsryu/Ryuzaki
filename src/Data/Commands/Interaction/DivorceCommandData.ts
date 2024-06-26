@@ -22,11 +22,13 @@ class DivorceCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['divórcio', 'divorcio'],
-                'en-US': []
+                'en-US': [],
+                'es-ES': ['divorcio']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: ['AddReactions', 'ReadMessageHistory'],

@@ -1,14 +1,8 @@
-import { Ryuzaki } from '../../RyuzakiClient';
 import { ModuleStructure } from '../../Structures/ModuleStructures';
 import { AttachmentBuilder, ModalSubmitInteraction } from 'discord.js';
 import { profileConstructor } from '../../Utils/profileConstructor';
 
-
 export default class RepModal extends ModuleStructure {
-    constructor(client: Ryuzaki) {
-        super(client);
-    }
-
     async moduleExecute(interaction: ModalSubmitInteraction) {
         try {
             const id = interaction.message?.attachments.first()?.description;
@@ -48,7 +42,7 @@ export default class RepModal extends ModuleStructure {
                             const profileBuild = await (new profileConstructor(this.client).moduleExecute({ user, data: userData, message: interaction }));
                             const attachment = new AttachmentBuilder(profileBuild.toBuffer('image/png'), { name: 'profile_card.png', description: user.id });
 
-                            interaction.deferUpdate();
+                            await interaction.deferUpdate();
                             return void interaction.message?.edit({ files: [attachment] });
                         }
                     }
@@ -56,7 +50,7 @@ export default class RepModal extends ModuleStructure {
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, RepModal.name);
-            this.client.logger.warn((err as Error).stack!, RepModal.name);
+            this.client.logger.warn((err as Error).stack, RepModal.name);
         }
     }
 }

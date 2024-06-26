@@ -22,11 +22,13 @@ class BotInfoCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['bot', 'botinfo', 'infobot'],
-                'en-US': ['bot', 'botinfo', 'infobot']
+                'en-US': ['bot', 'botinfo', 'infobot'],
+                'es-ES': ['bot', 'botinfo', 'infobot']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: ['EmbedLinks'],

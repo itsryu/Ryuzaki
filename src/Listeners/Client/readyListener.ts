@@ -35,7 +35,7 @@ export default class readyListener extends ListenerStructure {
                 }
             });
 
-            this.client.logger.info(`${this.client.user?.username} has been loaded completely and it's in ${this.client.guilds.cache.size} guilds on port: ${process.env.SHARD_PORT}.`, `Ready - ${this.client.shard?.ids[0]}`);
+            this.client.logger.info(`${this.client.user?.username} has been loaded completely and it's in ${this.client.guilds.cache.size} guilds.`, `Ready - ${this.client.shard?.ids[0]}`);
         } catch (err) {
             this.client.logger.error((err as Error).message, readyListener.name);
             this.client.logger.warn((err as Error).stack, readyListener.name);

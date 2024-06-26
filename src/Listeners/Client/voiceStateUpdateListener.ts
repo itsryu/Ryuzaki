@@ -46,7 +46,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                     },
                                     {
                                         name: 'Tempo total em ligações:',
-                                        value: Util.formatDuration(call.totalCall, language) != '' ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '\`0 segundos\`',
+                                        value: Util.formatDuration(call.totalCall, language) != '' ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '`0 segundos`',
                                         inline: false
                                     });
 
@@ -82,7 +82,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                     },
                                     {
                                         name: 'Tempo total em ligações:',
-                                        value: Util.formatDuration(call.totalCall, language) != '' ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '\`0 segundos\`',
+                                        value: Util.formatDuration(call.totalCall, language) != '' ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '`0 segundos`',
                                         inline: true
                                     });
 
@@ -123,7 +123,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                                     },
                                     {
                                         name: 'Tempo total em ligações:',
-                                        value: call.totalCall > 0 ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '\`0 segundos\`',
+                                        value: call.totalCall > 0 ? `\`${Util.formatDuration(call.totalCall, language)}\`` : '`0 segundos`',
                                         inline: true
                                     });
 

@@ -22,11 +22,13 @@ class VoteCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['dbl', 'upvote', 'votar'],
-                'en-US': ['dbl', 'upvote']
+                'en-US': ['dbl', 'upvote'],
+                'es-ES': ['dbl', 'upvote', 'votar']
             },
             usage: {
                 'pt-BR': [],
-                'en-US': []
+                'en-US': [],
+                'es-ES': []
             },
             permissions: {
                 client: ['EmbedLinks'],

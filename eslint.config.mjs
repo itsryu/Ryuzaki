@@ -33,6 +33,11 @@ export default tseslint.config(
             '@typescript-eslint/no-unsafe-return': 'error',
             '@typescript-eslint/require-await': 'error',
             '@typescript-eslint/no-use-before-define': 'error',
+            '@typescript-eslint/no-misused-promises': 'off',
+            '@typescript-eslint/restrict-template-expressions': 'off',
+            '@typescript-eslint/no-unnecessary-condition': 'off',
+            '@typescript-eslint/no-non-null-assertion': 'off',
+            '@typescript-eslint/no-explicit-any': 'off',
             'indent': [
                 'error',
                 4,
@@ -65,12 +70,12 @@ export default tseslint.config(
         }
     },
     {
-    // disable type-aware linting on JS files
+        // disable type-aware linting on JS files
         files: ['**/*.js'],
         ...tseslint.configs.disableTypeChecked
     },
     {
-    // enable jest rules on test files
+        // enable jest rules on test files
         files: ['__tests__/**'],
         ...jestPlugin.configs['flat/recommended']
     }

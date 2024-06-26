@@ -32,21 +32,21 @@ export default class messageUpdateListener extends ListenerStructure {
                                 inline: true
                             });
 
-                    if (oldMessage.content || oldMessage.attachments.size >= 1) {
+                    if (oldMessage.content ?? oldMessage.attachments.size >= 1) {
                         embed.addFields({ name: 'Mensagem Anterior:', value: !oldMessage.content ? oldMessage.attachments.first()?.proxyURL ?? 'Não disponível' : `\`${oldMessage.content}\`` });
                     }
 
-                    if (newMessage.content || newMessage.attachments.size >= 1) {
+                    if (newMessage.content ?? newMessage.attachments.size >= 1) {
                         embed.addFields({ name: 'Mensagem Posterior:', value: !newMessage.content ? newMessage.attachments.first()?.proxyURL ?? 'Não disponível' : `[${newMessage.content}](${newMessage.url})` });
                     }
 
                     const channel = newMessage.guild.channels.cache.get(guildData.logs.channel) as TextChannel;
-                    channel.send({ embeds: [embed] });
+                    await channel.send({ embeds: [embed] });
                 }
             }
         } catch (err) {
             this.client.logger.error((err as Error).message, messageUpdateListener.name);
-            this.client.logger.warn((err as Error).stack!, messageUpdateListener.name);
+            this.client.logger.warn((err as Error).stack, messageUpdateListener.name);
         }
     }
 }
