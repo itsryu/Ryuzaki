@@ -1,14 +1,12 @@
 import { WebhookPayload } from '@top-gg/sdk';
 import { NextFunction, Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
-import { ClientEmbed } from '../../../Structures';
-import { Shard } from 'discord.js';
+import { EmbedBuilder, Shard } from 'discord.js';
 
 class DBLController extends RouteStructure {
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, shard: Shard) => {
         try {
             const user = await shard.eval(async (client, vote) => await client.users.fetch(vote.user).catch(() => undefined), vote);
-            const client = await shard.eval((client) => client, {});
             const userData = await this.app.getData(user?.id, 'user');
             const addedMoney = this.app.utils.randomIntFromInterval(2000, 5000);
 
@@ -27,7 +25,8 @@ class DBLController extends RouteStructure {
                 if (userData.economy.votes % 40 === 0) {
                     // TODO: Criar surpresa especial: 
                 } else {
-                    const votedEmbed = new ClientEmbed(client)
+                    const votedEmbed = new EmbedBuilder()
+                        .setColor(0xF1F1F1)
                         .setAuthor({ name: this.app.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
                         .setDescription(this.app.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: this.app.utils.toAbbrev(addedMoney) }));
 
