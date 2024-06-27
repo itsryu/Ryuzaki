@@ -303,7 +303,7 @@ export default class App extends AppStructure {
     }
 
     public async getLanguage(id: string): Promise<Languages> {
-        const guild = await this.shard.eval(async (client) => await client.guilds.fetch(id).catch(() => undefined));
+        const guild = await this.shard.eval(async (client, id) => await client.guilds.fetch(id).catch(() => undefined), id);
         const user = guild ? null : await this.shard.eval(async (client) => await client.users.fetch(id).catch(() => undefined));
 
         if (guild) {
@@ -337,7 +337,7 @@ export default class App extends AppStructure {
         switch (type) {
             case 'user': {
                 if (id) {
-                    const user = await this.shard.eval(async (client) => await client.users.fetch(id).catch(() => undefined));
+                    const user = await this.shard.eval(async (client, id) => await client.users.fetch(id).catch(() => undefined), id);
 
                     if (user) {
                         let data = await this.database.users.findOne({ _id: user.id });
@@ -362,7 +362,7 @@ export default class App extends AppStructure {
 
             case 'guild': {
                 if (id) {
-                    const guild = await this.shard.eval(async (client) => await client.guilds.fetch(id).catch(() => undefined));
+                    const guild = await this.shard.eval(async (client, id) => await client.guilds.fetch(id).catch(() => undefined), id);
 
                     if (guild) {
                         try {
