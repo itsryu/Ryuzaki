@@ -7,8 +7,8 @@ import { Shard } from 'discord.js';
 class DBLController extends RouteStructure {
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, shard: Shard) => {
         try {
-            const user = await shard.eval(async (client) => await client.users.fetch(vote.user).catch(() => undefined));
-            const client = await shard.eval((client) => client, { });
+            const user = await shard.eval(async (client, vote) => await client.users.fetch(vote.user).catch(() => undefined), vote);
+            const client = await shard.eval((client) => client, {});
             const userData = await this.app.getData(user?.id, 'user');
             const addedMoney = this.app.utils.randomIntFromInterval(2000, 5000);
 
