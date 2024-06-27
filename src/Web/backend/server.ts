@@ -13,6 +13,7 @@ import { Api, Webhook } from '@top-gg/sdk';
 import { DataDocument, DataType, Languages } from '../../Types/ClientTypes';
 import { ClientModel, CommandModel, GuildModel, UserModel } from '../../Database';
 import { Translate } from '../../../Lib/Translate';
+import { connect, connection } from 'mongoose';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
@@ -34,7 +35,8 @@ export default class App extends AppStructure {
             commands: CommandModel
         };
 
-    serverExecute() {
+    public async serverExecute() {
+        await this.initDatabase();
         this.configServer();
         this.listen(process.env.PORT);
     }
@@ -388,5 +390,19 @@ export default class App extends AppStructure {
                 return undefined;
             }
         }
+    }
+
+    private async initDatabase() {
+        await connect(process.env.MONGO_CONNECTION_URI, { autoIndex: false, serverApi: { version: '1', strict: true, deprecationErrors: true } });
+        await connection.db.admin().command({ ping: 1 });
+        this.logger.info('Pinged your deployment. WEB Server has successfully connected to MongoDB!', 'Database');
+
+        connection.on('error', (err) => {
+            this.logger.error((err as Error).stack, 'Database');
+        });
+
+        connection.once('open', () => {
+            this.logger.info('Database loaded successfully on WEB Server.', 'Database');
+        });
     }
 }

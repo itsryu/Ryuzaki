@@ -16,14 +16,14 @@ export class ShardManager extends ShardingManager {
                 shard.on('spawn', () => {
                     this.logger.info(`Starting Shard: [${shard.id.toString()}]`, ShardManager.name);
                 });
-                shard.on('ready', () => {
+                shard.on('ready', async () => {
                     this.shardsReady++;
                     this.logger.info(`Shard [${shard.id.toString()}] is ready! (${this.shardsReady}/${this.totalShards !== 'auto' ? this.totalShards : this.shards.size})`, ShardManager.name);
 
-                    if(this.shardsReady === this.totalShards) {
+                    if (this.shardsReady === this.totalShards) {
                         this.logger.info('All shards are ready! Starting WEB server...', ShardManager.name);
                         const server = new App(shard);
-                        server.serverExecute();
+                        await server.serverExecute();
                     }
                 });
                 shard.on('disconnect', () => {
