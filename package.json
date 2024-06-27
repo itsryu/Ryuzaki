@@ -18,7 +18,7 @@
     "clean-win": "rmdir /s /q dist",
     "clean-lin": "rm -rf dist",
     "dev:start": "concurrently \"node dist/ShardManager.js\" \"npm run start --prefix src/Web/frontend\"",
-    "prod:start": "pm2 start dist/src/RyuzakiLauncher.js",
+    "prod:start": "pm2 start dist/src/ShardManager.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "jest"
