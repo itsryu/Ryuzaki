@@ -1,11 +1,11 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Shard } from 'discord.js';
 
 export abstract class AppStructure {
-    readonly client: Ryuzaki;
+    public readonly shard: Shard;
 
-    constructor(client: Ryuzaki) {
-        this.client = client;
+    public constructor(shard: Shard) {
+        this.shard = shard;
     }
 
-    abstract serverExecute(...args: any[]): Promise<void> | void;
+    public abstract serverExecute(...args: any[]): Promise<void> | void;
 }

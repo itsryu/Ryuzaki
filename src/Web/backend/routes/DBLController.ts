@@ -2,14 +2,15 @@ import { WebhookPayload } from '@top-gg/sdk';
 import { NextFunction, Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import { ClientEmbed } from '../../../Structures';
-import { Ryuzaki } from '../../../RyuzakiClient';
+import { Shard } from 'discord.js';
 
 class DBLController extends RouteStructure {
-    run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, client: Ryuzaki) => {
+    run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, shard: Shard) => {
         try {
-            const user = await client.users.fetch(vote.user).catch(() => undefined);
-            const userData = await client.getData(user?.id, 'user');
-            const addedMoney = client.utils.randomIntFromInterval(2000, 5000);
+            const user = await shard.eval(async (client) => await client.users.fetch(vote.user).catch(() => undefined));
+            const client = await shard.eval((client) => client, { });
+            const userData = await this.app.getData(user?.id, 'user');
+            const addedMoney = this.app.utils.randomIntFromInterval(2000, 5000);
 
             if (!userData) {
                 return void res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
@@ -27,8 +28,8 @@ class DBLController extends RouteStructure {
                     // TODO: Criar surpresa especial: 
                 } else {
                     const votedEmbed = new ClientEmbed(client)
-                        .setAuthor({ name: client.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(client.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: client.utils.toAbbrev(addedMoney) }));
+                        .setAuthor({ name: this.app.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setDescription(this.app.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: this.app.utils.toAbbrev(addedMoney) }));
 
                     user?.send({ embeds: [votedEmbed] })
                         .then((message) => message.react('🥰'))

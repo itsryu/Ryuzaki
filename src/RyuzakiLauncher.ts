@@ -4,8 +4,7 @@ import 'dayjs/locale/en';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { Ryuzaki } from './RyuzakiClient';
 
-
-const client = new Ryuzaki  ({
+const client: Ryuzaki = new Ryuzaki({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
@@ -50,6 +49,6 @@ const client = new Ryuzaki  ({
     extend((await import('dayjs/plugin/relativeTime')).default);
 })()
     .catch((err: unknown) => {
-        client.logger.error((err as Error).message, 'unhandledRejection');
-        client.logger.warn((err as Error).stack, 'unhandledRejection');
+        console.error((err as Error).message);
+        console.log((err as Error).stack);
     });

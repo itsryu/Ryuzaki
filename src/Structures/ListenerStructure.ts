@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { ClientEvents, Awaitable } from 'discord.js';
+import { ClientEvents } from 'discord.js';
 
 interface EventOptions {
     name: keyof ClientEvents;
@@ -7,13 +7,13 @@ interface EventOptions {
 }
 
 export abstract class ListenerStructure {
-    readonly client: Ryuzaki;
-    readonly options: EventOptions;
+    public readonly client: Ryuzaki;
+    public readonly options: EventOptions;
 
-    constructor(client: Ryuzaki, options: EventOptions) {
+    public constructor(client: Ryuzaki, options: EventOptions) {
         this.client = client;
         this.options = options;
     }
 
-    abstract eventExecute(...args: ClientEvents[keyof ClientEvents]): Awaitable<void> | void;
+    public abstract eventExecute(...args: ClientEvents[keyof ClientEvents]): Promise<void> | void;
 }

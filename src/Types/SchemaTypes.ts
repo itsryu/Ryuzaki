@@ -7,7 +7,7 @@ interface Reputation extends Document {
     time: number;
 }
 
-interface Reminder extends Document{
+export interface Reminder extends Document{
     reminder: string;
     channel: string;
     time: number;

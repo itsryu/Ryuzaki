@@ -3,7 +3,7 @@ import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structur
 import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 
-export default class messageCreateListener extends ListenerStructure {
+export default class MessageCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.MessageCreate
@@ -115,7 +115,7 @@ export default class messageCreateListener extends ListenerStructure {
                                 if (guildData.cmdblock.cmds.some((x) => x === command.data.options.name || guildData.cmdblock.channels.some((x) => x === message.channel.id))) {
                                     return void await message.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
                                         .then((sent) => setTimeout(() => sent.delete(), 10000))
-                                        .catch((err: unknown) => { this.client.logger.warn((err as Error).stack, messageCreateListener.name); });
+                                        .catch((err: unknown) => { this.client.logger.warn((err as Error).stack, MessageCreateListener.name); });
                                 }
                             }
                         }
@@ -230,8 +230,8 @@ export default class messageCreateListener extends ListenerStructure {
                                 return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
                                     .then((message) => setTimeout(() => message.delete(), 1000 * 10));
                             } catch (err) {
-                                this.client.logger.error((err as Error).message, messageCreateListener.name);
-                                this.client.logger.warn((err as Error).stack, messageCreateListener.name);
+                                this.client.logger.error((err as Error).message, MessageCreateListener.name);
+                                this.client.logger.warn((err as Error).stack, MessageCreateListener.name);
                             }
                         });
 
@@ -295,8 +295,8 @@ export default class messageCreateListener extends ListenerStructure {
                                     }
                                 }
                             } catch (err) {
-                                this.client.logger.error((err as Error).message, messageCreateListener.name);
-                                this.client.logger.warn((err as Error).stack, messageCreateListener.name);
+                                this.client.logger.error((err as Error).message, MessageCreateListener.name);
+                                this.client.logger.warn((err as Error).stack, MessageCreateListener.name);
                             }
                         });
                 }
@@ -325,8 +325,8 @@ export default class messageCreateListener extends ListenerStructure {
             //========================================//
 
         } catch (err) {
-            this.client.logger.error((err as Error).message, messageCreateListener.name);
-            this.client.logger.warn((err as Error).stack, messageCreateListener.name);
+            this.client.logger.error((err as Error).message, MessageCreateListener.name);
+            this.client.logger.warn((err as Error).stack, MessageCreateListener.name);
         }
     }
 }

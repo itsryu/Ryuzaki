@@ -39,17 +39,17 @@ interface CommandExecuteParams {
 }
 
 abstract class CommandStructure {
-    client: Ryuzaki;
-    data: CommandData;
+    public readonly client: Ryuzaki;
+    public readonly data: CommandData;
 
-    constructor(client: Ryuzaki, data: CommandData) {
+    public constructor(client: Ryuzaki, data: CommandData) {
         this.client = client;
         this.data = data;
 
         this.validateOptions();
     }
 
-    validateOptions() {
+    private validateOptions() {
         if (!this.data.options.name) {
             throw new Error('O nome do comando é obrigatório.');
         }
@@ -59,7 +59,7 @@ abstract class CommandStructure {
         }
     }
 
-    abstract commandExecute(params: CommandExecuteParams): Promise<void> | void;
+    public abstract commandExecute(params: CommandExecuteParams): Promise<void> | void;
 }
 
 export { CommandStructure, CommandData, RawCommandData };

@@ -1,11 +1,11 @@
 import { Ryuzaki } from '../RyuzakiClient';
 
-export abstract class ModuleStructure {
-    readonly client: Ryuzaki;
+export abstract class ModuleStructure<T = void> {
+    public readonly client: Ryuzaki;
 
-    constructor(client: Ryuzaki) {
+    public constructor(client: Ryuzaki) {
         this.client = client;
     }
 
-    abstract moduleExecute(...args: any[]): Promise<any> | any;
+    public abstract moduleExecute(...args: any[]): Promise<T> | T;
 }

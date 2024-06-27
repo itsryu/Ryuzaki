@@ -1,24 +1,20 @@
 import { Ryuzaki } from '../RyuzakiClient';
 
-
 type ServiceName = 'CheckPermissions' | 'DatabaseConnection' | 'LoadModules' | 'SetActivity';
 
 interface RawServiceData {
     name: ServiceName;
     initialize: boolean;
-    amount?: number;
-    interval?: number;
-    wait?: number;
 }
 
 export abstract class ServiceStructure<T = void> {
-    client: Ryuzaki;
-    data: RawServiceData;
+    public readonly client: Ryuzaki;
+    public readonly data: RawServiceData;
 
-    constructor(client: Ryuzaki, data: RawServiceData) {
+    public constructor(client: Ryuzaki, data: RawServiceData) {
         this.client = client;
         this.data = data;
     }
 
-    abstract serviceExecute(...args: any[]): Promise<T> | T;
+    public abstract serviceExecute(...args: any[]): Promise<T> | T;
 }

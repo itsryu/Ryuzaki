@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, Guild, WebhookClient } from 'discord.js';
 
-export default class guildDeleteListener extends ListenerStructure {
+export default class GuildDeleteListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.GuildDelete
@@ -41,8 +41,8 @@ export default class guildDeleteListener extends ListenerStructure {
 
             await webhook.send({ embeds: [embed] });
         } catch (err) {
-            this.client.logger.error((err as Error).message, guildDeleteListener.name);
-            this.client.logger.warn((err as Error).stack, guildDeleteListener.name);
+            this.client.logger.error((err as Error).message, GuildDeleteListener.name);
+            this.client.logger.warn((err as Error).stack, GuildDeleteListener.name);
         }
     }
 }

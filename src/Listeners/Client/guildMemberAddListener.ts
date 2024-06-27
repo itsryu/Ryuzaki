@@ -3,7 +3,7 @@ import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, GuildMember, PermissionFlagsBits, TextChannel } from 'discord.js';
 import Day from 'dayjs';
 
-export default class guildMemberAddListener extends ListenerStructure {
+export default class GuildMemberAddListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.GuildMemberAdd
@@ -130,8 +130,8 @@ export default class guildMemberAddListener extends ListenerStructure {
                 await (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, guildMemberAddListener.name);
-            this.client.logger.warn((err as Error).stack, guildMemberAddListener.name);
+            this.client.logger.error((err as Error).message, GuildMemberAddListener.name);
+            this.client.logger.warn((err as Error).stack, GuildMemberAddListener.name);
         }
     }
 }

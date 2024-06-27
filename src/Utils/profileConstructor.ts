@@ -1,11 +1,11 @@
 import { ModuleStructure } from '../Structures';
 import { UserDocument } from '../Types/SchemaTypes';
 import { Interaction, Message, User } from 'discord.js';
-import { loadImage, createCanvas } from '@napi-rs/canvas';
+import { loadImage, createCanvas, Canvas } from '@napi-rs/canvas';
 import { emojis } from './Objects/emojis';
 import Day from 'dayjs';
 
-class profileConstructor extends ModuleStructure {
+class profileConstructor extends ModuleStructure<Canvas> {
     async moduleExecute({ user, data, message }: { user: User, data: UserDocument, message: Message | Interaction }) {
         //========================// Criando canvas //========================//
 

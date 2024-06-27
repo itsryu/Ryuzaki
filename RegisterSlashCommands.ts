@@ -51,7 +51,8 @@ export default class RegisterSlashCommands extends ModuleStructure {
 
             this.client.logger.info(`Updated ${data.length} slash command(s) (/) successfully!`, 'Slash Commands');
         } catch (error) {
-            console.error(error);
+            this.client.logger.error((error as Error).message, RegisterSlashCommands.name);
+            this.client.logger.warn((error as Error).stack, RegisterSlashCommands.name);
         }
     }
 }

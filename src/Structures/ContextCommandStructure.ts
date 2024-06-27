@@ -27,17 +27,17 @@ abstract class ContextCommandData {
 }
 
 abstract class ContextCommandStructure {
-    client: Ryuzaki;
-    data: ContextCommandData;
+    public client: Ryuzaki;
+    public data: ContextCommandData;
 
-    constructor(client: Ryuzaki, data: ContextCommandData) {
+    public constructor(client: Ryuzaki, data: ContextCommandData) {
         this.client = client;
         this.data = data;
 
         this.validateOptions();
     }
 
-    validateOptions() {
+    private validateOptions() {
         if (!this.data.options.name) {
             throw new Error('O nome do comando é obrigatório.');
         }
@@ -47,7 +47,7 @@ abstract class ContextCommandStructure {
         }
     }
 
-    abstract commandExecute(...args: any[]): Promise<void> | void; 
+    public abstract commandExecute(...args: any[]): Promise<void> | void; 
 }
 
 export { ContextCommandStructure, ContextCommandData, RawContextCommandData };

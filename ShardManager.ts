@@ -1,11 +1,14 @@
-import { ShardingManager } from 'discord.js';
+import { Client, ShardingManager } from 'discord.js';
 import { Logger } from './src/Utils/util';
 import { config } from 'dotenv';
 import { join } from 'path';
+import App from './src/Web/backend/server';
 config();
 
-class ShardManager extends ShardingManager {
-    logger: Logger = new Logger();
+export class ShardManager extends ShardingManager {
+    public readonly logger: Logger = new Logger();
+    public shardClients = new Map<number, Client>();
+    public shardsReady = 0;
 
     async initialize(): Promise<void> {
         try {
@@ -14,7 +17,14 @@ class ShardManager extends ShardingManager {
                     this.logger.info(`Starting Shard: [${shard.id.toString()}]`, ShardManager.name);
                 });
                 shard.on('ready', () => {
-                    this.logger.info(`Shard [${shard.id.toString()}] started!`, ShardManager.name);
+                    this.shardsReady++;
+                    this.logger.info(`Shard [${shard.id.toString()}] is ready! (${this.shardsReady}/${this.totalShards !== 'auto' ? this.totalShards : this.shards.size})`, ShardManager.name);
+
+                    if(this.shardsReady === this.totalShards) {
+                        this.logger.info('All shards are ready! Starting WEB server...', ShardManager.name);
+                        const server = new App(shard);
+                        server.serverExecute();
+                    }
                 });
                 shard.on('disconnect', () => {
                     this.logger.error(`Shard [${shard.id.toString()}] disconnected.`, ShardManager.name);
@@ -28,7 +38,7 @@ class ShardManager extends ShardingManager {
                 shard.on('death', () => {
                     this.logger.error(`Shard [${shard.id.toString()}] died!`, ShardManager.name);
                 });
-                shard.on('error', (err: Error) => {
+                shard.on('error', (err) => {
                     this.logger.error(`Shard [${shard.id.toString()}] threw an error: ${err.stack ?? err.message}`, ShardManager.name);
                 });
             });
@@ -45,9 +55,10 @@ class ShardManager extends ShardingManager {
     }
 }
 
+
 const shard = new ShardManager(join(__dirname, './src/RyuzakiLauncher.js'), {
     mode: 'process',
-    totalShards: 'auto',
+    totalShards: 2,
     respawn: true,
     execArgv: ['--trace-warnings'],
     shardArgs: ['--ansi', '--color'],
@@ -58,6 +69,10 @@ const shard = new ShardManager(join(__dirname, './src/RyuzakiLauncher.js'), {
 
 (async () => {
     await shard.initialize();
-})().catch((err: unknown) => { console.error(err); });
+})()
+    .catch((err: unknown) => {
+        console.error((err as Error).message);
+        console.log((err as Error).stack);
+    });
 
 

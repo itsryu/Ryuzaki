@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, GuildMember, TextChannel } from 'discord.js';
 
-export default class guildMemberRemoveListener extends ListenerStructure {
+export default class GuildMemberRemoveListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.GuildMemberRemove
@@ -42,8 +42,8 @@ export default class guildMemberRemoveListener extends ListenerStructure {
             }
 
         } catch (err) {
-            this.client.logger.error((err as Error).message, guildMemberRemoveListener.name);
-            this.client.logger.warn((err as Error).stack, guildMemberRemoveListener.name);
+            this.client.logger.error((err as Error).message, GuildMemberRemoveListener.name);
+            this.client.logger.warn((err as Error).stack, GuildMemberRemoveListener.name);
         }
     }
 }

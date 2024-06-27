@@ -2,21 +2,39 @@ import { AppStructure } from '../../Structures';
 import express, { Express, Router } from 'express';
 import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
-import { InfoMiddleware, CommandMiddleware, AuthMiddleware } from './middlewares/index';
-import { Logger } from '../../Utils/util';
+import { InfoMiddleware, AuthMiddleware } from './middlewares/index';
+import { Logger, Util } from '../../Utils/util';
 import { Route } from '../../Types/HTTPSInterfaces';
-import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController, CommandExecuteController, InteractionController } from './routes/index';
-import { Webhook } from '@top-gg/sdk';
+import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController } from './routes/index';
 import cors from 'cors';
 import { verifyKey } from 'discord-interactions';
 import { JSONResponse } from '../../Structures/RouteStructure';
+import { Api, Webhook } from '@top-gg/sdk';
+import { DataDocument, DataType, Languages } from '../../Types/ClientTypes';
+import { ClientModel, CommandModel, GuildModel, UserModel } from '../../Database';
+import { Translate } from '../../../Lib/Translate';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
     public readonly logger: Logger = new Logger();
+    public readonly utils: Util = new Util();
+    public readonly stats: Api = new Api(process.env.DBL_TOKEN);
     public store = new Map<string, RESTPostOAuth2AccessTokenResult>();
+    public readonly translate: Translate = new Translate(process.env.LANG_PATH);
+    public t!: typeof this.translate.t;
+    public readonly database: {
+        client: typeof ClientModel;
+        guilds: typeof GuildModel;
+        users: typeof UserModel;
+        commands: typeof CommandModel;
+    } = {
+            client: ClientModel,
+            guilds: GuildModel,
+            users: UserModel,
+            commands: CommandModel
+        };
 
-    serverExecute(){
+    serverExecute() {
         this.configServer();
         this.listen(process.env.PORT);
     }
@@ -32,24 +50,24 @@ export default class App extends AppStructure {
     private listen(port: string | number) {
         setInterval(async () => {
             try {
-                const guildsArray = await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size);
-                const totalGuilds = guildsArray?.reduce((prev: number, count: number) => prev + count, 0) ?? 0;
+                const guildsArray = await this.shard.manager.broadcastEval((client: Client) => client.guilds.cache.size);
+                const totalGuilds = guildsArray?.reduce((acc, guilds) => acc + guilds, 0) ?? 0;
 
-                await this.client.stats.postStats({
+                await this.stats.postStats({
                     serverCount: totalGuilds,
-                    shardCount: this.client.shard?.ids.length,
-                    shards: this.client.shard?.ids
+                    shardCount: this.shard.manager.shards.size,
+                    shards: this.shard.manager.shards.map((shard) => shard.id)
                 });
 
-                this.client.logger.info('Updated stats on Top.gg website.', 'DBL');
+                this.logger.info('Updated stats on Top.gg website.', 'DBL');
             } catch (err) {
-                this.client.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
+                this.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
             }
         }, 30 * 60 * 1000); // Updating every 30 minutes;
 
         this.app.listen(port, () => {
-            this.client.logger.info(`[WEB Socket] Server started on port: ${port.toString()}`, 'Server');
-            this.client.logger.info(`[WEB Socket] http://localhost:${port.toString()}`, 'Server');
+            this.logger.info(`[WEB Socket] Server started on port: ${port.toString()}`, 'Server');
+            this.logger.info(`[WEB Socket] http://localhost:${port.toString()}`, 'Server');
         });
     }
 
@@ -74,11 +92,7 @@ export default class App extends AppStructure {
                         if (path.includes('/dblwebhook')) {
                             const webhook = new Webhook(process.env.AUTH_KEY);
 
-                            await webhook.listener((vote) => handler.run(req, res, next, vote, this.client))(req, res, next);
-                        } else if (path.includes('/command') || path.includes('/api/interactions')) {
-                            const commandMiddleware = new CommandMiddleware(this);
-
-                            commandMiddleware.run(req, res, () => handler.run(req, res, next, this.client), this.client);
+                            await webhook.listener((vote) => handler.run(req, res, next, vote, this.shard))(req, res, next);
                         } else {
                             await handler.run(req, res, next);
                         }
@@ -103,9 +117,6 @@ export default class App extends AppStructure {
             { method: 'GET', path: '/api/discord/user/:id', handler: new DiscordUserController(this) },
             { method: 'GET', path: '/linked-role', handler: new DiscordUserController(this) },
             { method: 'GET', path: '/discord-oauth-callback', handler: new DiscordUserController(this) },
-            { method: 'POST', path: '/update-metadata', handler: new InteractionController(this) },
-            { method: 'POST', path: '/api/interactions', handler: new InteractionController(this) },
-            { method: 'POST', path: '/command/:name', handler: new CommandExecuteController(this) },
             { method: 'POST', path: '/dblwebhook', handler: new DBLController(this) }
         ];
 
@@ -289,5 +300,93 @@ export default class App extends AppStructure {
 
     public getDiscordTokens(userId: Snowflake) {
         return this.store.get(`discord-${userId}`);
+    }
+
+    public async getLanguage(id: string): Promise<Languages> {
+        const guild = await this.shard.eval(async (client) => await client.guilds.fetch(id).catch(() => undefined));
+        const user = guild ? null : await this.shard.eval(async (client) => await client.users.fetch(id).catch(() => undefined));
+
+        if (guild) {
+            const guildData = await this.getData(guild.id, 'guild');
+            const languages: Languages[] = ['pt-BR', 'en-US', 'es-ES'];
+
+            await guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
+
+            return guildData?.lang as Languages;
+        } else {
+            const userData = await this.getData(user?.id, 'user');
+
+            await userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
+
+            return userData?.lang as Languages;
+        }
+    }
+
+    public async getTranslate(id: string) {
+        const language = await this.getLanguage(id);
+        this.t = await this.translate.init();
+
+        this.translate.setLang(language);
+        return this.t;
+    }
+
+    public async getData<T extends DataType>(
+        id: string | undefined,
+        type: T
+    ) {
+        switch (type) {
+            case 'user': {
+                if (id) {
+                    const user = await this.shard.eval(async (client) => await client.users.fetch(id).catch(() => undefined));
+
+                    if (user) {
+                        let data = await this.database.users.findOne({ _id: user.id });
+
+                        try {
+                            if (!data) {
+                                data = await this.database.users.create({ _id: user.id });
+                            }
+
+                            return data as DataDocument<T>;
+                        } catch (err) {
+                            this.logger.error((err as Error).message, [App.name, this.getData.name]);
+                            this.logger.warn((err as Error).stack, [App.name, this.getData.name]);
+                        }
+                    } else {
+                        return undefined;
+                    }
+                }
+
+                break;
+            }
+
+            case 'guild': {
+                if (id) {
+                    const guild = await this.shard.eval(async (client) => await client.guilds.fetch(id).catch(() => undefined));
+
+                    if (guild) {
+                        try {
+                            let data = await this.database.guilds.findOne({ _id: guild.id });
+
+                            if (!data) {
+                                data = await this.database.guilds.create({ _id: guild.id });
+                            }
+
+                            return data as DataDocument<T>;
+                        } catch (err) {
+                            this.logger.error((err as Error).message, [App.name, this.getData.name]);
+                            this.logger.warn((err as Error).stack, [App.name, this.getData.name]);
+                        }
+                    } else {
+                        return undefined;
+                    }
+                }
+
+                break;
+            }
+            default: {
+                return undefined;
+            }
+        }
     }
 }

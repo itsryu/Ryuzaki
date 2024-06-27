@@ -57,11 +57,6 @@ export class Ryuzaki extends Client {
         await new servicesIndex(this).moduleExecute();
     }
 
-    protected async loadWS() {
-        const { default: App } = await import('./Web/backend/server');
-        new App(this).serverExecute();
-    }
-
     protected async registerSlashCommands() {
         const { default: registerSlash } = await import('../RegisterSlashCommands');
         return new registerSlash(this).moduleExecute();

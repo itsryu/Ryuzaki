@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, NonThreadGuildBasedChannel } from 'discord.js';
 
-export default class channelDeleteListener extends ListenerStructure {
+export default class ChannelDeleteListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.ChannelDelete
@@ -22,8 +22,8 @@ export default class channelDeleteListener extends ListenerStructure {
                 );
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, channelDeleteListener.name);
-            this.client.logger.warn((err as Error).stack, channelDeleteListener.name);
+            this.client.logger.error((err as Error).message, ChannelDeleteListener.name);
+            this.client.logger.warn((err as Error).stack, ChannelDeleteListener.name);
         }
     }
 }

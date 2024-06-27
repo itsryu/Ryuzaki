@@ -1,5 +1,5 @@
 import { Ryuzaki } from '../RyuzakiClient';
-import { Awaitable, GatewayDispatchEvents } from 'discord.js';
+import { GatewayDispatchEvents } from 'discord.js';
 
 interface RawEventOptions {
     name: GatewayDispatchEvents;
@@ -15,5 +15,5 @@ export abstract class RawListenerStructure {
         this.options = options;
     }
 
-    abstract eventExecute(...args: unknown[]): Awaitable<void> | void;
+    abstract eventExecute(...args: unknown[]): Promise<void> | void;
 }

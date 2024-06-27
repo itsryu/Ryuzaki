@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../Structures/';
 import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType } from 'discord.js';
 
-export default class interactionCreateListener extends ListenerStructure {
+export default class InteractionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.InteractionCreate
@@ -143,8 +143,8 @@ export default class interactionCreateListener extends ListenerStructure {
 
                         const message = Object.assign(interaction, {
                             author: interaction.user,
-                            reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, interactionCreateListener.name); }),
-                            edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, interactionCreateListener.name); }),
+                            reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, InteractionCreateListener.name); }),
+                            edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, InteractionCreateListener.name); }),
                             delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
                         }) as ChatInputCommandInteraction;
 
@@ -253,8 +253,8 @@ export default class interactionCreateListener extends ListenerStructure {
                                 }
                             });
                     } catch (err) {
-                        this.client.logger.error((err as Error).message, interactionCreateListener.name);
-                        this.client.logger.warn((err as Error).stack, interactionCreateListener.name);
+                        this.client.logger.error((err as Error).message, InteractionCreateListener.name);
+                        this.client.logger.warn((err as Error).stack, InteractionCreateListener.name);
                     }
                 }
             }
@@ -303,16 +303,16 @@ export default class interactionCreateListener extends ListenerStructure {
                         await interaction.respond(response);
                     }
                 } catch (err) {
-                    this.client.logger.error((err as Error).message, interactionCreateListener.name);
-                    this.client.logger.warn((err as Error).stack, interactionCreateListener.name);
+                    this.client.logger.error((err as Error).message, InteractionCreateListener.name);
+                    this.client.logger.warn((err as Error).stack, InteractionCreateListener.name);
                 }
             }
 
 
             //==============================================//
         } catch (err) {
-            this.client.logger.error((err as Error).message, interactionCreateListener.name);
-            this.client.logger.warn((err as Error).stack, interactionCreateListener.name); return;
+            this.client.logger.error((err as Error).message, InteractionCreateListener.name);
+            this.client.logger.warn((err as Error).stack, InteractionCreateListener.name); return;
         }
     }
 }

@@ -1,5 +1,6 @@
 import { ModuleStructure, ClientEmbed } from '../Structures';
 import { TextChannel } from 'discord.js';
+import { Reminder } from '../Types/SchemaTypes';
 
 export default class ReminderModule extends ModuleStructure {
     moduleExecute() {
@@ -35,42 +36,66 @@ export default class ReminderModule extends ModuleStructure {
                 const embed = new ClientEmbed(this.client)
                     .setColor(0xFFB32B);
 
-                if (list) {
-                    list.map(async ([, x]) => {
-                        const channel = await this.client.channels.fetch(x.channel).catch(async () => { await this.removeReminder(id, list); }) as TextChannel;
+                if (list && user) {
+                    try {
+                        const listPromise = list.map(async ([, x]) => {
+                            try {
+                                const channel = await this.client.channels.fetch(x.channel).catch(async () => { await this.removeReminder(id, list); }) as TextChannel | null;
 
-                        if (channel && user) {
-                            embed.addFields(
-                                {
-                                    name: '<a:lembrete:1042905549651579030> Lembrete:',
-                                    value: `\`${x.reminder}\``
-                                })
-                                .setFooter({ text: `Lembrete de ${user.tag}`, iconURL: user.displayAvatarURL({ extension: 'png', size: 4096 }) });
+                                if (channel && user) {
+                                    embed.addFields(
+                                        {
+                                            name: '<a:lembrete:1042905549651579030> Lembrete:',
+                                            value: `\`${x.reminder}\``
+                                        })
+                                        .setFooter({ text: `Lembrete de ${user.tag}`, iconURL: user.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
-                            if (userData.reminder.isDm) {
-                                user.send({ content: `${user}`, embeds: [embed] })
-                                    .catch(() => {
-                                        channel.send({ content: `${user}, não pude enviar o lembrete em sua DM.`, embeds: [embed] });
-                                    });
-                            } else {
-                                channel.send({ content: `${user}`, embeds: [embed] });
+                                    if (userData.reminder.isDm) {
+                                        user.send({ content: `${user}`, embeds: [embed] })
+                                            .catch(async () => {
+                                                await channel.send({ content: `${user}, não pude enviar o lembrete em sua DM.`, embeds: [embed] });
+                                            });
+                                    } else {
+                                        await channel.send({ content: `${user}`, embeds: [embed] });
+                                    }
+
+                                    await this.removeReminder(id, list);
+                                }
+                            } catch (err) {
+                                this.client.logger.error((err as Error).message, ReminderModule.name);
+                                this.client.logger.warn((err as Error).stack, ReminderModule.name);
                             }
+                        });
 
-                            this.removeReminder(id, list);
-                        }
-                    });
+                        await Promise.all(listPromise);
+                    } catch (err) {
+                        this.client.logger.error((err as Error).message, ReminderModule.name);
+                        this.client.logger.warn((err as Error).stack, ReminderModule.name);
+                    }
                 }
             }
         });
     }
 
-    removeReminder(id: string, list: [string, any][]) {
-        list.map(async ([, x]) => {
-            const userData = await this.client.getData(id, 'user');
+    async removeReminder(id: string, list: [string, Reminder][]) {
+        try {
+            const listPromise = list.map(async ([, x]) => {
+                try {
+                    const userData = await this.client.getData(id, 'user');
 
-            if (userData) {
-                await userData.updateOne({ _id: id }, { $pull: { 'reminder.reminderList': { time: x.time } } });
-            }
-        });
+                    if (userData) {
+                        await userData.updateOne({ _id: id }, { $pull: { 'reminder.reminderList': { time: x.time } } });
+                    }
+                } catch (err) {
+                    this.client.logger.error((err as Error).message, [ReminderModule.name, this.removeReminder.name]);
+                    this.client.logger.warn((err as Error).stack, [ReminderModule.name, this.removeReminder.name]);
+                }
+            });
+
+            await Promise.all(listPromise);
+        } catch (err) {
+            this.client.logger.error((err as Error).message, [ReminderModule.name, this.removeReminder.name]);
+            this.client.logger.warn((err as Error).stack, [ReminderModule.name, this.removeReminder.name]);
+        }
     }
 }

@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, PermissionFlagsBits, Collection, Invite } from 'discord.js';
 
-export default class readyListener extends ListenerStructure {
+export default class ClientReadyListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
         super(client, {
             name: Events.ClientReady,
@@ -34,11 +34,9 @@ export default class readyListener extends ListenerStructure {
                     }
                 }
             });
-
-            this.client.logger.info(`${this.client.user?.username} has been loaded completely and it's in ${this.client.guilds.cache.size} guilds.`, `Ready - ${this.client.shard?.ids[0]}`);
         } catch (err) {
-            this.client.logger.error((err as Error).message, readyListener.name);
-            this.client.logger.warn((err as Error).stack, readyListener.name);
+            this.client.logger.error((err as Error).message, ClientReadyListener.name);
+            this.client.logger.warn((err as Error).stack, ClientReadyListener.name);
         }
     }
 }
