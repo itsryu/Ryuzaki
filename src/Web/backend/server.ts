@@ -306,7 +306,7 @@ export default class App extends AppStructure {
 
     public async getLanguage(id: string): Promise<Languages> {
         const guild = await this.shard.eval(async (client, id) => await client.guilds.fetch(id).catch(() => undefined), id);
-        const user = guild ? null : await this.shard.eval(async (client) => await client.users.fetch(id).catch(() => undefined));
+        const user = !guild ? await this.shard.eval(async (client, id) => await client.users.fetch(id).catch(() => undefined), id) : undefined;
 
         if (guild) {
             const guildData = await this.getData(guild.id, 'guild');
@@ -315,12 +315,14 @@ export default class App extends AppStructure {
             await guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
 
             return guildData?.lang as Languages;
-        } else {
+        } else if (user) {
             const userData = await this.getData(user?.id, 'user');
 
             await userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
 
             return userData?.lang as Languages;
+        } else {
+            return 'pt-BR';
         }
     }
 
