@@ -1,9 +1,7 @@
 import { Ryuzaki } from '../RyuzakiClient';
 
 export abstract class ModuleStructure<T = void> {
-    public readonly client: Ryuzaki;
-
-    public constructor(client: Ryuzaki) {
+    public constructor(public readonly client: Ryuzaki) {
         this.client = client;
     }
 

@@ -1,9 +1,7 @@
 import { Shard } from 'discord.js';
 
 export abstract class AppStructure {
-    public readonly shard: Shard;
-
-    public constructor(shard: Shard) {
+    public constructor(public readonly shard: Shard) {
         this.shard = shard;
     }
 

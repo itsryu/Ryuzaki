@@ -8,10 +8,7 @@ interface RawServiceData {
 }
 
 export abstract class ServiceStructure<T = void> {
-    public readonly client: Ryuzaki;
-    public readonly data: RawServiceData;
-
-    public constructor(client: Ryuzaki, data: RawServiceData) {
+    public constructor(public readonly client: Ryuzaki, public readonly data: RawServiceData) {
         this.client = client;
         this.data = data;
     }

@@ -39,10 +39,7 @@ interface CommandExecuteParams {
 }
 
 abstract class CommandStructure {
-    public readonly client: Ryuzaki;
-    public readonly data: CommandData;
-
-    public constructor(client: Ryuzaki, data: CommandData) {
+    public constructor(public readonly client: Ryuzaki, public readonly data: CommandData) {
         this.client = client;
         this.data = data;
 

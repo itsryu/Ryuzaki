@@ -7,10 +7,7 @@ interface EventOptions {
 }
 
 export abstract class ListenerStructure {
-    public readonly client: Ryuzaki;
-    public readonly options: EventOptions;
-
-    public constructor(client: Ryuzaki, options: EventOptions) {
+    public constructor(public readonly client: Ryuzaki, public readonly options: EventOptions) {
         this.client = client;
         this.options = options;
     }

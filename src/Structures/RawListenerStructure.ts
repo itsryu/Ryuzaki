@@ -7,10 +7,7 @@ interface RawEventOptions {
 }
 
 export abstract class RawListenerStructure {
-    readonly client: Ryuzaki;
-    readonly options: RawEventOptions;
-
-    constructor(client: Ryuzaki, options: RawEventOptions) {
+    constructor(public readonly client: Ryuzaki, public readonly options: RawEventOptions) {
         this.client = client;
         this.options = options;
     }

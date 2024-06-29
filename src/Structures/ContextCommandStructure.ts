@@ -19,18 +19,13 @@ interface RawContextCommandData extends RESTPostAPIContextMenuApplicationCommand
 }
 
 abstract class ContextCommandData {
-    options: RawContextCommandData;
-
-    constructor(options: RawContextCommandData) {
+    public constructor(public readonly options: RawContextCommandData) {
         this.options = options;
     }
 }
 
 abstract class ContextCommandStructure {
-    public client: Ryuzaki;
-    public data: ContextCommandData;
-
-    public constructor(client: Ryuzaki, data: ContextCommandData) {
+    public constructor(public readonly client: Ryuzaki, public readonly data: ContextCommandData) {
         this.client = client;
         this.data = data;
 

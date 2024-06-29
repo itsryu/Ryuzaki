@@ -17,12 +17,14 @@ export class Translate {
     private languages: Record<string, Language> = {};
     private actualLang = 'pt-BR';
 
-    constructor(dir: PathOrFileDescriptor) {
+    public constructor(dir: PathOrFileDescriptor) {
         this.dir = dir;
     }
 
     public async init(): Promise<(locale: string, options?: FormatOptions) => string> {
         const dirs = sync(`${this.dir}/**/*.json`);
+
+        if (dirs.length === 0) throw new Error('No translation files found');
 
         await Promise.all(
             dirs.map((file) => {
@@ -36,7 +38,8 @@ export class Translate {
                 }
 
                 const data = readFileSync(file, 'utf8');
-                this.languages[language][ns.replace('.json', '')] = JSON.parse(data);
+                const object = JSON.parse(data) as Language;
+                this.languages[language][ns.replace('.json', '')] = object;
             })
         );
 

@@ -10,9 +10,11 @@ class DBLController extends RouteStructure {
             const userData = await this.app.getData(user?.id, 'user');
             const addedMoney = this.app.utils.randomIntFromInterval(2000, 5000);
 
-            if (!userData) {
+            if (!user || !userData) {
                 return void res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
             } else {
+                this.app.t = await this.app.getTranslate(user.id);
+
                 const money = userData.economy.coins;
                 const votes = userData.economy.votes;
 

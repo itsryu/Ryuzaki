@@ -46,9 +46,7 @@ class JSONResponse {
 }
 
 abstract class RouteStructure<T = Request, K = Response, N = NextFunction, V = void> {
-    public readonly app: App;
-
-    public constructor(app: App) {
+    public constructor(public readonly app: App) {
         this.app = app;
     }
 
