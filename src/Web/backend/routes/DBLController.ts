@@ -6,7 +6,9 @@ import { EmbedBuilder, Shard } from 'discord.js';
 class DBLController extends RouteStructure {
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload, shard: Shard) => {
         try {
-            const user = await shard.eval(async (client, vote) => await client.users.fetch(vote.user).catch(() => undefined), vote);
+            const user = await shard.eval(async (client, vote) => {
+                return await client.users.fetch(vote.user).catch(() => undefined);
+            }, vote);
             const userData = await this.app.getData(user?.id, 'user');
             const addedMoney = this.app.utils.randomIntFromInterval(2000, 5000);
 
@@ -29,7 +31,7 @@ class DBLController extends RouteStructure {
                 } else {
                     const votedEmbed = new EmbedBuilder()
                         .setColor(0xF1F1F1)
-                        .setAuthor({ name: this.app.t('main:vote:embeds:voted.title'), iconURL: user?.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                        .setAuthor({ name: this.app.t('main:vote:embeds:voted.title'), iconURL: user.displayAvatarURL() })
                         .setDescription(this.app.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: this.app.utils.toAbbrev(addedMoney) }));
 
                     user?.send({ embeds: [votedEmbed] })
