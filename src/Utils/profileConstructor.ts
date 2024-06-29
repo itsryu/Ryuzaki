@@ -4,6 +4,7 @@ import { Interaction, Message, User } from 'discord.js';
 import { loadImage, createCanvas, Canvas } from '@napi-rs/canvas';
 import { emojis } from './Objects/emojis';
 import Day from 'dayjs';
+import { Abbrev } from './abbrev';
 
 class profileConstructor extends ModuleStructure<Canvas> {
     async moduleExecute({ user, data, message }: { user: User, data: UserDocument, message: Message | Interaction }) {
@@ -118,13 +119,13 @@ class profileConstructor extends ModuleStructure<Canvas> {
         ctx.textAlign = 'left';
         ctx.font = '20px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
-        ctx.fillText(this.client.utils.toAbbrev(data.economy.coins + data.economy.bank), 580, 540);
-        ctx.fillText('#' + data.exp.level + ' | ' + this.client.utils.toAbbrev(data.exp.xp) + '/' + this.client.utils.toAbbrev(nextLevel), 580, 585);
+        ctx.fillText(new Abbrev(data.economy.coins + data.economy.bank).toString(), 580, 540);
+        ctx.fillText('#' + data.exp.level + ' | ' + new Abbrev(data.exp.xp).toString() + '/' + new Abbrev(nextLevel).toString(), 580, 585);
 
         // Sobre
         ctx.font = '25px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
-        this.client.utils.renderEmoji(ctx, data.about ? (data.about.match(/.{1,30}/g) ?? []).join('\n') : 'Altere o seu \'sobre mim\' clicando no botão abaixo.', 170, 535);
+        await this.client.utils.renderEmoji(ctx, data.about ? (data.about.match(/.{1,30}/g) ?? []).join('\n') : 'Altere o seu \'sobre mim\' clicando no botão abaixo.', 170, 535);
 
         // Títulos:
         ctx.textAlign = 'left';

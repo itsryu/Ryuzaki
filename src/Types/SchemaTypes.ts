@@ -140,6 +140,7 @@ interface UserDocument extends Document {
     },
     exp: {
         xp: number,
+        totalXp: number,
         level: number,
         nextLevel: number,
         id: string,

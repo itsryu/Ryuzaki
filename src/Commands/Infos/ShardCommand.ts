@@ -5,6 +5,7 @@ import { Languages } from '../../Types/ClientTypes';
 import { Client, Message } from 'discord.js';
 import Ascii from 'ascii-table';
 import Day from 'dayjs';
+import { Bytes } from '../../Utils/bytes';
 
 export default class ShardCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -28,13 +29,13 @@ export default class ShardCommand extends CommandStructure {
 
             const uptime = await this.client.shard?.broadcastEval((client: Client) => client.uptime) as number[],
                 ping = (await this.client.shard?.broadcastEval((client: Client) => client.ws.ping))!,
-                ram = (await this.client.shard?.broadcastEval(() => process.memoryUsage().heapUsed / 1024 / 1024))!,
+                ram = (await this.client.shard?.broadcastEval(() => process.memoryUsage().heapUsed))!,
                 guilds = (await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size))!,
                 users = (await this.client.shard?.broadcastEval((client: Client) => client.users.cache.size))!,
                 shardCount = this.client.shard?.count ?? 0;
 
             for (let i = 0; i < shardCount; i++) {
-                table.addRow(i, Day.duration(-uptime[i]).locale(language).humanize(true), '~' + Math.round(ping[i]) + 'ms', (ram[i].toFixed(2) + ' MB'), guilds[i].toLocaleString(language), users[i].toLocaleString(language));
+                table.addRow(i, Day.duration(-uptime[i]).locale(language).humanize(true), '~' + Math.round(ping[i]) + 'ms', new Bytes(ram[i]), guilds[i].toLocaleString(language), users[i].toLocaleString(language));
             }
 
             const botGuilds = guilds.reduce((prev, val) => prev + val),
@@ -44,7 +45,7 @@ export default class ShardCommand extends CommandStructure {
                 media = pingG / shardCount;
 
             table.addRow('______', '______', '______', '______', '______', '______');
-            table.addRow('TOTAL', '-', '~' + Math.round(media) + 'ms', (ramTotal.toFixed(2) + ' MB'), botGuilds.toLocaleString(language), botUsers.toLocaleString(language));
+            table.addRow('TOTAL', '-', '~' + Math.round(media) + 'ms', new Bytes(ramTotal), botGuilds.toLocaleString(language), botUsers.toLocaleString(language));
 
             await message.reply({ content: `\`\`\`prolog\n${table.toString()}\`\`\`` });
 

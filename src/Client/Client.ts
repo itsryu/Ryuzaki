@@ -1,5 +1,5 @@
 import { GatewayIntentBits, Partials } from 'discord.js';
-import { Ryuzaki } from './RyuzakiClient';
+import { Ryuzaki } from '../RyuzakiClient';
 
 const client: Ryuzaki = new Ryuzaki({
     intents: [
@@ -37,4 +37,4 @@ const client: Ryuzaki = new Ryuzaki({
     }
 });
 
-export default client;
+export { client };

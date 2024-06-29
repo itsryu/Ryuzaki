@@ -1,7 +1,18 @@
+import { ActivitiesOptions, ActivityType, PresenceUpdateStatus } from 'discord.js';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ServiceStructure } from '../../Structures';
+import { clientStats } from '../../Client';
 
 export default class SetActivityService extends ServiceStructure {
+    declare interval: NodeJS.Timeout;
+
+    private readonly activities: ActivitiesOptions[] = [
+        { name: `My name is ${this.client.user?.username}!`, type: ActivityType.Listening },
+        { name: 'Use /ryu to know more about me!', type: ActivityType.Listening },
+        { name: 'Use /help to know what i can do!', type: ActivityType.Listening },
+        { name: `${clientStats.shards} shards`, type: ActivityType.Listening }
+    ];
+
     constructor(client: Ryuzaki) {
         super(client, {
             name: 'SetActivity',
@@ -11,36 +22,35 @@ export default class SetActivityService extends ServiceStructure {
 
     serviceExecute() {
         try {
-            if (this.client.user) {
-                const activityArray = [
-                    `My name is ${this.client.user.username}!`,
-                    'Use /ryu to know more about me!',
-                    'Use /help to know what i can do!',
-                    `${this.client.shard?.count.toString()} clusters`
-                ];
-
-                const typeArray = [0];
-                const time = 15;
-                let x = 0;
-                let y = 0;
-
-                setInterval(() => {
-                    const shardId = this.client.shard?.ids[Math.floor(Math.random() * this.client.shard.ids.length)];
-                    const shardGuilds = this.client.guilds.cache.filter(guild => guild.shardId === shardId).size;
-
-                    const newArray = activityArray.map(str => {
-                        return `${str} | Shard ${shardId?.toString() ?? '0'} [${shardGuilds.toLocaleString('en-US')}]`;
-                    });
-
-                    const activity = { name: newArray[x++ % activityArray.length], type: typeArray[y++ % typeArray.length] };
-                    this.client.user?.setPresence({ status: 'online', activities: [activity] });
-                }, 1000 * time);
-
-                this.client.logger.info(`${this.client.user.username} presence has been successfully set.`, `Presence - ${this.client.shard?.ids[0].toString()}`);
-            }
+            this.stop();
+            this.setPresence(true);
+            this.interval = setInterval(() => { this.setPresence(); }, 1000 * 60);
         } catch (err) {
             this.client.logger.error((err as Error).message, SetActivityService.name);
             this.client.logger.warn((err as Error).stack, SetActivityService.name);
         }
+    }
+
+    public setPresence(shard = this.random) {
+        this.client.user?.setPresence({
+            activities: shard ? this.shardActivities : this.activities,
+            shardId: shard ? clientStats.shardId : undefined,
+            status: PresenceUpdateStatus.Online
+        });
+    }
+
+    private get random() {
+        return Boolean(Math.round(Math.random()));
+    }
+
+    public get shardActivities(): ActivitiesOptions[] {
+        return [{
+            name: `Shard [${clientStats.shardId}] (${clientStats.shardId + 1}/${clientStats.shards})`,
+            type: ActivityType.Listening
+        }];
+    }
+
+    private stop() {
+        clearInterval(this.interval);
     }
 }

@@ -1,6 +1,7 @@
 import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
-import { Util, Logger } from './Utils/util';
+import { Util } from './Utils/util';
+import { Logger } from './Utils/logger';
 import { Translate } from '../Lib/Translate';
 import { Api } from '@top-gg/sdk';
 import { CommandStructure, ContextCommandStructure, ServiceStructure } from './Structures';
@@ -46,6 +47,7 @@ export class Ryuzaki extends Client {
     public async initialize() {
         try {
             await this.clientManager();
+            await this.registerSlashCommands();
         } catch (err) {
             this.logger.error((err as Error).message, [Ryuzaki.name, this.initialize.name]);
             this.logger.warn((err as Error).stack, [Ryuzaki.name, this.initialize.name]);

@@ -38,6 +38,7 @@ export default tseslint.config(
             '@typescript-eslint/no-unnecessary-condition': 'off',
             '@typescript-eslint/no-non-null-assertion': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
+            "@typescript-eslint/no-inferrable-types": "off",
             'indent': [
                 'error',
                 4,

@@ -3,6 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { Message } from 'discord.js';
 import { StealCommandData } from '../../Data/Commands/Economy/StealCommandData';
 import { Languages } from '../../Types/ClientTypes';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class StealCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -64,7 +65,7 @@ export default class StealCommand extends CommandStructure {
 
                             const embed = new ClientEmbed(this.client)
                                 .setAuthor({ name: `${message.author.username} roubou ${member.user.username}`, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                                .setDescription(`Você roubou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) de ${member}! \n\nVocê também recebeu: **${receivedExp}** de experiência.`);
+                                .setDescription(`Você roubou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(money).toString()}) de ${member}! \n\nVocê também recebeu: **${receivedExp}** de experiência.`);
 
                             return void await message.reply({ embeds: [embed] });
                         } else {

@@ -3,6 +3,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { WorkCommandData } from '../../Data/Commands/Economy/WorkCommandData';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class WorkCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -38,7 +39,7 @@ export default class WorkCommand extends CommandStructure {
 
                     const embed = new ClientEmbed(this.client)
                         .setAuthor({ name: 'Trabalho!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(`Você trabalhou e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)} + R$ ${this.client.utils.toAbbrev(extraMoney)}) (VIP)!` : `\n**${totalReceived.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(totalReceived)})! \n\nVocê também recebeu: \n**${receivedExp}** de experiência!`}`)
+                        .setDescription(`Você trabalhou e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(money).toString()} + R$ ${new Abbrev(extraMoney).toString()}) (VIP)!` : `\n**${totalReceived.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(totalReceived).toString()})! \n\nVocê também recebeu: \n**${receivedExp}** de experiência!`}`)
                         .setFooter({ text: 'Trabalhe novamente:' })
                         .setTimestamp(Date.now() + 60000 * 60 * 12);
 

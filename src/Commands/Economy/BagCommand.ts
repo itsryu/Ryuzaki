@@ -4,6 +4,7 @@ import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { emojis } from '../../Utils/Objects/emojis';
 import { BagCommandData } from '../../Data/Commands/Economy/BagCommandData';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class BagCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -27,15 +28,15 @@ export default class BagCommand extends CommandStructure {
                     .addFields(
                         {
                             name: `${emojis.dinheiro} Dinheiro fora do banco:`,
-                            value: `\`${coins.toLocaleString(language, { style: 'currency', currency: 'BRL' })}\` \`(R$ ${this.client.utils.toAbbrev(coins)})\``
+                            value: `\`${coins.toLocaleString(language, { style: 'currency', currency: 'BRL' })}\` \`(R$ ${new Abbrev(coins).toString()})\``
                         },
                         {
                             name: `${emojis.banco} Dinheiro no banco:`,
-                            value: `\`${bank.toLocaleString(language, { style: 'currency', currency: 'BRL' })}\` \`(R$ ${this.client.utils.toAbbrev(bank)})\``
+                            value: `\`${bank.toLocaleString(language, { style: 'currency', currency: 'BRL' })}\` \`(R$ ${new Abbrev(bank).toString()})\``
                         },
                         {
                             name: `${emojis.economia} Total`,
-                            value: `\`${(coins + bank).toLocaleString(language, { style: 'currency', currency: 'BRL' })}\` \`(R$ ${this.client.utils.toAbbrev(coins + bank)})\``
+                            value: `\`${(coins + bank).toLocaleString(language, { style: 'currency', currency: 'BRL' })}\` \`(R$ ${new Abbrev(coins + bank).toString()})\``
                         }
                     );
 

@@ -1,13 +1,11 @@
-import { Client, ShardingManager } from 'discord.js';
-import { Logger } from './src/Utils/util';
+import { ShardingManager } from 'discord.js';
 import { config } from 'dotenv';
 import { join } from 'path';
-import App from './src/Web/backend/server';
+import { Logger } from './src/Utils/logger';
 config();
 
 export class ShardManager extends ShardingManager {
     public readonly logger: Logger = new Logger();
-    public shardClients = new Map<number, Client>();
     public shardsReady = 0;
 
     async initialize(): Promise<void> {
@@ -16,15 +14,9 @@ export class ShardManager extends ShardingManager {
                 shard.on('spawn', () => {
                     this.logger.info(`Starting Shard: [${shard.id.toString()}]`, ShardManager.name);
                 });
-                shard.on('ready', async () => {
+                shard.on('ready', () => {
                     this.shardsReady++;
-                    this.logger.info(`Shard [${shard.id.toString()}] is ready! (${this.shardsReady}/${this.totalShards !== 'auto' ? this.totalShards : this.shards.size})`, ShardManager.name);
-
-                    if (this.shardsReady === this.totalShards) {
-                        this.logger.info('All shards are ready! Starting WEB server...', ShardManager.name);
-                        const server = new App(shard);
-                        await server.serverExecute();
-                    }
+                    this.logger.info(`Shard [${shard.id.toString()}] is ready! (${this.shardsReady}/${this.totalShards})`, ShardManager.name);
                 });
                 shard.on('disconnect', () => {
                     this.logger.error(`Shard [${shard.id.toString()}] disconnected.`, ShardManager.name);
@@ -53,6 +45,14 @@ export class ShardManager extends ShardingManager {
             this.logger.warn((err as Error).stack, ShardManager.name);
         }
     }
+
+    public get isReady(): boolean {
+        return this.shardsReady === this.totalShards;
+    }
+
+    public get shardCount(): number {
+        return this.shardList.length;
+    }
 }
 
 
@@ -74,5 +74,4 @@ const shard = new ShardManager(join(__dirname, './src/RyuzakiLauncher.js'), {
         console.error((err as Error).message);
         console.log((err as Error).stack);
     });
-
 

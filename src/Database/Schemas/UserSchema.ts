@@ -63,15 +63,19 @@ const userSchema = new Schema<UserDocument>({
     exp: {
         xp: {
             type: Schema.Types.Number,
-            default: 1
+            default: 0
+        },
+        totalXp: {
+            type: Schema.Types.Number,
+            default: 0
         },
         level: {
             type: Schema.Types.Number,
-            default: 1
+            default: 0
         },
         nextLevel: {
             type: Schema.Types.Number,
-            default: 100
+            default: 0
         },
         id: {
             type: Schema.Types.String,

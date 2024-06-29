@@ -3,6 +3,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { DepositCommandData } from '../../Data/Commands/Economy/DepositCommandData';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class DepositCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -13,7 +14,7 @@ export default class DepositCommand extends CommandStructure {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
             const amount = args[0];
-            const coins = this.client.utils.notAbbrev(amount);
+            const coins = Abbrev.parse(amount);
 
             if (!userData) {
                 return void await message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
@@ -23,7 +24,7 @@ export default class DepositCommand extends CommandStructure {
                     if (userData.economy.coins == 0) {
                         return void await message.reply({ content: 'Você não possui dinheiro para depositar.' });
                     } else {
-                        await message.reply({ content: `Você depositou **${userData.economy.coins.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(userData.economy.coins)}) com sucesso.` });
+                        await message.reply({ content: `Você depositou **${userData.economy.coins.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(userData.economy.coins).toString()}) com sucesso.` });
 
                         userData.set({
                             'economy.coins': 0,
@@ -39,7 +40,7 @@ export default class DepositCommand extends CommandStructure {
                 } else if (coins > userData.economy.coins) {
                     return void await message.reply({ content: 'Você não possui essa quantia para depositar.' });
                 } else {
-                    await message.reply({ content: `Você depositou **${coins.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(coins)}) com sucesso.` });
+                    await message.reply({ content: `Você depositou **${coins.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(coins).toString()}) com sucesso.` });
 
                     userData.set({
                         'economy.coins': userData.economy.coins - coins,

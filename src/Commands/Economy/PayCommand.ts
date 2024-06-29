@@ -3,6 +3,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { PayCommandData } from '../../Data/Commands/Economy/PayCommandData';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class PayCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -24,12 +25,12 @@ export default class PayCommand extends CommandStructure {
             } else if (!amount) {
                 return void await message.reply({ content: 'Você deve inserir a quantia que deseja enviar.' });
             } else {
-                const money = this.client.utils.notAbbrev(amount);
+                const money = Abbrev.parse(amount);
 
                 if (isNaN(money)) {
                     return void await message.reply({ content: 'Esta quantia é inválida. Insira um `valor válido`.' });
                 } else if (money <= 0) {
-                    return void await message.reply({ content: 'Esta quantia é invalida, pois é menor ou igual a 0. Insira um \`valor válido\`.' });
+                    return void await message.reply({ content: 'Esta quantia é invalida, pois é menor ou igual a 0. Insira um `valor válido`.' });
                 } else if (member.id === message.author.id) {
                     return void await message.reply({ content: 'Você não pode enviar o seu dinheiro para si mesmo.' });
                 } else if (money > userData.economy.bank) {
@@ -40,7 +41,7 @@ export default class PayCommand extends CommandStructure {
                     if (!target) {
                         return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
                     } else {
-                        const msg = await message.reply({ content: `Você deseja enviar **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) para o(a) ${member}?!` });
+                        const msg = await message.reply({ content: `Você deseja enviar **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(money).toString()}) para o(a) ${member}?!` });
                         await msg.react('✅');
                         await msg.react('❌');
 
@@ -63,7 +64,7 @@ export default class PayCommand extends CommandStructure {
                                 });
                                 await target.save();
 
-                                return void await msg.edit({ content: `Você enviou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)}) com sucesso para o(a) ${member}.` });
+                                return void await msg.edit({ content: `Você enviou **${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(money).toString()}) com sucesso para o(a) ${member}.` });
                             }
 
                             if (reaction.emoji.name === '❌') {

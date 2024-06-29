@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../Structures/';
-import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType } from 'discord.js';
+import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType, Message } from 'discord.js';
 
 export default class InteractionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -146,7 +146,7 @@ export default class InteractionCreateListener extends ListenerStructure {
                             reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, InteractionCreateListener.name); }),
                             edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, InteractionCreateListener.name); }),
                             delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
-                        }) as ChatInputCommandInteraction;
+                        }) as Message & ChatInputCommandInteraction;
 
                         //===============> Checando permissões dos membros e do cliente:
 
@@ -228,28 +228,15 @@ export default class InteractionCreateListener extends ListenerStructure {
                                     });
 
                                     userData.set({
-                                        'commands.usages': userData.commands.usages + 1,
-                                        'exp.xp': userData.exp.xp + Math.floor(Math.random() * 50) + 1
+                                        'commands.usages': userData.commands.usages + 1
                                     });
 
                                     await commandData.save();
                                     await userData.save();
 
-                                    const xp = userData.exp.xp;
-                                    const level = userData.exp.level;
-                                    const nextLevel = userData.exp.nextLevel;
-
-                                    if (xp >= nextLevel) {
-                                        userData.set({
-                                            'exp.xp': 0,
-                                            'exp.level': level + 1,
-                                            'exp.nextLevel': this.client.utils.nextLevelExp(level + 1)
-                                        });
-
-                                        await userData.save();
-
-                                        return void await message.reply({ content: `Você acaba de subir para o nível **${userData.exp.level}**.`, ephemeral: true });
-                                    }
+                                    //===============> Levels:
+                                    const { default: XPModule } = await import('../../Modules/XPModule');
+                                    await new XPModule(this.client).moduleExecute({ message });
                                 }
                             });
                     } catch (err) {

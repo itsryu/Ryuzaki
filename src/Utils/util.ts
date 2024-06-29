@@ -1,18 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import * as winston from 'winston';
-import { abbrev, convertAbbrev } from './Plugins/abbrev';
 import { renderEmoji } from './Plugins/renderEmoji';
 import { SKRSContext2D } from '@napi-rs/canvas';
 import { duration } from 'dayjs';
 import { Language } from './Objects/flags';
 import { Languages } from '../Types/ClientTypes';
-
-enum LogLevel {
-    DEBUG = 'debug',
-    INFO = 'info',
-    WARN = 'warn',
-    ERROR = 'error'
-}
 
 class Util {
     public getTime(timestamp: number | Date, language: string | string[]): string {
@@ -26,14 +17,6 @@ class Util {
 
     public GetMention(id: string): RegExp {
         return new RegExp(`^<@!?${id}>( |)$`);
-    }
-
-    public toAbbrev(num: number) {
-        return abbrev(num);
-    }
-
-    public notAbbrev(string: string) {
-        return convertAbbrev(string);
     }
 
     public seconds_since_epoch(d: number) {
@@ -166,69 +149,5 @@ class Util {
     }
 }
 
-class Logger {
-    private logger: winston.Logger;
 
-    constructor(level: LogLevel = LogLevel.INFO, environment: string = process.env.STATE) {
-        this.logger = winston.createLogger({
-            level,
-            defaultMeta: { environment },
-            transports: [
-                new winston.transports.Console()
-            ],
-            format: winston.format.combine(
-                winston.format.timestamp(),
-                winston.format.errors({ stack: true }),
-                winston.format.splat(),
-                winston.format.json(),
-                winston.format.colorize({
-                    colors: {
-                        error: 'red',
-                        warn: 'yellow',
-                        info: 'green',
-                        debug: 'blue'
-                    }
-                }),
-                winston.format.printf((info) => {
-                    const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-                    return `[${timestamp}] [${info.level}] [${info.environment}] [${info.path}] ${info.message}`;
-                })
-            )
-        });
-    }
-
-    public debug(message: string | string[] | undefined, meta: string | string[] | undefined): void {
-        if (message && Array.isArray(message)) message = message.join(' ');
-        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
-        if (!message) message = '';
-
-        this.logger.debug(message, { path: meta });
-    }
-
-    public info(message: string | string[] | undefined, meta: string | string[] | undefined): void {
-        if (message && Array.isArray(message)) message = message.join(' ');
-        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
-        if (!message) message = '';
-
-        this.logger.info(message, { path: meta });
-    }
-
-    public warn(message: string | string[] | undefined, meta: string | string[] | undefined): void {
-        if (message && Array.isArray(message)) message = message.join(' ');
-        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
-        if (!message) message = '';
-
-        this.logger.warn(message, { path: meta });
-    }
-
-    public error(message: string | string[] | undefined, meta: string | string[] | undefined): void {
-        if (message && Array.isArray(message)) message = message.join(' ');
-        if (meta && Array.isArray(meta)) meta = meta.join(' - ');
-        if (!message) message = '';
-
-        this.logger.error(message, { path: meta });
-    }
-}
-
-
-export { Util, Logger };
+export { Util };

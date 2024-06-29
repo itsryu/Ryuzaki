@@ -3,40 +3,23 @@ import express, { Express, Router } from 'express';
 import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, AuthMiddleware } from './middlewares/index';
-import { Logger, Util } from '../../Utils/util';
+import { Util } from '../../Utils/util';
+import { Logger } from '../../Utils/logger';
 import { Route } from '../../Types/HTTPSInterfaces';
 import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController } from './routes/index';
 import cors from 'cors';
 import { verifyKey } from 'discord-interactions';
 import { JSONResponse } from '../../Structures/RouteStructure';
-import { Api, Webhook } from '@top-gg/sdk';
-import { DataDocument, DataType, Languages } from '../../Types/ClientTypes';
-import { ClientModel, CommandModel, GuildModel, UserModel } from '../../Database';
-import { Translate } from '../../../Lib/Translate';
-import { connect, connection } from 'mongoose';
+import { Webhook } from '@top-gg/sdk';
+import { clientStats } from '../../Client';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
     public readonly logger: Logger = new Logger();
     public readonly utils: Util = new Util();
-    public readonly stats: Api = new Api(process.env.DBL_TOKEN);
     public store = new Map<string, RESTPostOAuth2AccessTokenResult>();
-    public readonly translate: Translate = new Translate(process.env.LANG_PATH);
-    public t!: typeof this.translate.t;
-    public readonly database: {
-        client: typeof ClientModel;
-        guilds: typeof GuildModel;
-        users: typeof UserModel;
-        commands: typeof CommandModel;
-    } = {
-            client: ClientModel,
-            guilds: GuildModel,
-            users: UserModel,
-            commands: CommandModel
-        };
 
-    public async serverExecute() {
-        await this.initDatabase();
+    public serverExecute() {
         this.configServer();
         this.listen(process.env.PORT);
     }
@@ -52,13 +35,13 @@ export default class App extends AppStructure {
     private listen(port: string | number) {
         setInterval(async () => {
             try {
-                const guildsArray = await this.shard.manager.broadcastEval((client: Client) => client.guilds.cache.size);
+                const guildsArray = await this.client.shard?.broadcastEval((client: Client) => client.guilds.cache.size);
                 const totalGuilds = guildsArray?.reduce((acc, guilds) => acc + guilds, 0) ?? 0;
 
-                await this.stats.postStats({
+                await this.client.stats.postStats({
                     serverCount: totalGuilds,
-                    shardCount: this.shard.manager.shards.size,
-                    shards: this.shard.manager.shards.map((shard) => shard.id)
+                    shardCount: clientStats.shards,
+                    shards: guildsArray
                 });
 
                 this.logger.info('Updated stats on Top.gg website.', 'DBL');
@@ -94,7 +77,7 @@ export default class App extends AppStructure {
                         if (path.includes('/dblwebhook')) {
                             const webhook = new Webhook(process.env.AUTH_KEY);
 
-                            await webhook.listener((vote) => handler.run(req, res, next, vote, this.shard))(req, res, next);
+                            await webhook.listener((vote) => handler.run(req, res, next, vote))(req, res, next);
                         } else {
                             await handler.run(req, res, next);
                         }
@@ -206,7 +189,6 @@ export default class App extends AppStructure {
 
             if (response.ok) {
                 const tokens = await response.json() as RESTPostOAuth2AccessTokenResult;
-                tokens.access_token = tokens.access_token;
                 tokens.expires_in = Date.now() + tokens.expires_in * 1000;
                 this.storeDiscordTokens(userId, tokens);
                 return tokens.access_token;
@@ -302,109 +284,5 @@ export default class App extends AppStructure {
 
     public getDiscordTokens(userId: Snowflake) {
         return this.store.get(`discord-${userId}`);
-    }
-
-    public async getLanguage(id: string): Promise<Languages> {
-        const guild = await this.shard.eval(async (client, id) => await client.guilds.fetch(id).catch(() => undefined), id);
-        const user = !guild ? await this.shard.eval(async (client, id) => await client.users.fetch(id).catch(() => undefined), id) : undefined;
-
-        if (guild) {
-            const guildData = await this.getData(guild.id, 'guild');
-            const languages: Languages[] = ['pt-BR', 'en-US', 'es-ES'];
-
-            await guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
-
-            return guildData?.lang as Languages;
-        } else if (user) {
-            const userData = await this.getData(user?.id, 'user');
-
-            await userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
-
-            return userData?.lang as Languages;
-        } else {
-            return 'pt-BR';
-        }
-    }
-
-    public async getTranslate(id: string) {
-        const language = await this.getLanguage(id);
-        this.t = await this.translate.init();
-
-        this.translate.setLang(language);
-        return this.t;
-    }
-
-    public async getData<T extends DataType>(
-        id: string | undefined,
-        type: T
-    ) {
-        switch (type) {
-            case 'user': {
-                if (id) {
-                    const user = await this.shard.eval(async (client, id) => await client.users.fetch(id).catch(() => undefined), id);
-
-                    if (user) {
-                        let data = await this.database.users.findOne({ _id: user.id });
-
-                        try {
-                            if (!data) {
-                                data = await this.database.users.create({ _id: user.id });
-                            }
-
-                            return data as DataDocument<T>;
-                        } catch (err) {
-                            this.logger.error((err as Error).message, [App.name, this.getData.name]);
-                            this.logger.warn((err as Error).stack, [App.name, this.getData.name]);
-                        }
-                    } else {
-                        return undefined;
-                    }
-                }
-
-                break;
-            }
-
-            case 'guild': {
-                if (id) {
-                    const guild = await this.shard.eval(async (client, id) => await client.guilds.fetch(id).catch(() => undefined), id);
-
-                    if (guild) {
-                        try {
-                            let data = await this.database.guilds.findOne({ _id: guild.id });
-
-                            if (!data) {
-                                data = await this.database.guilds.create({ _id: guild.id });
-                            }
-
-                            return data as DataDocument<T>;
-                        } catch (err) {
-                            this.logger.error((err as Error).message, [App.name, this.getData.name]);
-                            this.logger.warn((err as Error).stack, [App.name, this.getData.name]);
-                        }
-                    } else {
-                        return undefined;
-                    }
-                }
-
-                break;
-            }
-            default: {
-                return undefined;
-            }
-        }
-    }
-
-    private async initDatabase() {
-        await connect(process.env.MONGO_CONNECTION_URI, { autoIndex: false, serverApi: { version: '1', strict: true, deprecationErrors: true } });
-        await connection.db.admin().command({ ping: 1 });
-        this.logger.info('Pinged your deployment. WEB Server has successfully connected to MongoDB!', 'Database');
-
-        connection.on('error', (err) => {
-            this.logger.error((err as Error).stack, 'Database');
-        });
-
-        connection.once('open', () => {
-            this.logger.info('Database loaded successfully on WEB Server.', 'Database');
-        });
     }
 }

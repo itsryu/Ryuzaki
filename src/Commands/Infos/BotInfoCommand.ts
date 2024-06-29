@@ -4,10 +4,13 @@ import { Languages } from '../../Types/ClientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BotInfoCommandData } from '../../Data/Commands/Infos/BotInfoCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version } from 'discord.js';
-import { platform, cpus, arch } from 'node:os';
+import { platform, arch } from 'node:os';
 import Day from 'dayjs';
 import { connection } from 'mongoose';
-
+import { clientStats } from '../../Client';
+import { CPU_CORES, CPU_MODEL, TOTAL_RAM } from '../../Utils/constants';
+import { Bytes } from '../../Utils/bytes';
+import { memoryUsage } from 'node:process';
 
 export default class BotInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -25,10 +28,9 @@ export default class BotInfoCommand extends CommandStructure {
             const clientUsers = usersArray?.reduce((acc, userCount) => acc + userCount, 0);
             const guildsArray = await this.client.shard?.fetchClientValues('guilds.cache.size').catch(() => undefined) as number[] | undefined;
             const clientGuilds = guildsArray?.reduce((acc, guildCount) => acc + guildCount, 0);
-            const clientShards = this.client.shard?.count;
             const clientCommands = this.client.commands.size;
             const clientUptime = Day.duration(process.uptime() * 1000).locale(language).humanize();
-            const clientMemory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) + 'MB';
+            const clientMemory = new Bytes(process.memoryUsage().heapUsed);
             const clientPing = Math.floor(this.client.ws.ping);
             const djsVersion = version;
             const njsVersion = process.version;
@@ -49,7 +51,7 @@ export default class BotInfoCommand extends CommandStructure {
                     },
                     {
                         name: 'Estatísticas:',
-                        value: `💻 Plataforma: \`${platform()}\`\n🧮 Memória: \`${clientMemory}\`\n🏘️ Servidores: \`${clientGuilds}\`\n👥 Usuários: \`${clientUsers}\`\n🔧 Total de Comandos: \`${clientCommands}\`\n📀 Shards totais: \`${clientShards}\``
+                        value: `💻 Plataforma: \`${platform()}\`\n🧮 Memória: \`${clientMemory}\`\n🏘️ Servidores: \`${clientGuilds}\`\n👥 Usuários: \`${clientUsers}\`\n🔧 Total de Comandos: \`${clientCommands}\`\n📀 Shard ID: \`${clientStats.shardId}\` \`(${clientStats.shardId + 1}/${clientStats.totalShards}\`)`
                     },
                     {
                         name: 'Linguagem e outros:',
@@ -57,7 +59,7 @@ export default class BotInfoCommand extends CommandStructure {
                     },
                     {
                         name: 'Sistema:',
-                        value: `🤖 CPU: \`\`\`md\n${cpus().map(i => i.model)[0]}\`\`\`\n🛠️ Arquitetura: \`${arch()}\`\n⏰ Tempo online: \`${clientUptime}\`\n🛰 Ping do Host: \`${clientPing}\`ms\n🍃 Ping do DB: \`${dbPing}\`ms`
+                        value: `CPU: \`${CPU_MODEL} (${CPU_CORES} cores)\`\nRAM: \`${new Bytes(memoryUsage().heapUsed)}/${new Bytes(TOTAL_RAM)}\`🛠️ Arquitetura: \`${arch()}\`\n⏰ Tempo online: \`${clientUptime}\`\n🛰 Ping do Host: \`${clientPing}\`ms\n🍃 Ping do DB: \`${dbPing}\`ms`
                     })
                 .setFooter({ text: `${this.client.user?.username} criado pelo ${clientOwner.tag}`, iconURL: clientOwner.displayAvatarURL({ extension: 'png', size: 4096 }) });
 

@@ -3,6 +3,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { DailyCommandData } from '../../Data/Commands/Economy/DailyCommandData';
 import { Languages } from '../../Types/ClientTypes';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class DailyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -34,7 +35,7 @@ export default class DailyCommand extends CommandStructure {
                 } else {
                     const embed = new ClientEmbed(this.client)
                         .setAuthor({ name: 'Recompensa diária!', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(`Você resgatou a sua recompensa diária e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(money)} + R$ ${this.client.utils.toAbbrev(extraMoney)}) (VIP)!` : `\n**${addedMoney.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${this.client.utils.toAbbrev(addedMoney)})!`}`)
+                        .setDescription(`Você resgatou a sua recompensa diária e conseguiu: ${userData.vip.status ? `\n**${money.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(money).toString()} + R$ ${new Abbrev(extraMoney).toString()}) (VIP)!` : `\n**${addedMoney.toLocaleString(language, { style: 'currency', currency: 'BRL' })}** (R$ ${new Abbrev(addedMoney).toString()})!`}`)
                         .setFooter({ text: 'Pegue a sua recompensa diária:' })
                         .setTimestamp(Date.now() + 60000 * 60 * 12);
 

@@ -271,28 +271,15 @@ export default class MessageCreateListener extends ListenerStructure {
                                     });
 
                                     userData.set({
-                                        'commands.usages': userData.commands.usages + 1,
-                                        'exp.xp': userData.exp.xp + Math.floor(Math.random() * 50) + 1
+                                        'commands.usages': userData.commands.usages + 1
                                     });
 
                                     await commandData.save();
                                     await userData.save();
 
-                                    const xp = userData.exp.xp;
-                                    const level = userData.exp.level;
-                                    const nextLevel = userData.exp.nextLevel;
-
-                                    if (xp >= nextLevel) {
-                                        userData.set({
-                                            'exp.xp': 0,
-                                            'exp.level': level + 1,
-                                            'exp.nextLevel': this.client.utils.nextLevelExp(level + 1)
-                                        });
-
-                                        await userData.save();
-
-                                        return void await message.reply({ content: `Você acaba de subir para o nível **${userData.exp.level}**.` });
-                                    }
+                                    //===============> Levels:
+                                    const { default: XPModule } = await import('../../Modules/XPModule');
+                                    await new XPModule(this.client).moduleExecute({ message });
                                 }
                             } catch (err) {
                                 this.client.logger.error((err as Error).message, MessageCreateListener.name);
@@ -308,10 +295,6 @@ export default class MessageCreateListener extends ListenerStructure {
                 //===============> AFK:
                 const { default: afkModule } = await import('../../Modules/AFKModule');
                 await new afkModule(this.client).moduleExecute(message);
-
-                //===============> Levels:
-                const { default: xpModule } = await import('../../Modules/XPModule');
-                await new xpModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Convites:
                 const { default: inviteModule } = await import('../../Modules/InviteModule');

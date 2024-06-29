@@ -1,4 +1,4 @@
-import { Collection, Emoji, PartialEmoji } from 'discord.js';
+import { Collection, Emoji, PartialEmoji, Status } from 'discord.js';
 import { GuildDocument, UserDocument, ClientDocument, CommandDocument } from './SchemaTypes';
 
 type DataType = 'user' | 'guild' | 'client' | 'command';
@@ -42,6 +42,40 @@ type DataDocument<T extends DataType> = T extends 'guild'
     ? CommandDocument & Required<{ _id: string }>
     : never;
 
+interface Stats {
+    botMessages: number
+    channels: number
+    emojis: number
+    guilds: number
+    interactions: number
+    isLastShard: boolean
+    cpuUsage: NodeJS.CpuUsage
+    memoryUsage: NodeJS.MemoryUsage
+    messages: number
+    readyAt: Date | null
+    readyTimestamp: number | null
+    shardId: number
+    shardIds: number[]
+    shards: number
+    totalChannels: number
+    totalEmojis: number
+    totalGuilds: number
+    totalInteractions: number
+    totalMemoryUsage: number
+    totalMessages: number
+    totalShards: number
+    totalUsers: number
+    totalVoiceAdapters: number
+    uptime: number | null
+    usedCommands: Record<string, number>
+    userMessages: number
+    users: number
+    voiceAdapters: number
+    wsPing: number | null
+    wsStatus: Status
+}
+
+
 export type {
     DataType,
     Languages,
@@ -49,5 +83,6 @@ export type {
     CategoryValidation,
     CategoryEmojis,
     DataDocument,
-    ShardMemory
+    ShardMemory,
+    Stats
 };

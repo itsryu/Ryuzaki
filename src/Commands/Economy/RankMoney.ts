@@ -2,6 +2,7 @@ import { Message, MessageComponentInteraction } from 'discord.js';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { RankMoneyCommandData } from '../../Data/Commands/Economy/RankMoneyCommandData';
+import { Abbrev } from '../../Utils/abbrev';
 
 export default class RankMoneyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -39,7 +40,7 @@ export default class RankMoneyCommand extends CommandStructure {
             if (members.length > 0) {
                 const coinsMap = members.sort((a, b) => (b?.coins ?? 0) - (a?.coins ?? 0));
                 const ranking = coinsMap.findIndex((x) => x?.user.id === message.author.id) + 1;
-                const description = coinsMap.slice(0, 100).map((x, i) => `**${i + 1}º** **[${x?.user.tag}](https://discord.com/users/${x?.user.id})** - **R$${this.client.utils.toAbbrev(x?.coins ?? 0)}**\n**ID:** \`${x?.user.id}\``);
+                const description = coinsMap.slice(0, 100).map((x, i) => `**${i + 1}º** **[${x?.user.tag}](https://discord.com/users/${x?.user.id})** - **R$${new Abbrev(x?.coins ?? 0).toString()}**\n**ID:** \`${x?.user.id}\``);
                 const pages: ClientEmbed[] = [];
                 let current = 0;
 
