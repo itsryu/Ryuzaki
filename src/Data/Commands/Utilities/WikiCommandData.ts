@@ -34,7 +34,8 @@ class WikiCommandDataConstructor extends CommandData {
                 interactionOnly: false,
                 isDMAllowed: true,
                 registerSlash: true,
-                args: true
+                args: true,
+                ephemeral: true
             },
             options: [
                 {

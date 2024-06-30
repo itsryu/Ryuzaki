@@ -38,7 +38,8 @@ class GuildSubCommandDataConstructor extends CommandData {
                 interactionOnly: false,
                 isDMAllowed: false,
                 registerSlash: true,
-                args: true
+                args: true,
+                ephemeral: true
             },
             options: [
                 {

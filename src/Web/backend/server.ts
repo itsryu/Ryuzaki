@@ -41,7 +41,8 @@ export default class App extends AppStructure {
                 await this.client.stats.postStats({
                     serverCount: totalGuilds,
                     shardCount: clientStats.shards,
-                    shards: guildsArray
+                    shards: guildsArray,
+                    shardId: clientStats.shardId
                 });
 
                 this.logger.info('Updated stats on Top.gg website.', 'DBL');

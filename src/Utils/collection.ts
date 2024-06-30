@@ -48,7 +48,7 @@ export class Collections<T> {
     clear(): void {
         this.collection.length = 0;
     }
-
+    
     isEmpty(): boolean {
         return this.collection.length === 0;
     }

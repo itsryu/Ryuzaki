@@ -22,9 +22,9 @@ export default class StealCommand extends CommandStructure {
             } else if (member.user.bot) {
                 return void await message.reply({ content: 'Você não pode roubar um BOT.' });
             } else if (message.author.id === member.id) {
-                return void await message.reply({ content: 'Você não roubar a si mesmo.' });
+                return void await message.reply({ content: 'Você não pode roubar a si mesmo.' });
             } else if (userData.exp.level < 5) {
-                return void await message.reply({ content: 'Você precisa ser `nível 5` ou superiro para roubar alguém.' });
+                return void await message.reply({ content: 'Você precisa ser `nível 5` ou superior para roubar alguém.' });
             } else {
                 const target = await this.client.getData(member.id, 'user');
                 const time = userData.steal.time;

@@ -1,4 +1,4 @@
-import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
+import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions, REST } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
 import { Util } from './Utils/util';
 import { Logger } from './Utils/logger';
@@ -11,6 +11,7 @@ import { config } from 'dotenv';
 config();
 
 export class Ryuzaki extends Client {
+    public readonly rest: REST = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
     public readonly logger: Logger = new Logger();
     public readonly utils: Util = new Util();
     public readonly stats: Api = new Api(process.env.DBL_TOKEN);

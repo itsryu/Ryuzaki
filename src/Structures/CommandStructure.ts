@@ -20,6 +20,7 @@ interface RawCommandData extends RESTPostAPIChatInputApplicationCommandsJSONBody
         isDMAllowed: boolean,
         registerSlash: boolean,
         args: boolean
+        ephemeral?: boolean;
     };
 }
 

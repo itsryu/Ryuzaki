@@ -40,7 +40,8 @@ class KissCommandDataConstructor extends CommandData {
                 interactionOnly: false,
                 isDMAllowed: false,
                 registerSlash: true,
-                args: true
+                args: true,
+                ephemeral: false
             },
             options: [
                 {

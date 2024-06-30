@@ -40,7 +40,8 @@ class MarryCommandDataConstructor extends CommandData {
                 interactionOnly: false,
                 isDMAllowed: false,
                 registerSlash: true,
-                args: false
+                args: false,
+                ephemeral: false
             },
             options: [
                 {

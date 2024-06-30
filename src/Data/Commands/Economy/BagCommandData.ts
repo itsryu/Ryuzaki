@@ -22,8 +22,8 @@ class BagCommandDataConstructor extends CommandData {
             },
             aliases: {
                 'pt-BR': ['carteira'],
-                'en-US': ['balance'],
-                'es-ES': ['balance']
+                'en-US': ['balance', 'wallet'],
+                'es-ES': ['balance', 'cartera']
             },
             usage: {
                 'pt-BR': ['[usuário]'],
@@ -40,7 +40,8 @@ class BagCommandDataConstructor extends CommandData {
                 interactionOnly: false,
                 isDMAllowed: true,
                 registerSlash: true,
-                args: false
+                args: false,
+                ephemeral: true
             },
             options: [
                 {

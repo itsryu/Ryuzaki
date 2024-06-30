@@ -81,7 +81,7 @@
         "embeds": {
             "voted": {
                 "title": "Thanks for voting!",
-                "description": "Thank you for voting for me {{user}}, your vote is very important for other users to see that I am a useful bot and consequently increasing my visibility to new users.\n\nEach time you vote you can win up to `$5,000`, turn on notifications and stay tuned whenever you can vote again!\n\nYou now have {{votes}} votes and as a reward you have earned **{{money}}** (R$ {{ abbrevMoney}})"
+                "description": "Thank you for voting for me {{user}}, your vote is very important for other users to see that I am a useful bot and consequently increasing my visibility to new users.\n\nEach time you vote you can win up to `R$5,000`, turn on notifications and stay tuned whenever you can vote again!\n\nYou now have {{votes}} votes and as a reward you have earned **{{money}}** (R$ {{abbrevMoney}})"
             }
         }
     }

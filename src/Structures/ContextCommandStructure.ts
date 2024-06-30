@@ -15,6 +15,7 @@ interface RawContextCommandData extends RESTPostAPIContextMenuApplicationCommand
         isDMAllowed: boolean,
         registerSlash: boolean,
         args: boolean
+        ephemeral?: boolean;
     };
 }
 

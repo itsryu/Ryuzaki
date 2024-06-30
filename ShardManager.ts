@@ -55,7 +55,6 @@ export class ShardManager extends ShardingManager {
     }
 }
 
-
 const shard = new ShardManager(join(__dirname, './src/RyuzakiLauncher.js'), {
     mode: 'process',
     totalShards: 'auto',

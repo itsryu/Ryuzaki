@@ -11,7 +11,7 @@ import App from './Web/backend/server';
     if (client.shard && (client.shard.ids[0] === (client.shard.count - 1))) {
         client.logger.info('All shards are ready! Starting WEB server...', 'Initialization');
         const server = new App(client);
-        await server.serverExecute();
+        server.serverExecute();
     }
 
     extend((await import('dayjs/plugin/localizedFormat')).default);

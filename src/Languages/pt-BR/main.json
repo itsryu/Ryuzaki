@@ -81,7 +81,7 @@
       "embeds": {
         "voted": {
             "title": "Obrigado por votar!",
-            "description": "Obrigado por votar em mim {{user}}, o seu voto é muito importante para que outros usuários vejam que eu sou um robô util e consequentemente aumentando a minha visibilidade para novos usuários.\n\nCada vez que você votar você pode ganhar até `$5.000`, ative as notificações e fique atento(a) sempre quando puder votar novamente!\n\nVocê agora possui {{votes}} votos e como recompensa você ganhou **{{money}}** (R$ {{abbrevMoney}})"
+            "description": "Obrigado por votar em mim {{user}}, o seu voto é muito importante para que outros usuários vejam que eu sou um robô util e consequentemente aumentando a minha visibilidade para novos usuários.\n\nCada vez que você votar você pode ganhar até `R$5.000`, ative as notificações e fique atento(a) sempre quando puder votar novamente!\n\nVocê agora possui {{votes}} votos e como recompensa você ganhou **{{money}}** (R$ {{abbrevMoney}})"
         }
       }  
     }

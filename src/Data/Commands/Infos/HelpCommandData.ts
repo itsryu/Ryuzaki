@@ -40,7 +40,8 @@ class HelpCommandDataConstructor extends CommandData {
                 interactionOnly: false,
                 isDMAllowed: true,
                 registerSlash: true,
-                args: false
+                args: false,
+                ephemeral: true
             },
             options: [
                 {

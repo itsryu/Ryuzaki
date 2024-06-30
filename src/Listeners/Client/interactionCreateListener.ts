@@ -139,7 +139,7 @@ export default class InteractionCreateListener extends ListenerStructure {
 
                         //===============> Execução dos comandos:
 
-                        await interaction.deferReply({ fetchReply: true });
+                        command.data.options.config.ephemeral ? (await interaction.deferReply({ fetchReply: true, ephemeral: true })) : (await interaction.deferReply({ fetchReply: true }));
 
                         const message = Object.assign(interaction, {
                             author: interaction.user,
@@ -250,14 +250,17 @@ export default class InteractionCreateListener extends ListenerStructure {
 
             if (interaction.isButton()) {
                 if (interaction.customId === 'open') {
-                    const { default: createTicketButton } = await import('../../Modules/Buttons/CreateTicket');
-                    await new createTicketButton(this.client).moduleExecute(interaction);
+                    const { default: CreateTicketButton } = await import('../../Modules/Buttons/CreateTicketButton');
+                    await new CreateTicketButton(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'close') {
-                    const { default: closeTicketButton } = await import('../../Modules/Buttons/CloseTicket');
-                    await new closeTicketButton(this.client).moduleExecute(interaction, language);
+                    const { default: CloseTicketButton } = await import('../../Modules/Buttons/CloseTicketButton');
+                    await new CloseTicketButton(this.client).moduleExecute(interaction, language);
                 }
+
+                const { default: CalculatorButton } = await import('../../Modules/Buttons/CalculatorButton');
+                await new CalculatorButton(this.client).moduleExecute(interaction);
             }
 
             //===============> Modal <===============//
