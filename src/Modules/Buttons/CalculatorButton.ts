@@ -1,16 +1,20 @@
 import { APIEmbed, ButtonInteraction, codeBlock, Colors } from 'discord.js';
 import { ModuleStructure } from '../../Structures';
 
+interface ParsedId {
+    c: string;
+    k: string;
+}
+
 export default class CalculatorButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction) {
-        const parsedId = JSON.parse(interaction.customId);
+        const parsedId = JSON.parse(interaction.customId) as ParsedId;
 
         const [embed] = interaction.message.embeds;
 
         const embedJson = this.resolvePressedKey(embed.toJSON(), parsedId.k);
 
-        if (embedJson.description!.length > 254)
-            embedJson.description = this.displayBlock('Infinity');
+        if (embedJson.description!.length > 254) embedJson.description = this.displayBlock('Infinity');
 
         embedJson.color = this.randomFromObject(Colors);
 
@@ -140,8 +144,8 @@ export default class CalculatorButton extends ModuleStructure {
 
         try {
             embedJson.description = this.calculate(old, key, embedJson.description!);
-        } catch (error: any) {
-            embedJson.description = this.displayBlock(`Error: ${error?.message}`);
+        } catch (error) {
+            embedJson.description = this.displayBlock(`Error: ${(error as Error)?.message}`);
 
             return embedJson;
         }

@@ -48,6 +48,7 @@ class Util {
             8: '8️⃣',
             9: '9️⃣'
         };
+        
         return num
             .toString()
             .split('')
@@ -146,6 +147,15 @@ class Util {
         }
 
         return result;
+    }
+
+    public isJSON(str: string): boolean {
+        try {
+            JSON.parse(str);
+            return true;
+        } catch {
+            return false;
+        }
     }
 }
 

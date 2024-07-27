@@ -18,7 +18,7 @@
     "build": "tsc --project tsconfig.json --pretty --noEmitOnError",
     "clean-win": "rmdir /s /q dist",
     "clean-lin": "rm -rf dist",
-    "dev:start": "concurrently \"node dist/ShardManager.js\" \"npm run start --prefix src/Web/frontend\"",
+    "dev:start": "node dist/ShardManager.js",
     "prod:start": "pm2 start dist/ShardManager.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

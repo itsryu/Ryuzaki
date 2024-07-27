@@ -58,7 +58,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                     const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
 
                     collector.on('end', async () => {
-                        await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [this.client.utils.button(current + 1, true, true)] });
+                        return void await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [this.client.utils.button(current + 1, true, true)] });
                     });
 
                     collector.on('collect', async (i: StringSelectMenuInteraction) => {

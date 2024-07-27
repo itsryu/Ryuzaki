@@ -248,6 +248,12 @@ export default class InteractionCreateListener extends ListenerStructure {
 
             //===============> Botões <===============//
 
+            interface ParsedId {
+                c?: string;
+                k?: string;
+                e?: ClientEmbed[]
+            }
+
             if (interaction.isButton()) {
                 if (interaction.customId === 'open') {
                     const { default: CreateTicketButton } = await import('../../Modules/Buttons/CreateTicketButton');
@@ -259,8 +265,14 @@ export default class InteractionCreateListener extends ListenerStructure {
                     await new CloseTicketButton(this.client).moduleExecute(interaction, language);
                 }
 
-                const { default: CalculatorButton } = await import('../../Modules/Buttons/CalculatorButton');
-                await new CalculatorButton(this.client).moduleExecute(interaction);
+                if (this.client.utils.isJSON(interaction.customId)) {
+                    const parsedId = JSON.parse(interaction.customId) as ParsedId;
+
+                    if (parsedId && Object.keys(parsedId).length > 0 && parsedId.c === 'calculator') {
+                        const { default: CalculatorButton } = await import('../../Modules/Buttons/CalculatorButton');
+                        await new CalculatorButton(this.client).moduleExecute(interaction);
+                    }
+                }
             }
 
             //===============> Modal <===============//
