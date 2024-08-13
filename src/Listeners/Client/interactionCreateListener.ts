@@ -9,7 +9,7 @@ export default class InteractionCreateListener extends ListenerStructure {
         });
     }
 
-    async eventExecute(interaction: Interaction) {
+    public async eventExecute(interaction: Interaction) {
         try {
             if (interaction.user.bot) return;
 

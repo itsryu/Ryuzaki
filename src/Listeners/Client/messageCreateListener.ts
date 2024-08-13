@@ -10,7 +10,7 @@ export default class MessageCreateListener extends ListenerStructure {
         });
     }
 
-    async eventExecute(message: Message): Promise<void> {
+    public async eventExecute(message: Message): Promise<void> {
         if (message.author.bot) return;
 
         try {
