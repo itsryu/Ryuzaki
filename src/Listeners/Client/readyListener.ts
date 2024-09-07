@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, PermissionFlagsBits, Collection, Invite } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class ClientReadyListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -35,8 +36,8 @@ export default class ClientReadyListener extends ListenerStructure {
                 }
             });
         } catch (err) {
-            this.client.logger.error((err as Error).message, ClientReadyListener.name);
-            this.client.logger.warn((err as Error).stack, ClientReadyListener.name);
+            Logger.error((err as Error).message, ClientReadyListener.name);
+            Logger.warn((err as Error).stack, ClientReadyListener.name);
         }
     }
 }

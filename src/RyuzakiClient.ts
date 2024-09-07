@@ -8,11 +8,12 @@ import { CommandStructure, ContextCommandStructure, ServiceStructure } from './S
 import { Collections } from './Utils/collection';
 import { DataType, Languages, DataDocument, ShardMemory } from './Types/ClientTypes';
 import { config } from 'dotenv';
-config();
+import { join } from 'node:path';
+
+config({ path: join(__dirname, '../.env') });
 
 export class Ryuzaki extends Client {
     public readonly rest: REST = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
-    public readonly logger: Logger = new Logger();
     public readonly utils: Util = new Util();
     public readonly stats: Api = new Api(process.env.DBL_TOKEN);
     public readonly collection = new Collections<string>();
@@ -25,7 +26,7 @@ export class Ryuzaki extends Client {
     public readonly translate: Translate = new Translate(process.env.LANG_PATH);
     public t!: typeof this.translate.t;
     public url!: string;
-    public readonly database: {
+    public static readonly database: {
         client: typeof ClientModel;
         guilds: typeof GuildModel;
         users: typeof UserModel;
@@ -40,9 +41,9 @@ export class Ryuzaki extends Client {
     public constructor(options: ClientOptions) {
         super(options);
 
-        process.on('warning', (warn) => { this.logger.warn(warn.stack, 'warning'); });
-        process.on('uncaughtException', (err: Error) => { this.logger.error(err.stack, 'uncaughtException'); });
-        process.on('unhandledRejection', (err: Error) => { this.logger.error(err.stack, 'unhandledRejection'); });
+        process.on('warning', (warn) => { Logger.warn(warn.stack, 'warning'); });
+        process.on('uncaughtException', (err: Error) => { Logger.error(err.stack, 'uncaughtException'); });
+        process.on('unhandledRejection', (err: Error) => { Logger.error(err.stack, 'unhandledRejection'); });
     }
 
     public async initialize() {
@@ -50,8 +51,8 @@ export class Ryuzaki extends Client {
             await this.clientManager();
             await this.registerSlashCommands();
         } catch (err) {
-            this.logger.error((err as Error).message, [Ryuzaki.name, this.initialize.name]);
-            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.initialize.name]);
+            Logger.error((err as Error).message, [Ryuzaki.name, this.initialize.name]);
+            Logger.warn((err as Error).stack, [Ryuzaki.name, this.initialize.name]);
         }
     }
 
@@ -130,17 +131,17 @@ export class Ryuzaki extends Client {
                     const user = await this.users.fetch(id).catch(() => undefined);
 
                     if (user) {
-                        let data = await this.database.users.findOne({ _id: user.id });
+                        let data = await Ryuzaki.database.users.findOne({ _id: user.id });
 
                         try {
                             if (!data) {
-                                data = await this.database.users.create({ _id: user.id });
+                                data = await Ryuzaki.database.users.create({ _id: user.id });
                             }
 
                             return data as DataDocument<T>;
                         } catch (err) {
-                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
-                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
+                            Logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            Logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
                     } else {
                         return undefined;
@@ -156,16 +157,16 @@ export class Ryuzaki extends Client {
 
                     if (guild) {
                         try {
-                            let data = await this.database.guilds.findOne({ _id: guild.id });
+                            let data = await Ryuzaki.database.guilds.findOne({ _id: guild.id });
 
                             if (!data) {
-                                data = await this.database.guilds.create({ _id: guild.id });
+                                data = await Ryuzaki.database.guilds.create({ _id: guild.id });
                             }
 
                             return data as DataDocument<T>;
                         } catch (err) {
-                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
-                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
+                            Logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            Logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
                     } else {
                         return undefined;
@@ -181,16 +182,16 @@ export class Ryuzaki extends Client {
 
                     if (user && user.id === id) {
                         try {
-                            let data = await this.database.client.findOne({ _id: user.id });
+                            let data = await Ryuzaki.database.client.findOne({ _id: user.id });
 
                             if (!data) {
-                                data = await this.database.client.create({ _id: user.id });
+                                data = await Ryuzaki.database.client.create({ _id: user.id });
                             }
 
                             return data as DataDocument<T>;
                         } catch (err) {
-                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
-                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
+                            Logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            Logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
                     } else {
                         return undefined;
@@ -206,18 +207,18 @@ export class Ryuzaki extends Client {
 
                     if (command) {
                         try {
-                            let data = await this.database.commands.findOne({ _id: id });
+                            let data = await Ryuzaki.database.commands.findOne({ _id: id });
 
                             if (!data) {
-                                data = await this.database.commands.create({ _id: id });
+                                data = await Ryuzaki.database.commands.create({ _id: id });
 
                                 console.log(`The command: (${data._id}) had his documentation create successfully!`);
                             }
 
                             return data as DataDocument<T>;
                         } catch (err) {
-                            this.logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
-                            this.logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
+                            Logger.error((err as Error).message, [Ryuzaki.name, this.getData.name]);
+                            Logger.warn((err as Error).stack, [Ryuzaki.name, this.getData.name]);
                         }
                     } else {
                         return undefined;

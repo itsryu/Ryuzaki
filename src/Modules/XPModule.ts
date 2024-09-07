@@ -1,5 +1,6 @@
 import { ModuleStructure } from '../Structures';
 import { Message } from 'discord.js';
+import { Logger } from '../Utils/logger';
 
 export default class XPModule extends ModuleStructure {
     async moduleExecute({ message }: { message: Message }) {
@@ -37,13 +38,13 @@ export default class XPModule extends ModuleStructure {
                     }
 
                 } catch (err) {
-                    this.client.logger.error((err as Error).message, XPModule.name);
-                    this.client.logger.warn((err as Error).stack, XPModule.name);
+                    Logger.error((err as Error).message, XPModule.name);
+                    Logger.warn((err as Error).stack, XPModule.name);
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, XPModule.name);
-            this.client.logger.warn((err as Error).stack, XPModule.name);
+            Logger.error((err as Error).message, XPModule.name);
+            Logger.warn((err as Error).stack, XPModule.name);
         }
     }
 }

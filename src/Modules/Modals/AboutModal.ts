@@ -1,6 +1,7 @@
 import { ModuleStructure } from '../../Structures';
 import { profileConstructor } from '../../Utils/profileConstructor';
 import { AttachmentBuilder, ModalSubmitInteraction } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class AboutModal extends ModuleStructure {
     async moduleExecute(interaction: ModalSubmitInteraction) {
@@ -20,8 +21,8 @@ export default class AboutModal extends ModuleStructure {
                 return void interaction.message?.edit({ files: [attachment] });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, AboutModal.name);
-            this.client.logger.warn((err as Error).stack, AboutModal.name);
+            Logger.error((err as Error).message, AboutModal.name);
+            Logger.warn((err as Error).stack, AboutModal.name);
         }
     }
 }

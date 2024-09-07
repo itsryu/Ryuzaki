@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../../RyuzakiClient';
 import { ContextCommandStructure, ClientEmbed } from '../../../Structures';
 import { AvatarContextCommandData } from '../../../Data/Context/User/Utilities/AvatarContextCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContextMenuCommandInteraction } from 'discord.js';
+import { Logger } from '../../../Utils/logger';
 
 export default class AvatarContextCommand extends ContextCommandStructure {
     constructor(client: Ryuzaki) {
@@ -32,8 +33,8 @@ export default class AvatarContextCommand extends ContextCommandStructure {
             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
             return void await message.reply({ embeds: [embed], components: [row], ephemeral: true });
         } catch (err) {
-            this.client.logger.error((err as Error).message, AvatarContextCommand.name);
-            this.client.logger.warn((err as Error).stack, AvatarContextCommand.name);
+            Logger.error((err as Error).message, AvatarContextCommand.name);
+            Logger.warn((err as Error).stack, AvatarContextCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

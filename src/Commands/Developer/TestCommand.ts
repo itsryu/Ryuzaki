@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import { TestCommandData } from '../../Data/Commands/Developer/TestCommandData';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
+import { Logger } from '../../Utils/logger';
 
 export default class TestCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -10,10 +11,10 @@ export default class TestCommand extends CommandStructure {
 
     public commandExecute({ message }: { message: Message, args: string[] }) {
         try {
-            this.client.logger.debug(message.content, TestCommand.name);
+            Logger.debug(message.content, TestCommand.name);
         } catch (err) {
-            this.client.logger.error((err as Error).message, TestCommand.name);
-            this.client.logger.warn((err as Error).stack, TestCommand.name);
+            Logger.error((err as Error).message, TestCommand.name);
+            Logger.warn((err as Error).stack, TestCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -1,5 +1,6 @@
 import { ModuleStructure } from '../Structures';
 import { ChannelType, Message, PermissionFlagsBits } from 'discord.js';
+import { Logger } from '../Utils/logger';
 
 export default class InviteModule extends ModuleStructure {
     async moduleExecute(message: Message) {
@@ -28,8 +29,8 @@ export default class InviteModule extends ModuleStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, InviteModule.name);
-            this.client.logger.warn((err as Error).stack, InviteModule.name);
+            Logger.error((err as Error).message, InviteModule.name);
+            Logger.warn((err as Error).stack, InviteModule.name);
         }
     }
 }

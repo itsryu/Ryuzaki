@@ -1,13 +1,14 @@
 import { ModuleStructure } from '../Structures';
 import { Message } from 'discord.js';
+import { Logger } from '../Utils/logger';
 
 export default class AFKModule extends ModuleStructure {
     async moduleExecute(message: Message) {
         try {
             await this.mentionedAFK(message);
         } catch (err) {
-            this.client.logger.error((err as Error).message, AFKModule.name);
-            this.client.logger.warn((err as Error).stack, AFKModule.name);
+            Logger.error((err as Error).message, AFKModule.name);
+            Logger.warn((err as Error).stack, AFKModule.name);
         }
     }
 

@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class MessageDeleteListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -46,8 +47,8 @@ export default class MessageDeleteListener extends ListenerStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, MessageDeleteListener.name);
-            this.client.logger.warn((err as Error).stack, MessageDeleteListener.name);
+            Logger.error((err as Error).message, MessageDeleteListener.name);
+            Logger.warn((err as Error).stack, MessageDeleteListener.name);
         }
     }
 }

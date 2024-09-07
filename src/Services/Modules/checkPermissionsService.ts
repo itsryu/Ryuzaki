@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { PermissionsFlagsText, PermissionFlagKey } from '../../Utils/Objects/flags';
 import { ServiceStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { ChannelType, Message, PermissionsBitField } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class CheckPermissionsService extends ServiceStructure<boolean> {
     constructor(client: Ryuzaki) {
@@ -23,8 +24,8 @@ export default class CheckPermissionsService extends ServiceStructure<boolean> {
                 return true;
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, CheckPermissionsService.name);
-            this.client.logger.warn((err as Error).stack, CheckPermissionsService.name);
+            Logger.error((err as Error).message, CheckPermissionsService.name);
+            Logger.warn((err as Error).stack, CheckPermissionsService.name);
             return false;
         }
     }

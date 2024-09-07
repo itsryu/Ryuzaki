@@ -3,6 +3,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures';
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';
+import { Logger } from '../../Utils/logger';
 
 export default class KickCommand extends CommandStructure {
     public constructor(client: Ryuzaki) {
@@ -113,8 +114,8 @@ export default class KickCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, KickCommand.name);
-            this.client.logger.warn((err as Error).stack, KickCommand.name);
+            Logger.error((err as Error).message, KickCommand.name);
+            Logger.warn((err as Error).stack, KickCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

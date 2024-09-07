@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { Events, WebhookClient, Colors } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class ErrorListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -21,8 +22,8 @@ export default class ErrorListener extends ListenerStructure {
 
             await webhook.send({ embeds: [errorEmbed] });
         } catch (err) {
-            this.client.logger.error((err as Error).message, ErrorListener.name);
-            this.client.logger.warn((err as Error).stack, ErrorListener.name);
+            Logger.error((err as Error).message, ErrorListener.name);
+            Logger.warn((err as Error).stack, ErrorListener.name);
         }
     }
 }

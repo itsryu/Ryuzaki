@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
+import { Logger } from '../../../Utils/logger';
 
 class DiscordOauthCallbackController extends RouteStructure {
     run = async (req: Request, res: Response) => {
@@ -32,8 +33,8 @@ class DiscordOauthCallbackController extends RouteStructure {
                 }
             }
         } catch (err) {
-            this.app.logger.error((err as Error).message, DiscordOauthCallbackController.name);
-            this.app.logger.warn((err as Error).stack, DiscordOauthCallbackController.name);
+            Logger.error((err as Error).message, DiscordOauthCallbackController.name);
+            Logger.warn((err as Error).stack, DiscordOauthCallbackController.name);
 
             return void res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
+import { Logger } from '../../Utils/logger';
 
 export default class MessageCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -115,7 +116,7 @@ export default class MessageCreateListener extends ListenerStructure {
                                 if (guildData.cmdblock.cmds.some((x) => x === command.data.options.name || guildData.cmdblock.channels.some((x) => x === message.channel.id))) {
                                     return void await message.reply({ content: guildData.cmdblock.msg.replace(/{member}/g, `<@${message.author.id}>`).replace(/{channel}/g, `<#${message.channel.id}>`).replace(/{command}/g, command.data.options.name) })
                                         .then((sent) => setTimeout(() => sent.delete(), 10000))
-                                        .catch((err: unknown) => { this.client.logger.warn((err as Error).stack, MessageCreateListener.name); });
+                                        .catch((err: unknown) => { Logger.warn((err as Error).stack, MessageCreateListener.name); });
                                 }
                             }
                         }
@@ -216,8 +217,8 @@ export default class MessageCreateListener extends ListenerStructure {
                     await commandExecute
                         .catch(async (err: unknown) => {
                             try {
-                                this.client.logger.error((err as Error).message, command.data.options.name);
-                                this.client.logger.warn((err as Error).stack, command.data.options.name);
+                                Logger.error((err as Error).message, command.data.options.name);
+                                Logger.warn((err as Error).stack, command.data.options.name);
 
                                 const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
@@ -230,8 +231,8 @@ export default class MessageCreateListener extends ListenerStructure {
                                 return void message.reply({ content: this.client.t('main:errors.message', { index: 0 }) })
                                     .then((message) => setTimeout(() => message.delete(), 1000 * 10));
                             } catch (err) {
-                                this.client.logger.error((err as Error).message, MessageCreateListener.name);
-                                this.client.logger.warn((err as Error).stack, MessageCreateListener.name);
+                                Logger.error((err as Error).message, MessageCreateListener.name);
+                                Logger.warn((err as Error).stack, MessageCreateListener.name);
                             }
                         });
 
@@ -282,8 +283,8 @@ export default class MessageCreateListener extends ListenerStructure {
                                     await new XPModule(this.client).moduleExecute({ message });
                                 }
                             } catch (err) {
-                                this.client.logger.error((err as Error).message, MessageCreateListener.name);
-                                this.client.logger.warn((err as Error).stack, MessageCreateListener.name);
+                                Logger.error((err as Error).message, MessageCreateListener.name);
+                                Logger.warn((err as Error).stack, MessageCreateListener.name);
                             }
                         });
                 }
@@ -308,8 +309,8 @@ export default class MessageCreateListener extends ListenerStructure {
             //========================================//
 
         } catch (err) {
-            this.client.logger.error((err as Error).message, MessageCreateListener.name);
-            this.client.logger.warn((err as Error).stack, MessageCreateListener.name);
+            Logger.error((err as Error).message, MessageCreateListener.name);
+            Logger.warn((err as Error).stack, MessageCreateListener.name);
         }
     }
 }

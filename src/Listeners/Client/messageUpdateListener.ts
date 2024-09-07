@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class MessageUpdateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -45,8 +46,8 @@ export default class MessageUpdateListener extends ListenerStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, MessageUpdateListener.name);
-            this.client.logger.warn((err as Error).stack, MessageUpdateListener.name);
+            Logger.error((err as Error).message, MessageUpdateListener.name);
+            Logger.warn((err as Error).stack, MessageUpdateListener.name);
         }
     }
 }

@@ -1,5 +1,6 @@
 import { ModuleStructure, ClientEmbed } from '../Structures';
 import { Message, TextChannel } from 'discord.js';
+import { Logger } from '../Utils/logger';
 import ms from 'ms';
 
 interface SpamMap {
@@ -69,15 +70,15 @@ export default class SpamModule extends ModuleStructure {
                                 this.map.set(message.author.id, { msgCount: 1, lastMessage: message, timer: setTimeout(() => this.map.delete(message.author.id), time) });
                             }
                         } catch (err) {
-                            this.client.logger.error((err as Error).message, SpamModule.name);
-                            this.client.logger.warn((err as Error).stack, SpamModule.name);
+                            Logger.error((err as Error).message, SpamModule.name);
+                            Logger.warn((err as Error).stack, SpamModule.name);
                         }
                     }
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, SpamModule.name);
-            this.client.logger.warn((err as Error).stack, SpamModule.name);
+            Logger.error((err as Error).message, SpamModule.name);
+            Logger.warn((err as Error).stack, SpamModule.name);
         }
     }
 }

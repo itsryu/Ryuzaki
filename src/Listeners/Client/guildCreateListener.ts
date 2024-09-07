@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures';
 import { Guild, ChannelType, PermissionFlagsBits, Events, GuildInvitableChannelResolvable, WebhookClient } from 'discord.js';
 import { Languages } from '../../Types/ClientTypes';
+import { Logger } from '../../Utils/logger';
 
 export default class GuildCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -61,8 +62,8 @@ export default class GuildCreateListener extends ListenerStructure {
 
             await webhook.send({ embeds: [embed] });
         } catch (err) {
-            this.client.logger.error((err as Error).message, GuildCreateListener.name);
-            this.client.logger.warn((err as Error).stack, GuildCreateListener.name);
+            Logger.error((err as Error).message, GuildCreateListener.name);
+            Logger.warn((err as Error).stack, GuildCreateListener.name);
         }
     }
 }

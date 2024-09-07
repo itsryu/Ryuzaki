@@ -4,6 +4,7 @@ import { CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { WithdrawCommandData } from '../../Data/Commands/Economy/WithdrawCommandData';
 import { Abbrev } from '../../Utils/abbrev';
+import { Logger } from '../../Utils/logger';
 
 export default class WithdrawCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -52,8 +53,8 @@ export default class WithdrawCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, WithdrawCommand.name);
-            this.client.logger.warn((err as Error).stack, WithdrawCommand.name);
+            Logger.error((err as Error).message, WithdrawCommand.name);
+            Logger.warn((err as Error).stack, WithdrawCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

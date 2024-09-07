@@ -2,6 +2,7 @@ import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure, ServiceStructure } from '../Structures/';
 import { readdirSync } from 'fs';
 import { join } from 'path';
+import { Logger } from '../Utils/logger';
 
 export default class Services extends ModuleStructure {
     async moduleExecute() {
@@ -20,15 +21,15 @@ export default class Services extends ModuleStructure {
                         await service.serviceExecute();
                     }
                 } catch (serviceError) {
-                    this.client.logger.error((serviceError as Error).message, `Service: ${file}`);
-                    this.client.logger.warn((serviceError as Error).stack, `Service: ${file}`);
+                    Logger.error((serviceError as Error).message, `Service: ${file}`);
+                    Logger.warn((serviceError as Error).stack, `Service: ${file}`);
                 }
             });
 
             await Promise.all(service);
         } catch (err) {
-            this.client.logger.error((err as Error).message, Services.name);
-            this.client.logger.warn((err as Error).stack, Services.name);
+            Logger.error((err as Error).message, Services.name);
+            Logger.warn((err as Error).stack, Services.name);
         }
     }
 }

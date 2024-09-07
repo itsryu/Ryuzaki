@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { PrefixCommandData } from '../../Data/Commands/Settings/PrefixCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction, ButtonInteraction } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class PrefixCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -74,8 +75,8 @@ export default class PrefixCommand extends CommandStructure {
                 });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, PrefixCommand.name);
-            this.client.logger.warn((err as Error).stack, PrefixCommand.name);
+            Logger.error((err as Error).message, PrefixCommand.name);
+            Logger.warn((err as Error).stack, PrefixCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

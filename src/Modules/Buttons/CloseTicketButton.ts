@@ -2,6 +2,7 @@ import { ModuleStructure } from '../../Structures';
 import { ActionRowBuilder, ButtonBuilder, ChannelType, ButtonInteraction, ButtonStyle, TextChannel, MessageComponentInteraction } from 'discord.js';
 import { writeFileSync, readdirSync, statSync } from 'node:fs';
 import { Languages } from '../../Types/ClientTypes';
+import { Logger } from '../../Utils/logger';
 
 export default class CloseTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction, language: Languages) {
@@ -66,8 +67,8 @@ export default class CloseTicketButton extends ModuleStructure {
 
                                     await interaction.channel?.delete();
                                 } catch (err) {
-                                    this.client.logger.error((err as Error).message, CloseTicketButton.name);
-                                    this.client.logger.warn((err as Error).stack, CloseTicketButton.name);
+                                    Logger.error((err as Error).message, CloseTicketButton.name);
+                                    Logger.warn((err as Error).stack, CloseTicketButton.name);
                                 }
                             }, 15000);
                         } else {
@@ -83,8 +84,8 @@ export default class CloseTicketButton extends ModuleStructure {
 
                                     await interaction.channel?.delete();
                                 } catch (err) {
-                                    this.client.logger.error((err as Error).message, CloseTicketButton.name);
-                                    this.client.logger.warn((err as Error).stack, CloseTicketButton.name);
+                                    Logger.error((err as Error).message, CloseTicketButton.name);
+                                    Logger.warn((err as Error).stack, CloseTicketButton.name);
                                 }
                             }, 5000);
                         }
@@ -109,8 +110,8 @@ export default class CloseTicketButton extends ModuleStructure {
 
                                     await interaction.channel?.delete();
                                 } catch (err) {
-                                    this.client.logger.error((err as Error).message, CloseTicketButton.name);
-                                    this.client.logger.warn((err as Error).stack, CloseTicketButton.name);
+                                    Logger.error((err as Error).message, CloseTicketButton.name);
+                                    Logger.warn((err as Error).stack, CloseTicketButton.name);
                                 }
                             }, 5000);
                         } else {
@@ -126,8 +127,8 @@ export default class CloseTicketButton extends ModuleStructure {
 
                                     await interaction.channel?.delete();
                                 } catch (err) {
-                                    this.client.logger.error((err as Error).message, CloseTicketButton.name);
-                                    this.client.logger.warn((err as Error).stack, CloseTicketButton.name);
+                                    Logger.error((err as Error).message, CloseTicketButton.name);
+                                    Logger.warn((err as Error).stack, CloseTicketButton.name);
                                 }
                             }, 5000);
                         }
@@ -135,8 +136,8 @@ export default class CloseTicketButton extends ModuleStructure {
                 });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, CloseTicketButton.name);
-            this.client.logger.warn((err as Error).stack, CloseTicketButton.name);
+            Logger.error((err as Error).message, CloseTicketButton.name);
+            Logger.warn((err as Error).stack, CloseTicketButton.name);
         }
     }
 }

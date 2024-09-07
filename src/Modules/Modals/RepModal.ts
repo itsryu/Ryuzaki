@@ -1,6 +1,7 @@
 import { ModuleStructure } from '../../Structures/ModuleStructures';
 import { AttachmentBuilder, ModalSubmitInteraction } from 'discord.js';
 import { profileConstructor } from '../../Utils/profileConstructor';
+import { Logger } from '../../Utils/logger';
 
 export default class RepModal extends ModuleStructure {
     async moduleExecute(interaction: ModalSubmitInteraction) {
@@ -49,8 +50,8 @@ export default class RepModal extends ModuleStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, RepModal.name);
-            this.client.logger.warn((err as Error).stack, RepModal.name);
+            Logger.error((err as Error).message, RepModal.name);
+            Logger.warn((err as Error).stack, RepModal.name);
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, Guild, Invite, Collection, PermissionFlagsBits } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class inviteCreateListener extends ListenerStructure {
     private codeUses = new Collection<string, Invite>();
@@ -25,8 +26,8 @@ export default class inviteCreateListener extends ListenerStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, inviteCreateListener.name);
-            this.client.logger.warn((err as Error).stack, inviteCreateListener.name);
+            Logger.error((err as Error).message, inviteCreateListener.name);
+            Logger.warn((err as Error).stack, inviteCreateListener.name);
         }
     }
 }

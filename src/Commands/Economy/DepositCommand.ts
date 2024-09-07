@@ -4,6 +4,7 @@ import { CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { DepositCommandData } from '../../Data/Commands/Economy/DepositCommandData';
 import { Abbrev } from '../../Utils/abbrev';
+import { Logger } from '../../Utils/logger';
 
 export default class DepositCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -51,8 +52,8 @@ export default class DepositCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, DepositCommand.name);
-            this.client.logger.warn((err as Error).stack, DepositCommand.name);
+            Logger.error((err as Error).message, DepositCommand.name);
+            Logger.warn((err as Error).stack, DepositCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

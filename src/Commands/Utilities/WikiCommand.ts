@@ -3,6 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { WikiCommandData } from '../../Data/Commands/Utilities/WikiCommandData';
 import { Languages } from '../../Types/ClientTypes';
 import { Message } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class wikiCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -39,8 +40,8 @@ export default class wikiCommand extends CommandStructure {
                 return void await message.reply({ embeds: [embed] });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, wikiCommand.name);
-            this.client.logger.warn((err as Error).stack, wikiCommand.name);
+            Logger.error((err as Error).message, wikiCommand.name);
+            Logger.warn((err as Error).stack, wikiCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

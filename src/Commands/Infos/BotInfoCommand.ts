@@ -11,6 +11,7 @@ import { clientStats } from '../../Client';
 import { CPU_CORES, CPU_MODEL, TOTAL_RAM } from '../../Utils/constants';
 import { Bytes } from '../../Utils/bytes';
 import { memoryUsage } from 'node:process';
+import { Logger } from '../../Utils/logger';
 
 export default class BotInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -36,7 +37,7 @@ export default class BotInfoCommand extends CommandStructure {
             const njsVersion = process.version;
             const clientOwner = await this.client.users.fetch(process.env.OWNER_ID);
             const clientAvatar = this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 });
-            const dbPing = await this.databasePing();
+            const dbPing = await BotInfoCommand.databasePing();
 
             //===============> Finalizações <===============//
 
@@ -84,13 +85,13 @@ export default class BotInfoCommand extends CommandStructure {
             const row = new ActionRowBuilder<ButtonBuilder>().addComponents([addMeButton, githubButton, voteButton]);
             return void await message.reply({ embeds: [clientInfo], components: [row] });
         } catch (err) {
-            this.client.logger.error((err as Error).message, BotInfoCommand.name);
-            this.client.logger.warn((err as Error).stack, BotInfoCommand.name);
+            Logger.error((err as Error).message, BotInfoCommand.name);
+            Logger.warn((err as Error).stack, BotInfoCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }
 
-    private async databasePing() {
+    private static async databasePing() {
         const dbStart = process.hrtime();
         await connection.db.command({ ping: 1 });
         const dbStop = process.hrtime(dbStart);

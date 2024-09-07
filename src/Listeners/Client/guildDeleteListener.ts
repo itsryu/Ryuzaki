@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, Guild, WebhookClient } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class GuildDeleteListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -41,8 +42,8 @@ export default class GuildDeleteListener extends ListenerStructure {
 
             await webhook.send({ embeds: [embed] });
         } catch (err) {
-            this.client.logger.error((err as Error).message, GuildDeleteListener.name);
-            this.client.logger.warn((err as Error).stack, GuildDeleteListener.name);
+            Logger.error((err as Error).message, GuildDeleteListener.name);
+            Logger.warn((err as Error).stack, GuildDeleteListener.name);
         }
     }
 }

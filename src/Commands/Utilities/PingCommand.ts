@@ -3,6 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { PingCommandData } from '../../Data/Commands/Utilities/PingCommandData';
 import { Colors, Message } from 'discord.js';
 import { connection } from 'mongoose';
+import { Logger } from '../../Utils/logger';
 
 export default class pingCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -33,8 +34,8 @@ export default class pingCommand extends CommandStructure {
 
             return void await message.reply({ embeds: [embed] });
         } catch (err) {
-            this.client.logger.error((err as Error).message, pingCommand.name);
-            this.client.logger.warn((err as Error).stack, pingCommand.name);
+            Logger.error((err as Error).message, pingCommand.name);
+            Logger.warn((err as Error).stack, pingCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

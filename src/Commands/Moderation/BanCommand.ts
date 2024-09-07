@@ -3,6 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BanCommandData } from '../../Data/Commands/Moderation/BanCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, GuildTextBasedChannel, MessageComponentInteraction } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';
+import { Logger } from '../../Utils/logger';
 
 export default class BanCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -115,8 +116,8 @@ export default class BanCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, BanCommand.name);
-            this.client.logger.warn((err as Error).stack, BanCommand.name);
+            Logger.error((err as Error).message, BanCommand.name);
+            Logger.warn((err as Error).stack, BanCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -1,18 +1,20 @@
+import { Ryuzaki } from '../RyuzakiClient';
 import { ModuleStructure } from '../Structures';
+import { Logger } from '../Utils/logger';
 
 export default class VipModule extends ModuleStructure {
     moduleExecute() {
         try {
             this.vipUsers();
         } catch (err) {
-            this.client.logger.error((err as Error).message, VipModule.name);
-            this.client.logger.warn((err as Error).stack, VipModule.name);
+            Logger.error((err as Error).message, VipModule.name);
+            Logger.warn((err as Error).stack, VipModule.name);
         }
     }
 
     private vipUsers() {
         setInterval(async () => {
-            const vipArray = await this.client.database.users.find({ 'vip.date': { $gt: 1 } });
+            const vipArray = await Ryuzaki.database.users.find({ 'vip.date': { $gt: 1 } });
             const filter = Object.entries(vipArray).filter(([, x]) => x.vip.date <= Date.now());
             const map = filter.map(([, x]) => x._id);
 
@@ -38,7 +40,7 @@ export default class VipModule extends ModuleStructure {
                         await userData.set({ 'vip.date': 0, 'vip.hasVip': false }).save();
 
                         user.send({ content: user.toString() + ', o seu VIP foi removido.' }).catch(() => undefined);
-                        this.client.logger.info(`Retirado o VIP de ${user.tag}`, 'VIP');
+                        Logger.info(`Retirado o VIP de ${user.tag}`, 'VIP');
                     }
                 }
             }

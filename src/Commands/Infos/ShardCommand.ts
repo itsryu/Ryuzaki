@@ -6,6 +6,7 @@ import { Client, Message } from 'discord.js';
 import Ascii from 'ascii-table';
 import Day from 'dayjs';
 import { Bytes } from '../../Utils/bytes';
+import { Logger } from '../../Utils/logger';
 
 export default class ShardCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -51,8 +52,8 @@ export default class ShardCommand extends CommandStructure {
 
             table.clearRows();
         } catch (err) {
-            this.client.logger.error((err as Error).message, ShardCommand.name);
-            this.client.logger.warn((err as Error).stack, ShardCommand.name);
+            Logger.error((err as Error).message, ShardCommand.name);
+            Logger.warn((err as Error).stack, ShardCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

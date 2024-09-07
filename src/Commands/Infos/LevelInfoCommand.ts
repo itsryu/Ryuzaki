@@ -3,6 +3,7 @@ import { ClientEmbed, CommandStructure } from '../../../src/Structures/';
 import { Message } from 'discord.js';
 import { Abbrev } from '../../Utils/abbrev';
 import { LevelInfoCommandData } from '../../Data/Commands/Infos/LevelInfoCommandData';
+import { Logger } from '../../Utils/logger';
 
 export default class LevelInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -57,8 +58,8 @@ export default class LevelInfoCommand extends CommandStructure {
                 return void await message.reply({ embeds: [embed] });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, LevelInfoCommand.name);
-            this.client.logger.warn((err as Error).stack, LevelInfoCommand.name);
+            Logger.error((err as Error).message, LevelInfoCommand.name);
+            Logger.warn((err as Error).stack, LevelInfoCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

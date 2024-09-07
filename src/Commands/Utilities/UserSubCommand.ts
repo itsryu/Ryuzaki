@@ -2,24 +2,18 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { UserSubCommandData } from '../../Data/Commands/Utilities/UserSubCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
-import { PermissionFlagKey, PermissionsFlagsText, UserBadges, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
+import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
 import { Languages } from '../../Types/ClientTypes';
 import { Util } from '../../Utils/util';
-import { DiscordUser } from '../../Types/GatewayTypes';
-
-interface UserBoostBadge {
-    atualBadge?: string | null;
-    atualBadgeTime?: number;
-    nextBadge?: string;
-    nextBadgeTime?: number;
-};
+import { GetDiscordUserApiData } from '../../Utils/getUserData';
+import { Logger } from '../../Utils/logger';
 
 export default class UserSubCommand extends CommandStructure {
-    constructor(client: Ryuzaki) {
+    public constructor(client: Ryuzaki) {
         super(client, UserSubCommandData);
     }
 
-    async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
         try {
             switch (args[0]) {
                 case 'image': {
@@ -111,21 +105,13 @@ export default class UserSubCommand extends CommandStructure {
                     const pages: ClientEmbed[] = [];
                     let current = 0;
 
-                    const data = await fetch((process.env.STATE === 'development' ? (process.env.LOCAL_URL + ':' + process.env.PORT) : (process.env.DOMAIN_URL)) + ('/discord/user/' + user.id), {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': 'Bearer ' + process.env.AUTH_KEY
-                        }
-                    })
-                        .then((res) => res.json())
-                        .catch(() => undefined) as DiscordUser | undefined;
-
-                    const flags = this.getUserFlags(user, language);
-                    const badges = this.getUserBadges(data);
-                    const boostBadge = this.getUserBoostBadge(data);
+                    const data = await GetDiscordUserApiData.getUserData(user.id);
+                    const flags = UserSubCommand.getUserFlags(user, language);
+                    const badges = GetDiscordUserApiData.getUserBadges(data);
+                    const boostBadge = GetDiscordUserApiData.getUserBoostBadge(data);
 
                     if (member) {
-                        const permissions = this.getMemberPermissions(member, language);
+                        const permissions = UserSubCommand.getMemberPermissions(member, language);
 
                         const menuEmbed = new ClientEmbed(this.client)
                             .setThumbnail(user.displayAvatarURL({ size: 4096 }))
@@ -143,7 +129,7 @@ export default class UserSubCommand extends CommandStructure {
                                 },
                                 {
                                     name: '📱 Dispositivo:',
-                                    value: this.getMemberDevice(member),
+                                    value: UserSubCommand.getMemberDevice(member),
                                     inline: false
                                 }
                             );
@@ -259,13 +245,13 @@ export default class UserSubCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, UserSubCommand.name);
-            this.client.logger.warn((err as Error).stack, UserSubCommand.name);
+            Logger.error((err as Error).message, UserSubCommand.name);
+            Logger.warn((err as Error).stack, UserSubCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }
 
-    private getUserFlags(user: User, language: Languages) {
+    private static getUserFlags(user: User, language: Languages) {
         const flags = user.flags;
 
         if (flags) {
@@ -277,7 +263,7 @@ export default class UserSubCommand extends CommandStructure {
         }
     }
 
-    private getMemberPermissions(member: GuildMember, language: Languages): string[] {
+    private static getMemberPermissions(member: GuildMember, language: Languages): string[] {
         const permissions = member.permissions.toArray();
 
         return Object.entries(PermissionsFlagsText)
@@ -285,19 +271,9 @@ export default class UserSubCommand extends CommandStructure {
             .map(([, text]) => text[language]);
     }
 
-    private getUserBadges(user: DiscordUser | undefined) {
-        const badges = user?.badges;
+    
 
-        if (badges) {
-            return Object.entries(UserBadges)
-                .map(([badge, emoji]) => badges.map((b) => b.id).includes(badge as UserFlagKey) ? emoji : null)
-                .filter(emoji => emoji !== null);
-        } else {
-            return [];
-        }
-    }
-
-    private getMemberDevice(member: GuildMember): string {
+    private static getMemberDevice(member: GuildMember): string {
         return member.presence?.clientStatus?.desktop
             ? '`Desktop`'
             : member.presence?.clientStatus?.mobile
@@ -305,93 +281,5 @@ export default class UserSubCommand extends CommandStructure {
                 : member.presence?.clientStatus?.web
                     ? '`Web`'
                     : '`Offline`';
-    }
-
-    private getUserBoostBadge(user: DiscordUser | undefined): UserBoostBadge | undefined {
-        const atualBoostDate = user?.premium_guild_since;
-
-        if (atualBoostDate) {
-            const atualBoostTimeMs = new Date(atualBoostDate).getTime();
-            const calculatedAtualBoostTime = Math.abs(Date.now() - atualBoostTimeMs);
-            const avarageMonth = 365 / 12;
-
-            switch (true) {
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 1): {
-                    return {
-                        atualBadge: '<:1Month:1252302212559015986>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:2Months:1252302325918335109>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 1))
-                    };
-                }
-
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 2): {
-                    return {
-                        atualBadge: '<:2Months:1252302325918335109>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:3Months:1252302405572362466>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 2))
-                    };
-                }
-
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 3): {
-                    return {
-                        atualBadge: '<:3Months:1252302405572362466>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:6Months:1252346325136314489>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 3))
-                    };
-                }
-
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 6): {
-                    return {
-                        atualBadge: '<:6Months:1252346325136314489>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:9Months:1252346547996196937>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 9))
-                    };
-                }
-
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 12): {
-                    return {
-                        atualBadge: '<:9Months:1252346547996196937>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:12Months:1252346695547752478>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 12))
-                    };
-                }
-
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 18): {
-                    return {
-                        atualBadge: '<:12Months:1252346695547752478>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:18Months:1252346969355980820>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 18))
-                    };
-                }
-
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 24): {
-                    return {
-                        atualBadge: '<:18Months:1252346969355980820>',
-                        atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:24Months:1252347148381589574>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 24))
-                    };
-                }
-
-                case calculatedAtualBoostTime > (1000 * 60 * 60 * 24 * avarageMonth * 24): {
-                    return {
-                        atualBadge: '<:24Months:1252347148381589574>',
-                        atualBadgeTime: calculatedAtualBoostTime
-                    };
-                }
-
-                default: {
-                    return {};
-                }
-            }
-        } else {
-            return undefined;
-        }
     }
 }

@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
 import { Events, GuildMember, PermissionFlagsBits, TextChannel } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 import Day from 'dayjs';
 
 export default class GuildMemberAddListener extends ListenerStructure {
@@ -130,8 +131,8 @@ export default class GuildMemberAddListener extends ListenerStructure {
                 await (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, GuildMemberAddListener.name);
-            this.client.logger.warn((err as Error).stack, GuildMemberAddListener.name);
+            Logger.error((err as Error).message, GuildMemberAddListener.name);
+            Logger.warn((err as Error).stack, GuildMemberAddListener.name);
         }
     }
 }

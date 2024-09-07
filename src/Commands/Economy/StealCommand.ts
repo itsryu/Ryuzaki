@@ -4,6 +4,7 @@ import { Message } from 'discord.js';
 import { StealCommandData } from '../../Data/Commands/Economy/StealCommandData';
 import { Languages } from '../../Types/ClientTypes';
 import { Abbrev } from '../../Utils/abbrev';
+import { Logger } from '../../Utils/logger';
 
 export default class StealCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -87,8 +88,8 @@ export default class StealCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, StealCommand.name);
-            this.client.logger.warn((err as Error).stack, StealCommand.name);
+            Logger.error((err as Error).message, StealCommand.name);
+            Logger.warn((err as Error).stack, StealCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

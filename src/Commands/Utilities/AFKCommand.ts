@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Message } from 'discord.js';
 import { AFKCommandData } from '../../Data/Commands/Utilities/AFKCommandData';
+import { Logger } from '../../Utils/logger';
 
 export default class AFKCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -29,8 +30,8 @@ export default class AFKCommand extends CommandStructure {
                 return void await message.reply({ content: this.client.t('utilities:AFK.success') });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, AFKCommand.name);
-            this.client.logger.warn((err as Error).stack, AFKCommand.name);
+            Logger.error((err as Error).message, AFKCommand.name);
+            Logger.warn((err as Error).stack, AFKCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

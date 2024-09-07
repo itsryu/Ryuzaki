@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../../RyuzakiClient';
 import { ContextCommandStructure, ClientEmbed } from '../../../Structures/';
 import { BannerContextCommandData } from '../../../Data/Context/User/Utilities/BannerContextCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContextMenuCommandInteraction } from 'discord.js';
+import { Logger } from '../../../Utils/logger';
 
 export default class BannerContextCommand extends ContextCommandStructure {
     constructor(client: Ryuzaki) {
@@ -40,8 +41,8 @@ export default class BannerContextCommand extends ContextCommandStructure {
                     }
                 });
         } catch (err) {
-            this.client.logger.error((err as Error).message, BannerContextCommand.name);
-            this.client.logger.warn((err as Error).stack, BannerContextCommand.name);
+            Logger.error((err as Error).message, BannerContextCommand.name);
+            Logger.warn((err as Error).stack, BannerContextCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

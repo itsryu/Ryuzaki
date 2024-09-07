@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import { Snowflake } from 'discord-api-types/v10';
 import { DiscordUser } from '../../../Types/GatewayTypes';
+import { Logger } from '../../../Utils/logger';
 
 class DiscordUserController extends RouteStructure {
     run = async (req: Request, res: Response) => {
@@ -20,8 +21,8 @@ class DiscordUserController extends RouteStructure {
                 }
             }
         } catch (err) {
-            this.app.logger.error((err as Error).message, DiscordUserController.name);
-            this.app.logger.warn((err as Error).stack, DiscordUserController.name);
+            Logger.error((err as Error).message, DiscordUserController.name);
+            Logger.warn((err as Error).stack, DiscordUserController.name);
 
             return void res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }
@@ -40,14 +41,14 @@ class DiscordUserController extends RouteStructure {
                 const data = await response.json() as DiscordUser;
     
                 if (!response.ok) {
-                    this.app.logger.error(JSON.stringify(data), DiscordUserController.name);
+                    Logger.error(JSON.stringify(data), DiscordUserController.name);
                     resolve(null);
                 } else {
                     resolve(data);
                 }
             } catch (err) {
-                this.app.logger.error((err as Error).message, DiscordUserController.name);
-                this.app.logger.warn((err as Error).stack, DiscordUserController.name);
+                Logger.error((err as Error).message, DiscordUserController.name);
+                Logger.warn((err as Error).stack, DiscordUserController.name);
     
                 resolve(null);
             }

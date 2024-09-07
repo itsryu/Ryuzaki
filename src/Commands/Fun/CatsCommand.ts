@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { CatsCommandData } from '../../Data/Commands/Fun/CatsCommandData';
 import { Message } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 interface CatData {
     id: string,
@@ -30,8 +31,8 @@ export default class CatsCommand extends CommandStructure {
                 return void await message.reply({ content: 'Erro ao obter a imagem. Tente novamente mais tarde.' });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, CatsCommand.name);
-            this.client.logger.warn((err as Error).stack, CatsCommand.name);
+            Logger.error((err as Error).message, CatsCommand.name);
+            Logger.warn((err as Error).stack, CatsCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

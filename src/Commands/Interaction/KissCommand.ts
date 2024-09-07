@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { Message, MessageReaction, User } from 'discord.js';
 import { KissCommandData } from '../../Data/Commands/Interaction/KissCommandData';
+import { Logger } from '../../Utils/logger';
 
 interface KissData {
     url: string
@@ -87,8 +88,8 @@ export default class KissCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, KissCommand.name);
-            this.client.logger.warn((err as Error).stack, KissCommand.name);
+            Logger.error((err as Error).message, KissCommand.name);
+            Logger.warn((err as Error).stack, KissCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -3,6 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { MarryCommandData } from '../../Data/Commands/Interaction/MarryCommandData';
 import { Message, MessageReaction, User } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
+import { Logger } from '../../Utils/logger';
 
 export default class MarryCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -106,8 +107,8 @@ export default class MarryCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, MarryCommand.name);
-            this.client.logger.warn((err as Error).stack, MarryCommand.name);
+            Logger.error((err as Error).message, MarryCommand.name);
+            Logger.warn((err as Error).stack, MarryCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../Structures/';
 import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType, Message } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class InteractionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -143,8 +144,8 @@ export default class InteractionCreateListener extends ListenerStructure {
 
                         const message = Object.assign(interaction, {
                             author: interaction.user,
-                            reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, InteractionCreateListener.name); }),
-                            edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { this.client.logger.error((err as Error).message, InteractionCreateListener.name); }),
+                            reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { Logger.error((err as Error).message, InteractionCreateListener.name); }),
+                            edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { Logger.error((err as Error).message, InteractionCreateListener.name); }),
                             delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
                         }) as Message & ChatInputCommandInteraction;
 
@@ -176,8 +177,8 @@ export default class InteractionCreateListener extends ListenerStructure {
 
                         await interactionExecute
                             .catch(async (err: unknown) => {
-                                this.client.logger.error((err as Error).message, command.data.options.name);
-                                this.client.logger.warn((err as Error).stack, command.data.options.name);
+                                Logger.error((err as Error).message, command.data.options.name);
+                                Logger.warn((err as Error).stack, command.data.options.name);
 
                                 const errorChannel = new WebhookClient({ url: process.env.WEBHOOK_LOG_ERROR_URL });
 
@@ -240,8 +241,8 @@ export default class InteractionCreateListener extends ListenerStructure {
                                 }
                             });
                     } catch (err) {
-                        this.client.logger.error((err as Error).message, InteractionCreateListener.name);
-                        this.client.logger.warn((err as Error).stack, InteractionCreateListener.name);
+                        Logger.error((err as Error).message, InteractionCreateListener.name);
+                        Logger.warn((err as Error).stack, InteractionCreateListener.name);
                     }
                 }
             }
@@ -305,16 +306,16 @@ export default class InteractionCreateListener extends ListenerStructure {
                         await interaction.respond(response);
                     }
                 } catch (err) {
-                    this.client.logger.error((err as Error).message, InteractionCreateListener.name);
-                    this.client.logger.warn((err as Error).stack, InteractionCreateListener.name);
+                    Logger.error((err as Error).message, InteractionCreateListener.name);
+                    Logger.warn((err as Error).stack, InteractionCreateListener.name);
                 }
             }
 
 
             //==============================================//
         } catch (err) {
-            this.client.logger.error((err as Error).message, InteractionCreateListener.name);
-            this.client.logger.warn((err as Error).stack, InteractionCreateListener.name); return;
+            Logger.error((err as Error).message, InteractionCreateListener.name);
+            Logger.warn((err as Error).stack, InteractionCreateListener.name); return;
         }
     }
 }

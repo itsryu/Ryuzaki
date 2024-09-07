@@ -3,6 +3,7 @@ import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { TextChannel, VoiceState } from 'discord.js';
 import { Util } from '../../Utils/util';
 import { Languages } from '../../Types/ClientTypes';
+import { Logger } from '../../Utils/logger';
 
 export default class VoiceStateUpdateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -147,8 +148,8 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, VoiceStateUpdateListener.name);
-            this.client.logger.warn((err as Error).stack, VoiceStateUpdateListener.name);
+            Logger.error((err as Error).message, VoiceStateUpdateListener.name);
+            Logger.warn((err as Error).stack, VoiceStateUpdateListener.name);
         }
     }
 }

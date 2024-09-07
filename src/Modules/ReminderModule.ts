@@ -1,20 +1,22 @@
 import { ModuleStructure, ClientEmbed } from '../Structures';
 import { TextChannel } from 'discord.js';
 import { Reminder } from '../Types/SchemaTypes';
+import { Logger } from '../Utils/logger';
+import { Ryuzaki } from '../RyuzakiClient';
 
 export default class ReminderModule extends ModuleStructure {
     moduleExecute() {
         try {
             this.reminderInterval();
         } catch (err) {
-            this.client.logger.error((err as Error).message, ReminderModule.name);
-            this.client.logger.warn((err as Error).stack, ReminderModule.name);
+            Logger.error((err as Error).message, ReminderModule.name);
+            Logger.warn((err as Error).stack, ReminderModule.name);
         }
     }
 
     reminderInterval() {
         setInterval(async () => {
-            const remindersList = await this.client.database.users.find({ 'reminder.reminderList.0': { $exists: true } });
+            const remindersList = await Ryuzaki.database.users.find({ 'reminder.reminderList.0': { $exists: true } });
 
             if (remindersList) {
                 const membersList = Object.entries(remindersList).filter(([, x]) => x.reminder.reminderList.map((x) => x.time <= Date.now()));
@@ -62,15 +64,15 @@ export default class ReminderModule extends ModuleStructure {
                                     await this.removeReminder(id, list);
                                 }
                             } catch (err) {
-                                this.client.logger.error((err as Error).message, ReminderModule.name);
-                                this.client.logger.warn((err as Error).stack, ReminderModule.name);
+                                Logger.error((err as Error).message, ReminderModule.name);
+                                Logger.warn((err as Error).stack, ReminderModule.name);
                             }
                         });
 
                         await Promise.all(listPromise);
                     } catch (err) {
-                        this.client.logger.error((err as Error).message, ReminderModule.name);
-                        this.client.logger.warn((err as Error).stack, ReminderModule.name);
+                        Logger.error((err as Error).message, ReminderModule.name);
+                        Logger.warn((err as Error).stack, ReminderModule.name);
                     }
                 }
             }
@@ -87,15 +89,15 @@ export default class ReminderModule extends ModuleStructure {
                         await userData.updateOne({ _id: id }, { $pull: { 'reminder.reminderList': { time: x.time } } });
                     }
                 } catch (err) {
-                    this.client.logger.error((err as Error).message, [ReminderModule.name, this.removeReminder.name]);
-                    this.client.logger.warn((err as Error).stack, [ReminderModule.name, this.removeReminder.name]);
+                    Logger.error((err as Error).message, [ReminderModule.name, this.removeReminder.name]);
+                    Logger.warn((err as Error).stack, [ReminderModule.name, this.removeReminder.name]);
                 }
             });
 
             await Promise.all(listPromise);
         } catch (err) {
-            this.client.logger.error((err as Error).message, [ReminderModule.name, this.removeReminder.name]);
-            this.client.logger.warn((err as Error).stack, [ReminderModule.name, this.removeReminder.name]);
+            Logger.error((err as Error).message, [ReminderModule.name, this.removeReminder.name]);
+            Logger.warn((err as Error).stack, [ReminderModule.name, this.removeReminder.name]);
         }
     }
 }

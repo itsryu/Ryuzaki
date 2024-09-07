@@ -4,6 +4,7 @@ import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
 import { WorkCommandData } from '../../Data/Commands/Economy/WorkCommandData';
 import { Abbrev } from '../../Utils/abbrev';
+import { Logger } from '../../Utils/logger';
 
 export default class WorkCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -54,8 +55,8 @@ export default class WorkCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, WorkCommand.name);
-            this.client.logger.warn((err as Error).stack, WorkCommand.name);
+            Logger.error((err as Error).message, WorkCommand.name);
+            Logger.warn((err as Error).stack, WorkCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

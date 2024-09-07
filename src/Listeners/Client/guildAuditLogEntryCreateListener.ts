@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { ActionRowBuilder, AuditLogEvent, ButtonBuilder, ButtonInteraction, ButtonStyle, Events, Guild, GuildAuditLogsEntry, MessageComponentInteraction, NonThreadGuildBasedChannel, TextBasedChannel } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class GuildAuditLogEntryCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -139,8 +140,8 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, GuildAuditLogEntryCreateListener.name);
-            this.client.logger.warn((err as Error).stack, GuildAuditLogEntryCreateListener.name);
+            Logger.error((err as Error).message, GuildAuditLogEntryCreateListener.name);
+            Logger.warn((err as Error).stack, GuildAuditLogEntryCreateListener.name);
         }
     }
 }

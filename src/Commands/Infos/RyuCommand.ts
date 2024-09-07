@@ -4,6 +4,7 @@ import { Languages } from '../../Types/ClientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { RyuCommandData } from '../../Data/Commands/Infos/RyuCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class RyuCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -50,8 +51,8 @@ export default class RyuCommand extends CommandStructure {
                 return void await message.reply({ embeds: [embed], components: [row] });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, RyuCommand.name);
-            this.client.logger.warn((err as Error).stack, RyuCommand.name);
+            Logger.error((err as Error).message, RyuCommand.name);
+            Logger.warn((err as Error).stack, RyuCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -1,5 +1,6 @@
 import { ModuleStructure, ClientEmbed } from '../../Structures';
 import { ButtonBuilder, ActionRowBuilder, ChannelType, PermissionFlagsBits, ButtonInteraction, ButtonStyle, TextChannel } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class CreateTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction) {
@@ -105,8 +106,8 @@ export default class CreateTicketButton extends ModuleStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, CreateTicketButton.name);
-            this.client.logger.warn((err as Error).stack, CreateTicketButton.name);
+            Logger.error((err as Error).message, CreateTicketButton.name);
+            Logger.warn((err as Error).stack, CreateTicketButton.name);
         }
     }
 }

@@ -3,7 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { DivorceCommandData } from '../../Data/Commands/Interaction/DivorceCommandData.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Message, MessageReaction, User } from 'discord.js';
-
+import { Logger } from '../../Utils/logger';
 
 export default class DivorceCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -86,8 +86,8 @@ export default class DivorceCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, DivorceCommand.name);
-            this.client.logger.warn((err as Error).stack, DivorceCommand.name);
+            Logger.error((err as Error).message, DivorceCommand.name);
+            Logger.warn((err as Error).stack, DivorceCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

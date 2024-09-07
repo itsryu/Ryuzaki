@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BannerCommandData } from '../../Data/Commands/Utilities/BannerCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class BannerCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -36,8 +37,8 @@ export default class BannerCommand extends CommandStructure {
                 })
                 .catch(() => message.reply(this.client.t('utilities:banner:errors.!banner')));
         } catch (err) {
-            this.client.logger.error((err as Error).message, BannerCommand.name);
-            this.client.logger.warn((err as Error).stack, BannerCommand.name);
+            Logger.error((err as Error).message, BannerCommand.name);
+            Logger.warn((err as Error).stack, BannerCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

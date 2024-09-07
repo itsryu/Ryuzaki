@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, codeBlock } from 'discord.js';
 import { CalculatorCommandData } from '../../Data/Commands/Utilities/CalculatorCommandData';
+import { Logger } from '../../Utils/logger';
 
 export default class CalculatorCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -115,8 +116,8 @@ export default class CalculatorCommand extends CommandStructure {
                 ]
             });
         } catch (err) {
-            this.client.logger.error((err as Error).message, CalculatorCommand.name);
-            this.client.logger.warn((err as Error).stack, CalculatorCommand.name);
+            Logger.error((err as Error).message, CalculatorCommand.name);
+            Logger.warn((err as Error).stack, CalculatorCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

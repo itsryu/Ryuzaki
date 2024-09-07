@@ -3,6 +3,7 @@ import { ServiceStructure, CommandStructure, ListenerStructure, RawListenerStruc
 import { readdirSync } from 'node:fs';
 import { GlobalFonts } from '@napi-rs/canvas';
 import { join } from 'node:path';
+import { Logger } from '../../Utils/logger';
 
 export default class LoadModulesService extends ServiceStructure {
     constructor(client: Ryuzaki) {
@@ -18,8 +19,8 @@ export default class LoadModulesService extends ServiceStructure {
             await this.loadCommands();
             await this.loadFonts();
         } catch (err) {
-            this.client.logger.error((err as Error).message, LoadModulesService.name);
-            this.client.logger.warn((err as Error).stack, LoadModulesService.name);
+            Logger.error((err as Error).message, LoadModulesService.name);
+            Logger.warn((err as Error).stack, LoadModulesService.name);
         }
     }
 
@@ -64,11 +65,11 @@ export default class LoadModulesService extends ServiceStructure {
                 })
             );
 
-            this.client.logger.info(`${this.client.commands.size} commands loaded successfully.`, 'Commands');
-            this.client.logger.info(`${this.client.contexts.size} context commands loaded successfully.`, 'Context Commands');
+            Logger.info(`${this.client.commands.size} commands loaded successfully.`, 'Commands');
+            Logger.info(`${this.client.contexts.size} context commands loaded successfully.`, 'Context Commands');
         } catch (err) {
-            this.client.logger.error((err as Error).message, [LoadModulesService.name, this.loadCommands.name]);
-            this.client.logger.warn((err as Error).stack, [LoadModulesService.name, this.loadCommands.name]);
+            Logger.error((err as Error).message, [LoadModulesService.name, this.loadCommands.name]);
+            Logger.warn((err as Error).stack, [LoadModulesService.name, this.loadCommands.name]);
         }
     }
 
@@ -99,11 +100,11 @@ export default class LoadModulesService extends ServiceStructure {
                 })
             );
 
-            this.client.logger.info(`Added ${listeners.flat().length} listeners to the client.`, 'Listeners');
-            this.client.logger.info(`Added ${rawListeners.flat().length} raw listeners to the client.`, 'RawListeners');
+            Logger.info(`Added ${listeners.flat().length} listeners to the client.`, 'Listeners');
+            Logger.info(`Added ${rawListeners.flat().length} raw listeners to the client.`, 'RawListeners');
         } catch (err) {
-            this.client.logger.error((err as Error).message, [LoadModulesService.name, this.loadEvents.name]);
-            this.client.logger.warn((err as Error).stack, [LoadModulesService.name, this.loadEvents.name]);
+            Logger.error((err as Error).message, [LoadModulesService.name, this.loadEvents.name]);
+            Logger.warn((err as Error).stack, [LoadModulesService.name, this.loadEvents.name]);
         }
     }
 
@@ -118,10 +119,10 @@ export default class LoadModulesService extends ServiceStructure {
                 })
             );
 
-            this.client.logger.info(`${fonts.flat().length} fonts registered successfully.`, 'Fonts');
+            Logger.info(`${fonts.flat().length} fonts registered successfully.`, 'Fonts');
         } catch (err) {
-            this.client.logger.error((err as Error).message, [LoadModulesService.name, this.loadFonts.name]);
-            this.client.logger.warn((err as Error).stack, [LoadModulesService.name, this.loadFonts.name]);
+            Logger.error((err as Error).message, [LoadModulesService.name, this.loadFonts.name]);
+            Logger.warn((err as Error).stack, [LoadModulesService.name, this.loadFonts.name]);
         }
     }
 }

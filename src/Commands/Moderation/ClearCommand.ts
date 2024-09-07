@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { ClearCommandData } from '../../Data/Commands/Moderation/ClearCommandData';
 import { Collection, Message, TextChannel, GuildTextBasedChannel, PartialMessage } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class ClearCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -87,8 +88,8 @@ export default class ClearCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, ClearCommand.name);
-            this.client.logger.warn((err as Error).stack, ClearCommand.name);
+            Logger.error((err as Error).message, ClearCommand.name);
+            Logger.warn((err as Error).stack, ClearCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -4,6 +4,7 @@ import { DeveloperSubCommandData } from '../../Data/Commands/Developer/Developer
 import { Message, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
 import { inspect } from 'node:util';
 import { Languages } from '../../Types/ClientTypes';
+import { Logger } from '../../Utils/logger';
 
 export default class DeveloperSubCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -191,8 +192,8 @@ export default class DeveloperSubCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, DeveloperSubCommand.name);
-            this.client.logger.warn((err as Error).stack, DeveloperSubCommand.name);
+            Logger.error((err as Error).message, DeveloperSubCommand.name);
+            Logger.warn((err as Error).stack, DeveloperSubCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

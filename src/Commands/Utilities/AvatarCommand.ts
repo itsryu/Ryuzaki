@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { AvatarCommandData } from '../../Data/Commands/Utilities/AvatarCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class AvatarCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -49,8 +50,8 @@ export default class AvatarCommand extends CommandStructure {
                 return void await message.reply({ embeds: [embed], components: [row] });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, AvatarCommand.name);
-            this.client.logger.warn((err as Error).stack, AvatarCommand.name);
+            Logger.error((err as Error).message, AvatarCommand.name);
+            Logger.warn((err as Error).stack, AvatarCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

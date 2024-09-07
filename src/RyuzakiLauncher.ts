@@ -3,13 +3,14 @@ import 'dayjs/locale/pt';
 import 'dayjs/locale/en';
 import { client } from './Client/Client';
 import App from './Web/backend/server';
+import { Logger } from './Utils/logger';
 
 (async () => {
     await client.login(process.env.CLIENT_TOKEN);
     await client.initialize();
 
     if (client.shard && (client.shard.ids[0] === (client.shard.count - 1))) {
-        client.logger.info('All shards are ready! Starting WEB server...', 'Initialization');
+        Logger.info('All shards are ready! Starting WEB server...', 'Initialization');
         const server = new App(client);
         server.serverExecute();
     }

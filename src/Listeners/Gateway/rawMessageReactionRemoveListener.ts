@@ -1,6 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { RawListenerStructure, ClientEmbed } from '../../Structures';
 import { TextChannel, GatewayDispatchEvents, GatewayMessageReactionRemoveDispatchData } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class RawMessageReactionRemoveListener extends RawListenerStructure {
     constructor(client: Ryuzaki) {
@@ -89,8 +90,8 @@ export default class RawMessageReactionRemoveListener extends RawListenerStructu
                     }
                 }
             } catch (err) {
-                this.client.logger.error((err as Error).message, RawMessageReactionRemoveListener.name);
-                this.client.logger.warn((err as Error).stack, RawMessageReactionRemoveListener.name);
+                Logger.error((err as Error).message, RawMessageReactionRemoveListener.name);
+                Logger.warn((err as Error).stack, RawMessageReactionRemoveListener.name);
             }
         }
     }

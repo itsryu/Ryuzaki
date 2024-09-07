@@ -3,6 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
 import { LanguageCommandData } from '../../Data/Commands/Settings/LanguageCommandData';
 import { Languages } from '../../Types/ClientTypes';
+import { Logger } from '../../Utils/logger';
 
 interface LanguageProps {
     name: string;
@@ -120,8 +121,8 @@ export default class LanguageCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, LanguageCommand.name);
-            this.client.logger.warn((err as Error).stack, LanguageCommand.name);
+            Logger.error((err as Error).message, LanguageCommand.name);
+            Logger.warn((err as Error).stack, LanguageCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

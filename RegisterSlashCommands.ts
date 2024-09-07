@@ -1,5 +1,6 @@
 import { ModuleStructure, RawCommandData, RawContextCommandData } from './src/Structures';
 import { ApplicationCommand, PermissionsBitField, Routes } from 'discord.js';
+import { Logger } from './src/Utils/logger';
 
 export default class RegisterSlashCommands extends ModuleStructure {
     async moduleExecute() {
@@ -31,10 +32,10 @@ export default class RegisterSlashCommands extends ModuleStructure {
         try {
             const data = await this.client.rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands }) as ApplicationCommand[];
 
-            this.client.logger.info(`Updated ${data.length} slash command(s) (/) successfully!`, 'Slash Commands');
+            Logger.info(`Updated ${data.length} slash command(s) (/) successfully!`, 'Slash Commands');
         } catch (error) {
-            this.client.logger.error((error as Error).message, RegisterSlashCommands.name);
-            this.client.logger.warn((error as Error).stack, RegisterSlashCommands.name);
+            Logger.error((error as Error).message, RegisterSlashCommands.name);
+            Logger.warn((error as Error).stack, RegisterSlashCommands.name);
         }
     }
 }

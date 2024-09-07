@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { VoteCommandData } from '../../Data/Commands/Economy/VoteCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class VoteCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -42,8 +43,8 @@ export default class VoteCommand extends CommandStructure {
                 }
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, VoteCommand.name);
-            this.client.logger.warn((err as Error).stack, VoteCommand.name);
+            Logger.error((err as Error).message, VoteCommand.name);
+            Logger.warn((err as Error).stack, VoteCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

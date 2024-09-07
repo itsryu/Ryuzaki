@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { PurgeCommandData } from '../../Data/Commands/Utilities/PurgeCommandData';
 import { Message, Collection } from 'discord.js';
+import { Logger } from '../../Utils/logger';
 
 export default class purgeCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -30,8 +31,8 @@ export default class purgeCommand extends CommandStructure {
                 );
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, purgeCommand.name);
-            this.client.logger.warn((err as Error).stack, purgeCommand.name);
+            Logger.error((err as Error).message, purgeCommand.name);
+            Logger.warn((err as Error).stack, purgeCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

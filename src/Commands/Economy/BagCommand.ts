@@ -5,6 +5,7 @@ import { Languages } from '../../Types/ClientTypes';
 import { emojis } from '../../Utils/Objects/emojis';
 import { BagCommandData } from '../../Data/Commands/Economy/BagCommandData';
 import { Abbrev } from '../../Utils/abbrev';
+import { Logger } from '../../Utils/logger';
 
 export default class BagCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -43,8 +44,8 @@ export default class BagCommand extends CommandStructure {
                 return void await message.reply({ embeds: [carteira] });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, BagCommand.name);
-            this.client.logger.warn((err as Error).stack, BagCommand.name);
+            Logger.error((err as Error).message, BagCommand.name);
+            Logger.warn((err as Error).stack, BagCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }

@@ -15,7 +15,6 @@ import { clientStats } from '../../Client';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
-    public readonly logger: Logger = new Logger();
     public readonly utils: Util = new Util();
     public store = new Map<string, RESTPostOAuth2AccessTokenResult>();
 
@@ -45,15 +44,15 @@ export default class App extends AppStructure {
                     shardId: clientStats.shardId
                 });
 
-                this.logger.info('Updated stats on Top.gg website.', 'DBL');
+                Logger.info('Updated stats on Top.gg website.', 'DBL');
             } catch (err) {
-                this.logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
+                Logger.error('Error while updating stats to top.gg website: ' + (err as Error).message, 'DBL');
             }
         }, 30 * 60 * 1000); // Updating every 30 minutes;
 
         this.app.listen(port, () => {
-            this.logger.info(`[WEB Socket] Server started on port: ${port.toString()}`, 'Server');
-            this.logger.info(`[WEB Socket] http://localhost:${port.toString()}`, 'Server');
+            Logger.info(`[WEB Socket] Server started on port: ${port.toString()}`, 'Server');
+            Logger.info(`[WEB Socket] http://localhost:${port.toString()}`, 'Server');
         });
     }
 
@@ -215,11 +214,11 @@ export default class App extends AppStructure {
                 const data = await response.json() as RESTGetAPIUserResult;
                 return data;
             } else {
-                this.logger.error(`Error fetching user data: [${response.status.toString()}] ${response.statusText}`, 'getUserData');
+                Logger.error(`Error fetching user data: [${response.status.toString()}] ${response.statusText}`, 'getUserData');
             }
         } catch (err) {
-            this.logger.error((err as Error).message, 'getUserData');
-            this.logger.warn((err as Error).stack, 'getUserData');
+            Logger.error((err as Error).message, 'getUserData');
+            Logger.warn((err as Error).stack, 'getUserData');
         }
     }
 

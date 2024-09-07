@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import { EmbedBuilder } from 'discord.js';
 import { Abbrev } from '../../../Utils/abbrev';
+import { Logger } from '../../../Utils/logger';
 
 class DBLController extends RouteStructure {
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload) => {
@@ -37,8 +38,8 @@ class DBLController extends RouteStructure {
                 }
             }
         } catch (err) {
-            this.app.logger.error((err as Error).message, DBLController.name);
-            this.app.logger.warn((err as Error).stack, DBLController.name);
+            Logger.error((err as Error).message, DBLController.name);
+            Logger.warn((err as Error).stack, DBLController.name);
 
             return void res.status(500).json(new JSONResponse(500, 'Internal Server Error').toJSON());
         }

@@ -2,6 +2,7 @@ import { ActivitiesOptions, ActivityType, PresenceUpdateStatus } from 'discord.j
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ServiceStructure } from '../../Structures';
 import { clientStats } from '../../Client';
+import { Logger } from '../../Utils/logger';
 
 export default class SetActivityService extends ServiceStructure {
     declare interval: NodeJS.Timeout;
@@ -26,8 +27,8 @@ export default class SetActivityService extends ServiceStructure {
             this.setPresence(true);
             this.interval = setInterval(() => { this.setPresence(); }, 1000 * 60);
         } catch (err) {
-            this.client.logger.error((err as Error).message, SetActivityService.name);
-            this.client.logger.warn((err as Error).stack, SetActivityService.name);
+            Logger.error((err as Error).message, SetActivityService.name);
+            Logger.warn((err as Error).stack, SetActivityService.name);
         }
     }
 

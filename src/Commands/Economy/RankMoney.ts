@@ -3,6 +3,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { RankMoneyCommandData } from '../../Data/Commands/Economy/RankMoneyCommandData';
 import { Abbrev } from '../../Utils/abbrev';
+import { Logger } from '../../Utils/logger';
 
 export default class RankMoneyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -11,7 +12,7 @@ export default class RankMoneyCommand extends CommandStructure {
 
     public async commandExecute({ message }: { message: Message }) {
         try {
-            const collection = await this.client.database.users.find({
+            const collection = await Ryuzaki.database.users.find({
                 $or: [
                     { 'economy.bank': { $gt: 0 } },
                     { 'economy.coins': { $gt: 0 } }
@@ -75,8 +76,8 @@ export default class RankMoneyCommand extends CommandStructure {
                 return void await message.reply({ content: `${message.author}, não há usuários no banco de dados.` });
             }
         } catch (err) {
-            this.client.logger.error((err as Error).message, RankMoneyCommand.name);
-            this.client.logger.warn((err as Error).stack, RankMoneyCommand.name);
+            Logger.error((err as Error).message, RankMoneyCommand.name);
+            Logger.warn((err as Error).stack, RankMoneyCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
     }
