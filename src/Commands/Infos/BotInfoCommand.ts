@@ -19,8 +19,6 @@ export default class BotInfoCommand extends CommandStructure {
 
     async commandExecute({ message, prefix, language }: { message: Message, prefix: string, language: Languages }) {
         try {
-            //===============> Importações <===============//
-
             const clientUsername = this.client.user?.username;
             const clientTag = this.client.user?.tag;
             const clientId = this.client.user?.id;
@@ -36,8 +34,6 @@ export default class BotInfoCommand extends CommandStructure {
             const clientOwner = await this.client.users.fetch(process.env.OWNER_ID);
             const clientAvatar = this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 });
             const dbPing = await BotInfoCommand.databasePing();
-
-            //===============> Finalizações <===============//
 
             const clientInfo = new ClientEmbed(this.client)
                 .setAuthor({ name: `Olá, me chamo ${clientUsername}!`, iconURL: clientAvatar })
