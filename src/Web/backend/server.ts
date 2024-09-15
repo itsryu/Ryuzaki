@@ -3,7 +3,6 @@ import express, { Express, Router } from 'express';
 import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, AuthMiddleware } from './middlewares/index';
-import { Util } from '../../Utils/util';
 import { Logger } from '../../Utils/logger';
 import { Route } from '../../Types/HTTPSInterfaces';
 import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController } from './routes/index';
@@ -15,7 +14,6 @@ import { clientStats } from '../../Client';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
-    public readonly utils: Util = new Util();
     public store = new Map<string, RESTPostOAuth2AccessTokenResult>();
 
     public serverExecute() {

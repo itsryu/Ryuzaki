@@ -10,7 +10,6 @@ interface UserBoostBadge {
     nextBadgeTime?: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class GetDiscordUserApiData {
     public static async getUserData(userId: Snowflake): Promise<DiscordUser | undefined> {
         try {

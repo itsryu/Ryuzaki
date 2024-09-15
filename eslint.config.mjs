@@ -38,7 +38,9 @@ export default tseslint.config(
             '@typescript-eslint/no-unnecessary-condition': 'off',
             '@typescript-eslint/no-non-null-assertion': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
-            "@typescript-eslint/no-inferrable-types": "off",
+            '@typescript-eslint/no-inferrable-types': 'off',
+            '@typescript-eslint/no-namespace': 'off',
+            '@typescript-eslint/no-extraneous-class': 'off',
             'indent': [
                 'error',
                 4,

@@ -1,6 +1,7 @@
 import { ModuleStructure } from '../Structures';
 import { Message } from 'discord.js';
 import { Logger } from '../Utils/logger';
+import { Util } from '../Utils/util';
 
 export default class XPModule extends ModuleStructure {
     async moduleExecute({ message }: { message: Message }) {
@@ -28,7 +29,7 @@ export default class XPModule extends ModuleStructure {
                         userData.set({
                             'exp.xp': 0,
                             'exp.level': level + 1,
-                            'exp.nextLevel': this.client.utils.nextLevelExp(level + 1)
+                            'exp.nextLevel': Util.nextLevelExp(level + 1)
                         });
 
                         await userData.save();

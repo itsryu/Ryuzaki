@@ -5,6 +5,7 @@ import { Languages } from '../../Types/ClientTypes';
 import { WorkCommandData } from '../../Data/Commands/Economy/WorkCommandData';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class WorkCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -20,8 +21,8 @@ export default class WorkCommand extends CommandStructure {
             } else {
                 //================= Importações =================/
 
-                const money = this.client.utils.randomIntFromInterval(1000, 5000);
-                const extraMoney = this.client.utils.randomIntFromInterval(5000, 20000);
+                const money = Util.randomValueFromInterval(1000, 5000);
+                const extraMoney = Util.randomValueFromInterval(5000, 20000);
                 const totalReceived = userData.vip.status ? money + extraMoney : money;
                 const atual = userData.economy.coins;
                 const work = userData.economy.work;

@@ -3,6 +3,7 @@ import { ActionRowBuilder, ButtonBuilder, ChannelType, ButtonInteraction, Button
 import { writeFileSync, readdirSync, statSync } from 'node:fs';
 import { Languages } from '../../Types/ClientTypes';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class CloseTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction, language: Languages) {
@@ -29,7 +30,7 @@ export default class CloseTicketButton extends ModuleStructure {
                 const collector = msg.createMessageComponentCollector({ filter });
                 const messages = await (interaction.channel as TextChannel).messages.fetch();
                 const log = messages.filter((m) => !m.author.bot).map((m) => {
-                    return `[${this.client.utils.getTime(m.createdTimestamp, language)}] ` + `${m.author.tag}: ` + m.content;
+                    return `[${Util.getTime(m.createdTimestamp, language, 'America/Sao_Paulo')}] ` + `${m.author.tag}: ` + m.content;
                 }).reverse().join('\n');
 
                 writeFileSync(`./src/Logs/log-${interaction.user.id}.txt`, log);

@@ -1,20 +1,35 @@
 import { Abbrev } from '../src/Utils/abbrev';
 
 describe('Abbrev format', () => {
-    it('Should format abbrev properly', () => {
-        expect(new Abbrev(100).toString()).toBe('100.00');
-        expect(new Abbrev(1000).toString()).toBe('1.00K');
-        expect(new Abbrev(1000000).toString()).toBe('1.00M');
-        expect(new Abbrev(1000000000).toString()).toBe('1.00B');
-        expect(new Abbrev('100').toString()).toBe('100.00');
-        expect(new Abbrev('1000').toString()).toBe('1.00K');
-        expect(new Abbrev('1000000').toString()).toBe('1.00M');
-        expect(new Abbrev('1000000000').toString()).toBe('1.00B');
-        expect(Abbrev.parse('1 K')).toBe(1000);
-        expect(Abbrev.parse('1 M')).toBe(1000000);
-        expect(Abbrev.parse('1 B')).toBe(1000000000);
-        expect(Abbrev.parse('1K')).toBe(1000);
-        expect(Abbrev.parse('1k')).toBe(1000);
-        expect(Abbrev.parse('1000')).toBe(1000);
+    const testCases = [
+        { input: 100, expected: '100.00' },
+        { input: 1000, expected: '1.00K' },
+        { input: 1000000, expected: '1.00M' },
+        { input: 1000000000, expected: '1.00B' },
+        { input: '100', expected: '100.00' },
+        { input: '1000', expected: '1.00K' },
+        { input: '1000000', expected: '1.00M' },
+        { input: '1000000000', expected: '1.00B' }
+    ];
+
+    testCases.forEach(({ input, expected }) => {
+        it(`Should format ${input} properly`, () => {
+            expect(new Abbrev(input).toString()).toBe(expected);
+        });
+    });
+
+    const parseTestCases = [
+        { input: '1 K', expected: 1000 },
+        { input: '1 M', expected: 1000000 },
+        { input: '1 B', expected: 1000000000 },
+        { input: '1K', expected: 1000 },
+        { input: '1k', expected: 1000 },
+        { input: '1000', expected: 1000 }
+    ];
+
+    parseTestCases.forEach(({ input, expected }) => {
+        it(`Should parse ${input} properly`, () => {
+            expect(Abbrev.parse(input)).toBe(expected);
+        });
     });
 });

@@ -1,6 +1,5 @@
 import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions, REST } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
-import { Util } from './Utils/util';
 import { Logger } from './Utils/logger';
 import { Translate } from '../Lib/Translate';
 import { Api } from '@top-gg/sdk';
@@ -14,7 +13,6 @@ config({ path: join(__dirname, '../.env') });
 
 export class Ryuzaki extends Client {
     public readonly rest: REST = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
-    public readonly utils: Util = new Util();
     public readonly stats: Api = new Api(process.env.DBL_TOKEN);
     public readonly collection = new Collections<string>();
     public readonly developers: readonly string[] = Object.freeze([process.env.OWNER_ID]);

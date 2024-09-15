@@ -5,6 +5,7 @@ import { DailyCommandData } from '../../Data/Commands/Economy/DailyCommandData';
 import { Languages } from '../../Types/ClientTypes';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class DailyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -14,8 +15,8 @@ export default class DailyCommand extends CommandStructure {
     public async commandExecute({ message, language }: { message: Message, language: Languages }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
-            const money = this.client.utils.randomIntFromInterval(1000, 5000);
-            const extraMoney = this.client.utils.randomIntFromInterval(5000, 20000);
+            const money = Util.randomValueFromInterval(1000, 5000);
+            const extraMoney = Util.randomValueFromInterval(5000, 20000);
 
             if (!userData) {
                 return void await message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });

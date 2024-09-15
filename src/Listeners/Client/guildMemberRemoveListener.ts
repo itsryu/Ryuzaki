@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, GuildMember, TextChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class GuildMemberRemoveListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -39,7 +40,7 @@ export default class GuildMemberRemoveListener extends ListenerStructure {
             }
 
             if (guildData && guildData.counter.status) {
-                await (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, this.client.utils.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
+                await (this.client.channels.cache.get(guildData.counter.channel) as TextChannel).setTopic(guildData.counter.msg.replace(/{members}/g, Util.counter(guild.memberCount)).replace(/{guild}/g, guild.name));
             }
 
         } catch (err) {

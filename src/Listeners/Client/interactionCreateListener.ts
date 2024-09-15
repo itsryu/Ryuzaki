@@ -2,6 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../Structures/';
 import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType, Message } from 'discord.js';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class InteractionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -266,7 +267,7 @@ export default class InteractionCreateListener extends ListenerStructure {
                     await new CloseTicketButton(this.client).moduleExecute(interaction, language);
                 }
 
-                if (this.client.utils.isJSON(interaction.customId)) {
+                if (Util.isJSON(interaction.customId)) {
                     const parsedId = JSON.parse(interaction.customId) as ParsedId;
 
                     if (parsedId && Object.keys(parsedId).length > 0 && parsedId.c === 'calculator') {

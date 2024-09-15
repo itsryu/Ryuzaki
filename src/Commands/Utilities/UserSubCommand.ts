@@ -228,19 +228,19 @@ export default class UserSubCommand extends CommandStructure {
                         pages.push(embed);
                     }
 
-                    const msg = await message.reply({ embeds: [pages[current]], components: [this.client.utils.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)] });
+                    const msg = await message.reply({ embeds: [pages[current]], components: [Util.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)] });
                     const filter = (i: MessageComponentInteraction) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
                     const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
 
                     collector.on('end', async () => {
-                        await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [this.client.utils.button(current + 1, true, true)] });
+                        await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [Util.button(current + 1, true, true)] });
                     });
 
                     collector.on('collect', (i: StringSelectMenuInteraction) => {
                         if (i.customId === '-') current -= 1;
                         if (i.customId === '+') current += 1;
 
-                        return void msg.edit({ embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
+                        return void msg.edit({ embeds: [pages[current]], components: [Util.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
                     });
                 }
             }
@@ -271,7 +271,7 @@ export default class UserSubCommand extends CommandStructure {
             .map(([, text]) => text[language]);
     }
 
-    
+
 
     private static getMemberDevice(member: GuildMember): string {
         return member.presence?.clientStatus?.desktop

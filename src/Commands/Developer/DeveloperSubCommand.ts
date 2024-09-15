@@ -5,6 +5,7 @@ import { Message, MessageComponentInteraction, StringSelectMenuInteraction } fro
 import { inspect } from 'node:util';
 import { Languages } from '../../Types/ClientTypes';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class DeveloperSubCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -30,7 +31,7 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 .addFields(
                                     {
                                         name: '✅ Saída:',
-                                        value: '```js' + '\n' + this.client.utils.clean(evaled).substring(i, Math.min(evaled.length, i + 1000)) + '\n' + '```'
+                                        value: '```js' + '\n' + Util.clean(evaled).substring(i, Math.min(evaled.length, i + 1000)) + '\n' + '```'
                                     },
                                     {
                                         name: '🕸️ Tipo:',
@@ -47,26 +48,26 @@ export default class DeveloperSubCommand extends CommandStructure {
                                 .addFields(
                                     {
                                         name: '❌ Saída:',
-                                        value: '```js' + '\n' + this.client.utils.clean((err as Error).message).substring(i, Math.min((err as Error).message.length, i + 256)) + '\n' + '```'
+                                        value: '```js' + '\n' + Util.clean((err as Error).message).substring(i, Math.min((err as Error).message.length, i + 256)) + '\n' + '```'
                                     });
 
                             pages.push(embed);
                         }
                     }
 
-                    const msg = await message.reply({ embeds: [pages[current]], components: [this.client.utils.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)] });
+                    const msg = await message.reply({ embeds: [pages[current]], components: [Util.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)] });
                     const filter = (i: MessageComponentInteraction) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
                     const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
 
                     collector.on('end', async () => {
-                        return void await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [this.client.utils.button(current + 1, true, true)] });
+                        return void await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [Util.button(current + 1, true, true)] });
                     });
 
                     collector.on('collect', async (i: StringSelectMenuInteraction) => {
                         if (i.customId === '-') current -= 1;
                         if (i.customId === '+') current += 1;
 
-                        return void await msg.edit({ content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [this.client.utils.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
+                        return void await msg.edit({ content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [Util.button(current + 1, current <= 0 ? true : false, current === pages.length - 1 ? true : false)] });
                     });
 
                     break;

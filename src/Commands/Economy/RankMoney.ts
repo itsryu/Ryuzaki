@@ -4,6 +4,7 @@ import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { RankMoneyCommandData } from '../../Data/Commands/Economy/RankMoneyCommandData';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class RankMoneyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -54,7 +55,7 @@ export default class RankMoneyCommand extends CommandStructure {
                     pages.push(embed);
                 }
 
-                const msg = await message.reply({ content: `Página: 1/${pages.length}`, embeds: [pages[0]], components: [this.client.utils.button(1, true, pages.length === 1)] });
+                const msg = await message.reply({ content: `Página: 1/${pages.length}`, embeds: [pages[0]], components: [Util.button(1, true, pages.length === 1)] });
                 const filter = (i: MessageComponentInteraction) => i.user.id === message.author.id && i.isButton() && i.message.id === msg.id;
                 const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
 
@@ -63,14 +64,14 @@ export default class RankMoneyCommand extends CommandStructure {
 
                     await msg.edit({
                         content: `Página: ${current + 1}/${pages.length}`, embeds: [pages[current]], components: [
-                            this.client.utils.button(current + 1, current <= 0, current >= pages.length - 1)
+                            Util.button(current + 1, current <= 0, current >= pages.length - 1)
                         ]
                     });
                 });
 
                 collector.on('end', async () => {
                     pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) });
-                    return void await msg.edit({ embeds: [pages[current]], components: [this.client.utils.button(current + 1, true, true)] });
+                    return void await msg.edit({ embeds: [pages[current]], components: [Util.button(current + 1, true, true)] });
                 });
             } else {
                 return void await message.reply({ content: `${message.author}, não há usuários no banco de dados.` });

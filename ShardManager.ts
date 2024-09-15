@@ -6,7 +6,7 @@ import { Logger } from './src/Utils/logger';
 config({ path: join(__dirname, '../.env') });
 
 export class ShardManager extends ShardingManager {
-    private shardsReady = 0;
+    private static shardsReady = 0;
 
     async initialize(): Promise<void> {
         try {
@@ -15,8 +15,8 @@ export class ShardManager extends ShardingManager {
                     Logger.info(`Starting Shard: [${shard.id.toString()}]`, ShardManager.name);
                 });
                 shard.on('ready', () => {
-                    this.shardsReady++;
-                    Logger.info(`Shard [${shard.id.toString()}] is ready! (${this.shardsReady}/${this.totalShards})`, ShardManager.name);
+                    ShardManager.shardsReady++;
+                    Logger.info(`Shard [${shard.id.toString()}] is ready! (${ShardManager.shardsReady}/${this.totalShards})`, ShardManager.name);
                 });
                 shard.on('disconnect', () => {
                     Logger.error(`Shard [${shard.id.toString()}] disconnected.`, ShardManager.name);
@@ -47,7 +47,7 @@ export class ShardManager extends ShardingManager {
     }
 
     public get isReady(): boolean {
-        return this.shardsReady === this.totalShards;
+        return ShardManager.shardsReady === this.totalShards;
     }
 
     public get shardCount(): number {

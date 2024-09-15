@@ -64,12 +64,12 @@ export class Translate {
             return localeObj ? localeObj[key] : undefined;
         }, this.languages);
 
-        const formattedLocale = finalLocale ? this.format(finalLocale, options) : 'Translation not available';
+        const formattedLocale = finalLocale ? Translate.format(finalLocale, options) : 'Translation not available';
         return formattedLocale;
     }
 
-    private format(locale: Locale, options?: FormatOptions): string {
-        const translatedLocale: string = options?.index ? locale[options.index] : Array.isArray(locale) ? locale[0] : locale;
+    private static format(locale: Locale, options?: FormatOptions): string {
+        const translatedLocale = options?.index ? locale[options.index] : Array.isArray(locale) ? locale[0] : locale;
 
         if (typeof options !== 'object') return translatedLocale;
 

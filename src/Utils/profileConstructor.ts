@@ -5,6 +5,7 @@ import { loadImage, createCanvas, Canvas } from '@napi-rs/canvas';
 import { emojis } from './Objects/emojis';
 import Day from 'dayjs';
 import { Abbrev } from './abbrev';
+import { Util } from './util';
 
 class profileConstructor extends ModuleStructure<Canvas> {
     async moduleExecute({ user, data, message }: { user: User, data: UserDocument, message: Message | Interaction }) {
@@ -30,7 +31,7 @@ class profileConstructor extends ModuleStructure<Canvas> {
         ctx.textAlign = 'left';
         ctx.font = '35px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
-        await this.client.utils.renderEmoji(ctx, this.client.utils.trim(user.username, 20), 172, 510);
+        await Util.renderEmojis(ctx, Util.trim( user.username, 20 ), 172, 510);
 
         // Medalhas:
 
@@ -98,7 +99,7 @@ class profileConstructor extends ModuleStructure<Canvas> {
             const renderedFlags = filteredFlags.join(' ');
 
             ctx.font = '30px KGWhattheTeacherWants';
-            await this.client.utils.renderEmoji(ctx, renderedFlags, 200, 473);
+            await Util.renderEmojis(ctx, renderedFlags, 200, 473);
         }
 
 
@@ -125,7 +126,7 @@ class profileConstructor extends ModuleStructure<Canvas> {
         // Sobre
         ctx.font = '25px KGWhattheTeacherWants';
         ctx.fillStyle = 'rgb(1, 1, 1)';
-        await this.client.utils.renderEmoji(ctx, data.about ? (data.about.match(/.{1,30}/g) ?? []).join('\n') : 'Altere o seu \'sobre mim\' clicando no botão abaixo.', 170, 535);
+        await Util.renderEmojis(ctx, data.about ? (data.about.match(/.{1,30}/g) ?? []).join('\n') : 'Altere o seu \'sobre mim\' clicando no botão abaixo.', 170, 535);
 
         // Títulos:
         ctx.textAlign = 'left';

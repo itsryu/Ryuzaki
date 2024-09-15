@@ -1,10 +1,10 @@
 class Bytes<T extends number> {
-    static units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    index: number;
-    bytes: string;
-    unit: string;
+    private static units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    private index: number;
+    private bytes: string;
+    private unit: string;
 
-    constructor(public x: T) {
+    public constructor(public x: T) {
         this.index = this.#index;
         this.bytes = this.#bytes;
         this.unit = this.#unit;
@@ -27,15 +27,15 @@ class Bytes<T extends number> {
         return Bytes.units[this.index];
     }
 
-    toArray(): [bytes: number, unit: string] {
+    public toArray(): [bytes: number, unit: string] {
         return [Number(this.bytes), this.unit];
     }
 
-    toString() {
+    public toString() {
         return `${this.bytes} ${this.unit}`;
     }
 
-    toJSON() {
+    public toJSON() {
         return {
             bytes: Number(this.bytes),
             unit: this.unit

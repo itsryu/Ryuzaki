@@ -3,6 +3,7 @@ import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structur
 import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Logger } from '../../Utils/logger';
+import { Util } from '../../Utils/util';
 
 export default class MessageCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -32,7 +33,7 @@ export default class MessageCreateListener extends ListenerStructure {
                     .catch(() => undefined);
             }
 
-            if (this.client.user && message.content.match(this.client.utils.GetMention(this.client.user.id))) {
+            if (this.client.user && message.content.match(Util.isMention(this.client.user.id))) {
                 const row = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
                         new ButtonBuilder()

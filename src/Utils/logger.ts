@@ -1,7 +1,11 @@
 import * as winston from 'winston';
+import { config } from 'dotenv';
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+config();
+
 class Logger {
+    private static environment: string = process.env.STATE ?? 'development';
+
     private static readonly levels: winston.config.AbstractConfigSetLevels = {
         error: 0,
         warn: 1,
@@ -15,7 +19,7 @@ class Logger {
     private static readonly logger: winston.Logger = winston.createLogger({
         level: 'info',
         levels: Logger.levels,
-        defaultMeta: { environment: process.env.STATE },
+        defaultMeta: { environment: Logger.environment },
         transports: [
             new winston.transports.Console()
         ],

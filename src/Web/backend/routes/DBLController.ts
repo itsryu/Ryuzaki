@@ -4,13 +4,14 @@ import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure
 import { EmbedBuilder } from 'discord.js';
 import { Abbrev } from '../../../Utils/abbrev';
 import { Logger } from '../../../Utils/logger';
+import { Util } from '../../../Utils/util';
 
 class DBLController extends RouteStructure {
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload) => {
         try {
             const user = await this.app.client.users.fetch(vote.user);
             const userData = await this.app.client.getData(user?.id, 'user');
-            const addedMoney = this.app.utils.randomIntFromInterval(2000, 5000);
+            const addedMoney = Util.randomValueFromInterval(2000, 5000);
 
             if (!user || !userData) {
                 return void res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
