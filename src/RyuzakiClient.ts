@@ -1,7 +1,7 @@
 import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions, REST } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
 import { Logger } from './Utils/logger';
-import { Translate } from '../Lib/Translate';
+import { Translate } from '../lib/Translate';
 import { Api } from '@top-gg/sdk';
 import { CommandStructure, ContextCommandStructure, ServiceStructure } from './Structures';
 import { Collections } from './Utils/collection';
