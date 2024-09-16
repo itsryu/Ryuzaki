@@ -11,31 +11,38 @@ class DBLController extends RouteStructure {
         try {
             const user = await this.app.client.users.fetch(vote.user);
             const userData = await this.app.client.getData(user?.id, 'user');
-            const addedMoney = Util.randomValueFromInterval(2000, 5000);
+            const addedMoney = Util.randomValueFromInterval(5000, 10000);
 
             if (!user || !userData) {
                 return void res.status(404).json(new JSONResponse(404, 'User not found').toJSON());
             } else {
-                const money = userData.economy.coins;
-                const votes = userData.economy.votes;
+                try {
+                    const money = userData.economy.coins;
+                    const votes = userData.economy.votes;
 
-                await userData.set({
-                    'economy.coins': money + addedMoney,
-                    'economy.votes': votes + 1,
-                    'economy.vote': Date.now()
-                }).save();
+                    userData.set({
+                        'economy.coins': money + addedMoney,
+                        'economy.votes': votes + 1,
+                        'economy.vote': Date.now()
+                    });
 
-                if (userData.economy.votes % 40 === 0) {
-                    // TODO: Criar surpresa especial: 
-                } else {
-                    const votedEmbed = new EmbedBuilder()
-                        .setColor(0xF1F1F1)
-                        .setAuthor({ name: this.app.client.t('main:vote:embeds:voted.title'), iconURL: user.displayAvatarURL({ extension: 'png', size: 4096 }) })
-                        .setDescription(this.app.client.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: new Abbrev(addedMoney).toString() }));
+                    await userData.save();
 
-                    user?.send({ embeds: [votedEmbed] })
-                        .then((message) => message.react('🥰'))
-                        .catch(() => false);
+                    if (userData.economy.votes % 40 === 0) {
+                        // TODO: Criar surpresa especial: 
+                    } else {
+                        const votedEmbed = new EmbedBuilder()
+                            .setColor(0xF1F1F1)
+                            .setAuthor({ name: this.app.client.t('main:vote:embeds:voted.title'), iconURL: user.displayAvatarURL({ extension: 'png', size: 4096 }) })
+                            .setDescription(this.app.client.t('main:vote:embeds:voted.description', { user, votes, money: addedMoney.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), abbrevMoney: new Abbrev(addedMoney).toString() }));
+
+                        user?.send({ embeds: [votedEmbed] })
+                            .then((message) => message.react('🥰'))
+                            .catch(() => false);
+                    }
+                } catch (err) {
+                    Logger.error((err as Error).message, DBLController.name);
+                    Logger.warn((err as Error).stack, DBLController.name);
                 }
             }
         } catch (err) {

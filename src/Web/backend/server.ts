@@ -10,7 +10,7 @@ import cors from 'cors';
 import { verifyKey } from 'discord-interactions';
 import { JSONResponse } from '../../Structures/RouteStructure';
 import { Webhook } from '@top-gg/sdk';
-import { clientStats } from '../../Client';
+import ClientStats from '../../Client/ClientStats';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();
@@ -37,9 +37,9 @@ export default class App extends AppStructure {
 
                 await this.client.stats.postStats({
                     serverCount: totalGuilds,
-                    shardCount: clientStats.shards,
+                    shardCount: ClientStats.shards,
                     shards: guildsArray,
-                    shardId: clientStats.shardId
+                    shardId: ClientStats.shardId
                 });
 
                 Logger.info('Updated stats on Top.gg website.', 'DBL');

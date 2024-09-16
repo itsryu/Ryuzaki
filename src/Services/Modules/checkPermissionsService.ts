@@ -14,7 +14,7 @@ export default class CheckPermissionsService extends ServiceStructure<boolean> {
 
     async serviceExecute({ message, command, language }: { message: Message, command: CommandStructure, language: string }): Promise<boolean> {
         try {
-            if (message.channel.type === ChannelType.DM) {
+            if (message.channel && message.channel.type === ChannelType.DM || command.data.options.config.isDMAllowed) {
                 return true;
             } else if (command.data.options.permissions.client.length > 0 && !message.guild?.members.me?.permissions.has(command.data.options.permissions.client)) {
                 return await this.sendPermissionError(message, language, command, true);

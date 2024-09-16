@@ -3,6 +3,11 @@ import { Ryuzaki } from '../RyuzakiClient';
 
 const client: Ryuzaki = new Ryuzaki({
     intents: [
+        GatewayIntentBits.AutoModerationConfiguration,
+        GatewayIntentBits.AutoModerationExecution,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageTyping,
+        GatewayIntentBits.DirectMessageReactions,
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
@@ -12,17 +17,13 @@ const client: Ryuzaki = new Ryuzaki({
         GatewayIntentBits.GuildInvites,
         GatewayIntentBits.GuildMessageTyping,
         GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageTyping,
-        GatewayIntentBits.DirectMessageReactions,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.AutoModerationConfiguration,
-        GatewayIntentBits.AutoModerationExecution
+        GatewayIntentBits.MessageContent
     ],
     allowedMentions: {
         parse: [
             'users',
-            'roles'
+            'roles',
+            'everyone'
         ],
         repliedUser: true
     },

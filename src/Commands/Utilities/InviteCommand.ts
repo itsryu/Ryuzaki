@@ -11,7 +11,7 @@ export default class InviteCommand extends CommandStructure {
 
     async commandExecute({ message }: { message: Message }) {
         try {
-            const link = this.client.getInvite();
+            const link = this.client.getInvite;
 
             const embed = new ClientEmbed(this.client)
                 .setAuthor({ name: this.client.t('utilities:invite:embed.title'), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })

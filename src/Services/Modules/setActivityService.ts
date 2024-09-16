@@ -1,8 +1,8 @@
 import { ActivitiesOptions, ActivityType, PresenceUpdateStatus } from 'discord.js';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ServiceStructure } from '../../Structures';
-import { clientStats } from '../../Client';
 import { Logger } from '../../Utils/logger';
+import ClientStats from '../../Client/ClientStats';
 
 export default class SetActivityService extends ServiceStructure {
     declare interval: NodeJS.Timeout;
@@ -11,7 +11,7 @@ export default class SetActivityService extends ServiceStructure {
         { name: `My name is ${this.client.user?.username}!`, type: ActivityType.Listening },
         { name: 'Use /ryu to know more about me!', type: ActivityType.Listening },
         { name: 'Use /help to know what i can do!', type: ActivityType.Listening },
-        { name: `${clientStats.shards} shards`, type: ActivityType.Listening }
+        { name: `${ClientStats.shards} shards`, type: ActivityType.Listening }
     ];
 
     constructor(client: Ryuzaki) {
@@ -35,7 +35,7 @@ export default class SetActivityService extends ServiceStructure {
     public setPresence(shard = this.random) {
         this.client.user?.setPresence({
             activities: shard ? this.shardActivities : this.activities,
-            shardId: shard ? clientStats.shardId : undefined,
+            shardId: shard ? ClientStats.shardId : undefined,
             status: PresenceUpdateStatus.Online
         });
     }
@@ -46,7 +46,7 @@ export default class SetActivityService extends ServiceStructure {
 
     public get shardActivities(): ActivitiesOptions[] {
         return [{
-            name: `Shard [${clientStats.shardId}] (${clientStats.shardId + 1}/${clientStats.shards})`,
+            name: `Shard [${ClientStats.shardId}] (${ClientStats.shardId + 1}/${ClientStats.shards})`,
             type: ActivityType.Listening
         }];
     }

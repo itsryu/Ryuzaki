@@ -64,7 +64,7 @@ export class Ryuzaki extends Client {
         return new registerSlash(this).moduleExecute();
     }
 
-    public getInvite(): string {
+    public get getInvite(): string {
         return this.generateInvite({
             permissions: [
                 PermissionFlagsBits.ManageGuild,

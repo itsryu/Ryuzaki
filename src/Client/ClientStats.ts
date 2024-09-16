@@ -3,86 +3,86 @@ import { client } from './Client';
 import { Stats } from '../Types/ClientTypes';
 
 export default class ClientStats {
-    botMessages = 0;
-    interactions = 0;
-    isLastShard = false;
-    totalChannels = 0;
-    totalEmojis = 0;
-    totalGuilds = 0;
-    totalInteractions = 0;
-    totalMemoryUsage = 0;
-    totalMessages = 0;
-    totalShards = client.shard?.count ?? 0;
-    totalUsers = 0;
-    totalVoiceAdapters = 0;
-    userMessages = 0;
-    readonly usedCommands: Record<string, number> = {};
+    private static botMessages = 0;
+    private static interactions = 0;
+    private static isLastShard = false;
+    private static totalChannels = 0;
+    private static totalEmojis = 0;
+    private static totalGuilds = 0;
+    private static totalInteractions = 0;
+    private static totalMemoryUsage = 0;
+    private static totalMessages = 0;
+    public static readonly totalShards = client.shard?.count ?? 0;
+    private static totalUsers = 0;
+    private static totalVoiceAdapters = 0;
+    private static userMessages = 0;
+    private static readonly usedCommands: Record<string, number> = {};
 
-    get channels() {
+    public static get channels() {
         return client.channels.cache.size;
     }
 
-    get cpuUsage() {
+    public static get cpuUsage() {
         return cpuUsage();
     }
 
-    get emojis() {
+    public static get emojis() {
         return client.emojis.cache.size;
     }
 
-    get guilds() {
+    public static get guilds() {
         return client.guilds.cache.size;
     }
 
-    get memoryUsage() {
+    public static get memoryUsage() {
         return memoryUsage();
     }
 
-    get messages() {
-        return this.botMessages + this.userMessages;
+    public static get messages() {
+        return ClientStats.botMessages + ClientStats.userMessages;
     }
 
-    get readyAt() {
+    public static get readyAt() {
         return client.readyAt;
     }
 
-    get readyTimestamp() {
+    public static get readyTimestamp() {
         return client.readyTimestamp;
     }
 
-    get shards() {
+    public static get shards() {
         return client.shard?.count ?? 0;
     }
 
-    get shardId() {
+    public static get shardId() {
         return client.shard?.ids[0] ?? 0;
     }
 
-    get shardIds() {
+    public static get shardIds() {
         return client.shard?.ids ?? [];
     }
 
-    get uptime() {
+    public static get uptime() {
         return client.uptime;
     }
 
-    get users() {
+    public static get users() {
         return client.users.cache.size;
     }
 
-    get voiceAdapters() {
+    public static get voiceAdapters() {
         return client.voice.adapters.size;
     }
 
-    get wsPing() {
+    public static get wsPing() {
         return client.ws.ping;
     }
 
-    get wsStatus() {
+    public static get wsStatus() {
         return client.ws.status;
     }
 
-    async fetch() {
+    public static async fetch() {
         return client.shard?.broadcastEval(client => ({
             Channels: client.channels.cache.size,
             Emojis: client.emojis.cache.size,
@@ -114,38 +114,38 @@ export default class ClientStats {
             .catch(() => this) ?? this;
     }
 
-    toJSON(): Stats {
+    public static toJSON(): Stats {
         return {
-            botMessages: this.botMessages,
-            channels: this.channels,
-            cpuUsage: this.cpuUsage,
-            emojis: this.emojis,
-            guilds: this.guilds,
-            interactions: this.interactions,
-            isLastShard: this.isLastShard,
-            memoryUsage: this.memoryUsage,
-            messages: this.messages,
-            readyAt: this.readyAt,
-            readyTimestamp: this.readyTimestamp,
-            shards: this.shards,
-            shardId: this.shardId,
-            shardIds: this.shardIds,
-            totalChannels: this.totalChannels,
-            totalEmojis: this.totalEmojis,
-            totalGuilds: this.totalGuilds,
-            totalInteractions: this.totalInteractions,
-            totalMemoryUsage: this.totalMemoryUsage,
-            totalMessages: this.totalMessages,
-            totalShards: this.totalShards,
-            totalUsers: this.totalUsers,
-            totalVoiceAdapters: this.totalVoiceAdapters,
-            uptime: this.uptime,
-            usedCommands: this.usedCommands,
-            userMessages: this.userMessages,
-            users: this.users,
-            voiceAdapters: this.voiceAdapters,
-            wsPing: this.wsPing,
-            wsStatus: this.wsStatus
+            botMessages: ClientStats.botMessages,
+            channels: ClientStats.channels,
+            cpuUsage: ClientStats.cpuUsage,
+            emojis: ClientStats.emojis,
+            guilds: ClientStats.guilds,
+            interactions: ClientStats.interactions,
+            isLastShard: ClientStats.isLastShard,
+            memoryUsage: ClientStats.memoryUsage,
+            messages: ClientStats.messages,
+            readyAt: ClientStats.readyAt,
+            readyTimestamp: ClientStats.readyTimestamp,
+            shards: ClientStats.shards,
+            shardId: ClientStats.shardId,
+            shardIds: ClientStats.shardIds,
+            totalChannels: ClientStats.totalChannels,
+            totalEmojis: ClientStats.totalEmojis,
+            totalGuilds: ClientStats.totalGuilds,
+            totalInteractions: ClientStats.totalInteractions,
+            totalMemoryUsage: ClientStats.totalMemoryUsage,
+            totalMessages: ClientStats.totalMessages,
+            totalShards: ClientStats.totalShards,
+            totalUsers: ClientStats.totalUsers,
+            totalVoiceAdapters: ClientStats.totalVoiceAdapters,
+            uptime: ClientStats.uptime,
+            usedCommands: ClientStats.usedCommands,
+            userMessages: ClientStats.userMessages,
+            users: ClientStats.users,
+            voiceAdapters: ClientStats.voiceAdapters,
+            wsPing: ClientStats.wsPing,
+            wsStatus: ClientStats.wsStatus
         };
     }
 }

@@ -16,11 +16,11 @@ export default class VoteCommand extends CommandStructure {
             if (!userData) {
                 return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
             } else {
-                const vote = userData.economy.vote;
+                const time = userData.economy.vote;
                 const votes = userData.economy.votes;
-                const cooldown = 60000 * 60 * 12 - (Date.now() - vote);
+                const cooldown = 60000 * 60 * 12 - (Date.now() - time);
 
-                if (!vote && cooldown > 0) {
+                if (time && cooldown > 0) {
                     const reedemedEmbed = new ClientEmbed(this.client)
                         .setAuthor({ name: 'Discord Bot List', iconURL: message.author.displayAvatarURL({ extension: 'png', size: 4096 }) })
                         .setDescription(this.client.t('utilities:vote:embeds:reedemed.description', { author: message.author, firstTime: Math.floor((Date.now() + cooldown) / 1000), secondTime: Math.floor((Date.now() + cooldown) / 1000) }));

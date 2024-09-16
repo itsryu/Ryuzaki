@@ -37,7 +37,7 @@ export default class RyuCommand extends CommandStructure {
                             .setEmoji(emojis.github)
                             .setLabel(this.client.t('main:mentions:button.github')),
                         new ButtonBuilder()
-                            .setURL(this.client.url)
+                            .setURL(this.client.getInvite)
                             .setStyle(ButtonStyle.Link)
                             .setEmoji(emojis.pin)
                             .setLabel(this.client.t('main:mentions:button.add')),

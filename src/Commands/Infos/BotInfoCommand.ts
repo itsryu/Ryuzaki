@@ -5,12 +5,12 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BotInfoCommandData } from '../../Data/Commands/Infos/BotInfoCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version } from 'discord.js';
 import { connection } from 'mongoose';
-import { clientStats } from '../../Client';
 import { Constants } from '../../Utils/constants';
 import { Bytes } from '../../Utils/bytes';
 import { memoryUsage } from 'node:process';
 import { Logger } from '../../Utils/logger';
 import Day from 'dayjs';
+import ClientStats from '../../Client/ClientStats';
 
 export default class BotInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
@@ -46,7 +46,7 @@ export default class BotInfoCommand extends CommandStructure {
                     },
                     {
                         name: 'Estatísticas:',
-                        value: `🏘️ Servidores: \`${clientGuilds}\`\n👥 Usuários: \`${clientUsers}\`\n🔧 Total de Comandos: \`${clientCommands}\`\n📀 Shard ID: \`${clientStats.shardId}\` \`(${clientStats.shardId + 1}/${clientStats.totalShards}\`)`
+                        value: `🏘️ Servidores: \`${clientGuilds}\`\n👥 Usuários: \`${clientUsers}\`\n🔧 Total de Comandos: \`${clientCommands}\`\n📀 Shard ID: \`${ClientStats.shardId}\` \`(${ClientStats.shardId + 1}/${ClientStats.totalShards}\`)`
                     },
                     {
                         name: 'Linguagem e outros:',
@@ -59,7 +59,7 @@ export default class BotInfoCommand extends CommandStructure {
                 .setFooter({ text: `${this.client.user?.username} criado pelo ${clientOwner.tag}`, iconURL: clientOwner.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
             const addMeButton = new ButtonBuilder()
-                .setURL(this.client.getInvite())
+                .setURL(this.client.getInvite)
                 .setStyle(ButtonStyle.Link)
                 .setEmoji(emojis.pin)
                 .setLabel(this.client.t('main:mentions:button.add'));
