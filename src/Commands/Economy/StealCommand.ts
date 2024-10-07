@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { StealCommandData } from '../../Data/Commands/Economy/StealCommandData';
 import { Languages } from '../../Types/ClientTypes';
 import { Abbrev } from '../../Utils/abbrev';
@@ -11,7 +11,7 @@ export default class StealCommand extends CommandStructure {
         super(client, StealCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
         try {
             const member = message.mentions?.members?.first() ?? message.guild?.members.cache.get(args[0]);
             const userData = await this.client.getData(message.author.id, 'user');

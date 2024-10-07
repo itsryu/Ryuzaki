@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { UserSubCommandData } from '../../Data/Commands/Utilities/UserSubCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
 import { Languages } from '../../Types/ClientTypes';
 import { Util } from '../../Utils/util';
@@ -13,7 +13,7 @@ export default class UserSubCommand extends CommandStructure {
         super(client, UserSubCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
         try {
             switch (args[0]) {
                 case 'image': {

@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { PurgeCommandData } from '../../Data/Commands/Utilities/PurgeCommandData';
-import { Message, Collection } from 'discord.js';
+import { Message, Collection, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class purgeCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class purgeCommand extends CommandStructure {
         super(client, PurgeCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const amount = args[0];
             const limit = Number.isInteger(Number(amount)) ? Math.min(parseInt(amount), 100) : undefined;

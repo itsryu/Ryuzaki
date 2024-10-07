@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { DivorceCommandData } from '../../Data/Commands/Interaction/DivorceCommandData.js';
 import { emojis } from '../../Utils/Objects/emojis';
-import { Message, MessageReaction, User } from 'discord.js';
+import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class DivorceCommand extends CommandStructure {
@@ -10,7 +10,7 @@ export default class DivorceCommand extends CommandStructure {
         super(client, DivorceCommandData);
     }
 
-    public async commandExecute({ message }: { message: Message }) {
+    public async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
 

@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { CatsCommandData } from '../../Data/Commands/Fun/CatsCommandData';
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 interface CatData {
@@ -16,7 +16,7 @@ export default class CatsCommand extends CommandStructure {
         super(client, CatsCommandData);
     }
 
-    public async commandExecute({ message }: { message: Message }) {
+    public async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             const data = await fetch('https://api.thecatapi.com/v1/images/search')
                 .then(response => response.json())

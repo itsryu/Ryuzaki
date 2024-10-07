@@ -3,7 +3,7 @@ import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { HelpCommandData } from '../../Data/Commands/Infos/HelpCommandData';
 import { PermissionFlagKey, PermissionsFlagsText } from '../../Utils/Objects/flags';
 import { CategoryValidation, Languages } from '../../Types/ClientTypes';
-import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField } from 'discord.js';
+import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField, OmitPartialGroupDMChannel } from 'discord.js';
 import { categoryEmojis } from '../../Utils/Objects/emojis';
 import { Logger } from '../../Utils/logger';
 
@@ -12,7 +12,7 @@ export default class HelpCommand extends CommandStructure {
         super(client, HelpCommandData);
     }
 
-    async commandExecute({ message, args, prefix, language }: { message: Message, args: string[], prefix: string, language: Languages }) {
+    async commandExecute({ message, args, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], prefix: string, language: Languages }) {
         try {
             const { commands } = this.client;
 

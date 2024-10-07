@@ -3,7 +3,7 @@ import { emojis } from '../../Utils/Objects/emojis';
 import { Languages } from '../../Types/ClientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { RyuCommandData } from '../../Data/Commands/Infos/RyuCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class RyuCommand extends CommandStructure {
@@ -11,7 +11,7 @@ export default class RyuCommand extends CommandStructure {
         super(client, RyuCommandData);
     }
 
-    async commandExecute({ message, prefix, language }: { message: Message, prefix: string, language: Languages }) {
+    async commandExecute({ message, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, prefix: string, language: Languages }) {
         try {
             const owner = await this.client.users.fetch(process.env.OWNER_ID).catch(() => undefined);
             const username = this.client.user?.username;
@@ -19,7 +19,6 @@ export default class RyuCommand extends CommandStructure {
             const helpCommand = this.client.commands.get('help');
 
             if (helpCommand) {
-
                 const embed = new ClientEmbed(this.client)
                     .setTitle(this.client.t('infos:ryu:embed.title', { client: username }))
                     .setThumbnail(thumbnail ?? null)

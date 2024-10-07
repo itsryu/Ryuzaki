@@ -54,23 +54,3 @@ export class ShardManager extends ShardingManager {
         return this.shardList.length;
     }
 }
-
-const shard = new ShardManager(join(__dirname, './src/RyuzakiLauncher.js'), {
-    mode: 'process',
-    totalShards: 'auto',
-    respawn: true,
-    execArgv: ['--trace-warnings'],
-    shardArgs: ['--ansi', '--color'],
-    token: process.env.CLIENT_TOKEN,
-    shardList: 'auto',
-    silent: false
-});
-
-(async () => {
-    await shard.initialize();
-})()
-    .catch((err: unknown) => {
-        console.error((err as Error).message);
-        console.log((err as Error).stack);
-    });
-

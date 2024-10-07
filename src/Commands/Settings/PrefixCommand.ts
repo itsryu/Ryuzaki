@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { PrefixCommandData } from '../../Data/Commands/Settings/PrefixCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction, ButtonInteraction } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction, ButtonInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class PrefixCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class PrefixCommand extends CommandStructure {
         super(client, PrefixCommandData);
     }
 
-    async commandExecute({ message, prefix }: { message: Message, prefix: string }) {
+    async commandExecute({ message, prefix }: { message: OmitPartialGroupDMChannel<Message>, prefix: string }) {
         try {
             const guildData = await this.client.getData(message.guild?.id, 'guild');
             const userData = await this.client.getData(message.author.id, 'user');
@@ -43,12 +43,12 @@ export default class PrefixCommand extends CommandStructure {
                     await msg.edit({ embeds: [embed], components: [row] });
                 });
 
-                collector.on('collect', async (i: ButtonInteraction) => {
-                    if (i.customId == 'new') {
-                        message.channel.send({ content: this.client.t('config:prefix.new') });
+                collector.on('collect', async (interaction: ButtonInteraction) => {
+                    if (interaction.customId == 'new' && message.channel) {
+                        await message.channel.send({ content: this.client.t('config:prefix.new') });
 
                         const filter = (msg: Message) => msg.author.id === message.author.id;
-                        const col = await i.channel?.awaitMessages({ filter, max: 1 });
+                        const col = await message.channel.awaitMessages({ filter, max: 1 });
 
                         if (col) {
                             const collected = col.first();

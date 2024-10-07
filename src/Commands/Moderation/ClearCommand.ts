@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { ClearCommandData } from '../../Data/Commands/Moderation/ClearCommandData';
-import { Collection, Message, TextChannel, GuildTextBasedChannel, PartialMessage } from 'discord.js';
+import { Collection, Message, TextChannel, GuildTextBasedChannel, PartialMessage, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class ClearCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class ClearCommand extends CommandStructure {
         super(client, ClearCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const amount = args[0];
             const limit = Number.isInteger(Number(amount)) ? Math.min(parseInt(amount), 100) : undefined;

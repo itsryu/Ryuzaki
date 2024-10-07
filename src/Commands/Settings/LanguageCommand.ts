@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
+import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { LanguageCommandData } from '../../Data/Commands/Settings/LanguageCommandData';
 import { Languages } from '../../Types/ClientTypes';
 import { Logger } from '../../Utils/logger';
@@ -15,7 +15,7 @@ export default class LanguageCommand extends CommandStructure {
         super(client, LanguageCommandData);
     }
 
-    async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
+    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
         try {
             const guildLang = args[0];
             const guildData = await this.client.getData(message.guild?.id, 'guild');

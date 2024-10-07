@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { TestCommandData } from '../../Data/Commands/Developer/TestCommandData';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
@@ -9,7 +9,7 @@ export default class TestCommand extends CommandStructure {
         super(client, TestCommandData);
     }
 
-    public commandExecute({ message }: { message: Message, args: string[] }) {
+    public commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             Logger.debug(message.content, TestCommand.name);
         } catch (err) {

@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { Languages } from '../../Types/ClientTypes';
@@ -12,7 +12,7 @@ export default class BagCommand extends CommandStructure {
         super(client, BagCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: Message, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
         try {
             const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
             const userData = await this.client.getData(user.id, 'user');

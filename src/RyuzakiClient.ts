@@ -1,4 +1,4 @@
-import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions, REST } from 'discord.js';
+import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
 import { Logger } from './Utils/logger';
 import { Translate } from '../lib/Translate';
@@ -8,11 +8,11 @@ import { Collections } from './Utils/collection';
 import { DataType, Languages, DataDocument, ShardMemory } from './Types/ClientTypes';
 import { config } from 'dotenv';
 import { join } from 'node:path';
+import { SlashCommands } from '../slashCommands';
 
 config({ path: join(__dirname, '../.env') });
 
 export class Ryuzaki extends Client {
-    public readonly rest: REST = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
     public readonly stats: Api = new Api(process.env.DBL_TOKEN);
     public readonly collection = new Collections<string>();
     public readonly developers: readonly string[] = Object.freeze([process.env.OWNER_ID]);
@@ -47,7 +47,7 @@ export class Ryuzaki extends Client {
     public async initialize() {
         try {
             await this.clientManager();
-            await this.registerSlashCommands();
+            await SlashCommands.register(this);
         } catch (err) {
             Logger.error((err as Error).message, [Ryuzaki.name, this.initialize.name]);
             Logger.warn((err as Error).stack, [Ryuzaki.name, this.initialize.name]);
@@ -57,11 +57,6 @@ export class Ryuzaki extends Client {
     private async clientManager() {
         const { default: servicesIndex } = await import('./Services/index');
         await new servicesIndex(this).moduleExecute();
-    }
-
-    protected async registerSlashCommands() {
-        const { default: registerSlash } = await import('../RegisterSlashCommands');
-        return new registerSlash(this).moduleExecute();
     }
 
     public get getInvite(): string {

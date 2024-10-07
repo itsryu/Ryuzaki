@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { VoteCommandData } from '../../Data/Commands/Economy/VoteCommandData';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class VoteCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class VoteCommand extends CommandStructure {
         super(client, VoteCommandData);
     }
 
-    async commandExecute({ message }: { message: Message }) {
+    async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
 

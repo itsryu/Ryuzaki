@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { InviteCommandData } from '../../Data/Commands/Utilities/InviteCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class InviteCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class InviteCommand extends CommandStructure {
         super(client, InviteCommandData);
     }
 
-    async commandExecute({ message }: { message: Message }) {
+    async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             const link = this.client.getInvite;
 

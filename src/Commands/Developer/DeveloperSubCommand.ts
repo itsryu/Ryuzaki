@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { DeveloperSubCommandData } from '../../Data/Commands/Developer/DeveloperSubCommandData';
-import { Message, MessageComponentInteraction, StringSelectMenuInteraction } from 'discord.js';
+import { Message, MessageComponentInteraction, OmitPartialGroupDMChannel, StringSelectMenuInteraction } from 'discord.js';
 import { inspect } from 'node:util';
 import { Languages } from '../../Types/ClientTypes';
 import { Logger } from '../../Utils/logger';
@@ -12,7 +12,7 @@ export default class DeveloperSubCommand extends CommandStructure {
         super(client, DeveloperSubCommandData);
     }
 
-    async commandExecute({ message, args, language }: { message: Message, args: string[], prefix: string, language: Languages }) {
+    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], prefix: string, language: Languages }) {
         try {
             switch (args[0]) {
                 case 'eval': {

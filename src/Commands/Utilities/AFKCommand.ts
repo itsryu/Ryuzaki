@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { AFKCommandData } from '../../Data/Commands/Utilities/AFKCommandData';
 import { Logger } from '../../Utils/logger';
 
@@ -9,7 +9,7 @@ export default class AFKCommand extends CommandStructure {
         super(client, AFKCommandData);
     }
 
-    async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
 

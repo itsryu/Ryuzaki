@@ -3,7 +3,7 @@ import { emojis } from '../../Utils/Objects/emojis';
 import { Languages } from '../../Types/ClientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BotInfoCommandData } from '../../Data/Commands/Infos/BotInfoCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version, OmitPartialGroupDMChannel } from 'discord.js';
 import { connection } from 'mongoose';
 import { Constants } from '../../Utils/constants';
 import { Bytes } from '../../Utils/bytes';
@@ -11,13 +11,14 @@ import { memoryUsage } from 'node:process';
 import { Logger } from '../../Utils/logger';
 import Day from 'dayjs';
 import ClientStats from '../../Client/ClientStats';
+import { Util } from '../../Utils/util';
 
 export default class BotInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, BotInfoCommandData);
     }
 
-    async commandExecute({ message, prefix, language }: { message: Message, prefix: string, language: Languages }) {
+    async commandExecute({ message, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, prefix: string, language: Languages }) {
         try {
             const clientUsername = this.client.user?.username;
             const clientTag = this.client.user?.tag;
@@ -33,7 +34,7 @@ export default class BotInfoCommand extends CommandStructure {
             const njsVersion = process.version;
             const clientOwner = await this.client.users.fetch(process.env.OWNER_ID);
             const clientAvatar = this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 });
-            const dbPing = await BotInfoCommand.databasePing();
+            const databasePing = await Util.databasePing(connection);
 
             const clientInfo = new ClientEmbed(this.client)
                 .setAuthor({ name: `Olá, me chamo ${clientUsername}!`, iconURL: clientAvatar })
@@ -54,7 +55,7 @@ export default class BotInfoCommand extends CommandStructure {
                     },
                     {
                         name: 'Sistema:',
-                        value: `💻 CPU: \`${Constants.CPU_MODEL} (${Constants.CPU_CORES} cores)\`\n💾 RAM: \`${new Bytes(memoryUsage().heapUsed)}/${new Bytes(Constants.TOTAL_RAM)}\`\n🛠️ Arquitetura: \`${Constants.OS_ARCH}\`\n⏰ Tempo online: \`${clientUptime}\`\n🛰 Ping do Host: \`${clientPing}\`ms\n🍃 Ping do DB: \`${dbPing}\`ms`
+                        value: `💻 CPU: \`${Constants.CPU_MODEL} (${Constants.CPU_CORES} cores)\`\n💾 RAM: \`${new Bytes(memoryUsage().heapUsed)}/${new Bytes(Constants.TOTAL_RAM)}\`\n🛠️ Arquitetura: \`${Constants.OS_ARCH}\`\n⏰ Tempo online: \`${clientUptime}\`\n🛰 Ping do Host: \`${clientPing}\`ms\n🍃 Ping do DB: \`${databasePing}\`ms`
                     })
                 .setFooter({ text: `${this.client.user?.username} criado pelo ${clientOwner.tag}`, iconURL: clientOwner.displayAvatarURL({ extension: 'png', size: 4096 }) });
 
@@ -83,13 +84,5 @@ export default class BotInfoCommand extends CommandStructure {
             Logger.warn((err as Error).stack, BotInfoCommand.name);
             throw new Error((err as Error).message, { cause: err });
         }
-    }
-
-    private static async databasePing() {
-        const dbStart = process.hrtime();
-        await connection.db.command({ ping: 1 });
-        const dbStop = process.hrtime(dbStart);
-
-        return Math.round((dbStop[0] * 1e9 + dbStop[1]) / 1e6);
     }
 }

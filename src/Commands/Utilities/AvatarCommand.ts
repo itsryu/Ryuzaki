@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { AvatarCommandData } from '../../Data/Commands/Utilities/AvatarCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class AvatarCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class AvatarCommand extends CommandStructure {
         super(client, AvatarCommandData);
     }
 
-    async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
 

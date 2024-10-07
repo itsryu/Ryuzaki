@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
-import { ActionRowBuilder, AuditLogEvent, ButtonBuilder, ButtonInteraction, ButtonStyle, Events, Guild, GuildAuditLogsEntry, MessageComponentInteraction, NonThreadGuildBasedChannel, TextBasedChannel } from 'discord.js';
+import { ActionRowBuilder, AuditLogEvent, ButtonBuilder, ButtonInteraction, ButtonStyle, Events, Guild, GuildAuditLogsEntry, GuildTextBasedChannel, MessageComponentInteraction, NonThreadGuildBasedChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class GuildAuditLogEntryCreateListener extends ListenerStructure {
@@ -14,6 +14,7 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
         try {
             if (guild && guild.id === '1110360854219739156') {
                 const { action, executorId, targetId, target, changes } = auditLogEntry;
+                const logChannel = await this.client.channels.fetch('1251699570698883155').catch(() => null) as GuildTextBasedChannel;
 
                 switch (action) {
                     case AuditLogEvent.ChannelDelete: {
@@ -32,7 +33,6 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
                                 .setEmoji('🔁');
 
                             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
-                            const logChannel = await this.client.channels.fetch('1251699570698883155').catch(() => null) as TextBasedChannel;
                             const msg = await logChannel.send({ embeds: [embed], components: [row] });
                             const filter = (i: MessageComponentInteraction) => (i.user.id === '1110284870875361350' && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
                             const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
@@ -62,11 +62,11 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
                         const executor = await this.client.users.fetch(executorId!).catch(() => null);
 
                         if (executor) {
-                            const roleName = changes.find((change) => change.key === 'name')?.old as string;
-                            const rolePermissions = changes.find((change) => change.key === 'permissions')?.old as number;
-                            const roleHoisted = changes.find((change) => change.key === 'hoist')?.old as boolean;
-                            const roleColor = changes.find((change) => change.key === 'color')?.old as number;
-                            const roleMentionable = changes.find((change) => change.key === 'mentionable')?.old as boolean;
+                            const roleName = changes.find((change) => change.key === 'name')?.old!;
+                            const rolePermissions = changes.find((change) => change.key === 'permissions')?.old!;
+                            const roleHoisted = changes.find((change) => change.key === 'hoist')?.old!;
+                            const roleColor = changes.find((change) => change.key === 'color')?.old!;
+                            const roleMentionable = changes.find((change) => change.key === 'mentionable')?.old!;
 
                             const embed = new ClientEmbed(this.client)
                                 .setColor(parseInt(roleColor.toString(16), 16))
@@ -87,7 +87,7 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
                                 .setEmoji('🔁');
 
                             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
-                            const logChannel = await this.client.channels.fetch('1251699570698883155').catch(() => null) as TextBasedChannel;
+                            
                             const msg = await logChannel.send({ embeds: [embed], components: [row] });
                             const filter = (i: MessageComponentInteraction) => (i.user.id === '1110284870875361350' && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
                             const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
@@ -119,8 +119,6 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
                         const bannedUser = await this.client.users.fetch(targetId!).catch(() => null);
 
                         if (executor && bannedUser) {
-                            const logChannel = await this.client.channels.fetch('1251699570698883155').catch(() => null) as TextBasedChannel;
-
                             await logChannel.send(`${bannedUser.tag} was banned by ${executor.tag} on ${guild.name}.`);
                         }
                         break;
@@ -131,8 +129,6 @@ export default class GuildAuditLogEntryCreateListener extends ListenerStructure 
                         const kickedUser = await this.client.users.fetch(targetId!).catch(() => null);
 
                         if (executor && kickedUser) {
-                            const logChannel = await this.client.channels.fetch('1251699570698883155').catch(() => null) as TextBasedChannel;
-
                             await logChannel.send(`${kickedUser.tag} was kicked by ${executor.tag} on ${guild.name}.`);
                         }
                         break;

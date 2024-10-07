@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, codeBlock } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, OmitPartialGroupDMChannel, codeBlock } from 'discord.js';
 import { CalculatorCommandData } from '../../Data/Commands/Utilities/CalculatorCommandData';
 import { Logger } from '../../Utils/logger';
 
@@ -9,7 +9,7 @@ export default class CalculatorCommand extends CommandStructure {
         super(client, CalculatorCommandData);
     }
 
-    public async commandExecute({ message }: { message: Message }) {
+    public async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             return void await message.reply({
                 components: [

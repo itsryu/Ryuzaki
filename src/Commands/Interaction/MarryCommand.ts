@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { MarryCommandData } from '../../Data/Commands/Interaction/MarryCommandData';
-import { Message, MessageReaction, User } from 'discord.js';
+import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Logger } from '../../Utils/logger';
 
@@ -10,7 +10,7 @@ export default class MarryCommand extends CommandStructure {
         super(client, MarryCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined);
             const userData = await this.client.getData(message.author.id, 'user');

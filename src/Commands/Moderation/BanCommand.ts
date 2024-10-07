@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BanCommandData } from '../../Data/Commands/Moderation/BanCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, GuildTextBasedChannel, MessageComponentInteraction } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, GuildTextBasedChannel, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';
 import { Logger } from '../../Utils/logger';
 
@@ -10,7 +10,7 @@ export default class BanCommand extends CommandStructure {
         super(client, BanCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }): Promise<void> {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }): Promise<void> {
         try {
             const guildData = await this.client.getData(message.guild?.id, 'guild');
             const member = message.mentions?.members?.first() ?? await message.guild?.members.fetch(args[0]).catch(() => undefined);
@@ -95,7 +95,7 @@ export default class BanCommand extends CommandStructure {
 
                             member.ban({ reason: reason, deleteMessageSeconds: 604800 })
                                 .then(async () => {
-                                    member.send({ embeds: [bannedEmbed] }).catch(() => undefined);
+                                    await member.send({ embeds: [bannedEmbed] }).catch();
 
                                     if (guildData && guildData.logs.status && guildData.logs.moderation) {
                                         const channel = message.guild?.channels.cache.get(guildData.logs.channel) as GuildTextBasedChannel;

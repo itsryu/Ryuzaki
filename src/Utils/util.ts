@@ -4,6 +4,7 @@ import { SKRSContext2D } from '@napi-rs/canvas';
 import { duration } from 'dayjs';
 import { Language } from './Objects/flags';
 import { Languages } from '../Types/ClientTypes';
+import { Connection } from 'mongoose';
 
 namespace Util {
     export type timezone = 'America/Sao_Paulo' | 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Denver' | 'America/Phoenix' | 'America/Anchorage' | 'America/Adak' | 'Pacific/Honolulu';
@@ -191,6 +192,15 @@ namespace Util {
         }
 
         return result;
+    }
+
+    export async function databasePing(connection: Connection): Promise<number> {
+        if (!connection.db) return 0;
+
+        const dbStart = process.hrtime.bigint();
+        await connection.db.command({ ping: 1 });
+        const dbStop = process.hrtime.bigint();
+        return Number((dbStop - dbStart) / 1_000_000n);
     }
 
     /**

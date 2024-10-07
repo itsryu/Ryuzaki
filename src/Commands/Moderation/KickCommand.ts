@@ -1,7 +1,7 @@
 ﻿import { KickCommandData } from '../../Data/Commands/Moderation/KickCommandData';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures';
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';
 import { Logger } from '../../Utils/logger';
 
@@ -10,7 +10,7 @@ export default class KickCommand extends CommandStructure {
         super(client, KickCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }): Promise<void> {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }): Promise<void> {
         try {
             const guildData = await this.client.getData(message.guild?.id, 'guild');
             const member = message.mentions?.members?.first() ?? await message.guild?.members.fetch(args[0]).catch(() => undefined);
@@ -93,11 +93,11 @@ export default class KickCommand extends CommandStructure {
 
                             member.kick(reason)
                                 .then(async () => {
-                                    member.send({ embeds: [kickedEmbed] }).catch(() => { });
+                                    await member.send({ embeds: [kickedEmbed] }).catch();
 
                                     if (guildData && guildData.logs.status && guildData.logs.moderation) {
                                         const channel = message.guild?.channels.cache.get(guildData.logs.channel) as GuildTextBasedChannel;
-                                        if (channel) channel.send({ embeds: [kickEmbed] });
+                                        if (channel) await channel.send({ embeds: [kickEmbed] });
                                     }
 
                                     await msg.edit({ embeds: [kickEmbed], components: [] });

@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { SayCommandData } from '../../Data/Commands/Developer/SayCommandData';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../Structures/';
@@ -9,7 +9,7 @@ export default class SayCommand extends CommandStructure {
         super(client, SayCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const msg = args.join(' ');
 

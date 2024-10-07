@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures/';
-import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
+import { Events, Message, OmitPartialGroupDMChannel, PartialMessage, TextChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class MessageDeleteListener extends ListenerStructure {
@@ -10,7 +10,7 @@ export default class MessageDeleteListener extends ListenerStructure {
         });
     }
 
-    async eventExecute(message: Message | PartialMessage) {
+    async eventExecute(message: OmitPartialGroupDMChannel<Message | PartialMessage>) {
         if (!message.author || message.author.bot) return;
 
         try {

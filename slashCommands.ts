@@ -1,12 +1,15 @@
-import { ModuleStructure, RawCommandData, RawContextCommandData } from './src/Structures';
-import { ApplicationCommand, PermissionsBitField, Routes } from 'discord.js';
+import { RawCommandData, RawContextCommandData } from './src/Structures';
+import { ApplicationCommand, PermissionsBitField, REST, Routes } from 'discord.js';
 import { Logger } from './src/Utils/logger';
+import { Ryuzaki } from './src/RyuzakiClient';
 
-export default class RegisterSlashCommands extends ModuleStructure {
-    async moduleExecute() {
+export class SlashCommands {
+    public static readonly rest: REST = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
+
+    public static async register(client: Ryuzaki) {
         const commands: RawContextCommandData[] & RawCommandData[] = [];
-        const commandFolders = this.client.commands.map((command) => command.data.options);
-        const contextFolders = this.client.contexts.map((context) => context.data.options);
+        const commandFolders = client.commands.map((command) => command.data.options);
+        const contextFolders = client.contexts.map((context) => context.data.options);
 
         commandFolders.forEach((command) => {
             if (command.config.registerSlash) {
@@ -30,12 +33,12 @@ export default class RegisterSlashCommands extends ModuleStructure {
 
         //===============> Registrando os comandos <===============//
         try {
-            const data = await this.client.rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands }) as ApplicationCommand[];
+            const data = await this.rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands }) as ApplicationCommand[];
 
             Logger.info(`Updated ${data.length} slash command(s) (/) successfully!`, 'Slash Commands');
         } catch (error) {
-            Logger.error((error as Error).message, RegisterSlashCommands.name);
-            Logger.warn((error as Error).stack, RegisterSlashCommands.name);
+            Logger.error((error as Error).message, SlashCommands.name);
+            Logger.warn((error as Error).stack, SlashCommands.name);
         }
     }
 }

@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../../src/Structures/';
-import { Message } from 'discord.js';
+import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Abbrev } from '../../Utils/abbrev';
 import { LevelInfoCommandData } from '../../Data/Commands/Infos/LevelInfoCommandData';
 import { Logger } from '../../Utils/logger';
@@ -10,7 +10,7 @@ export default class LevelInfoCommand extends CommandStructure {
         super(client, LevelInfoCommandData);
     }
 
-    async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
             const userData = await this.client.getData(user.id, 'user');

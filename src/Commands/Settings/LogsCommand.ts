@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { LogsCommandData } from '../../Data/Commands/Settings/LogsCommandData';
-import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, EmbedBuilder } from 'discord.js';
+import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, EmbedBuilder, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { GuildDocument } from '../../Types/SchemaTypes';
 import { Logger } from '../../Utils/logger';
@@ -11,7 +11,7 @@ export default class LogsCommand extends CommandStructure {
         super(client, LogsCommandData);
     }
 
-    public async commandExecute({ message }: { message: Message }) {
+    public async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             const guildData = await this.client.getData(message.guild?.id, 'guild');
 
@@ -25,7 +25,7 @@ export default class LogsCommand extends CommandStructure {
                     .addFields(
                         {
                             name: 'Canal definido:',
-                            value: guildData.logs.channel == null ? '\`Nenhum canal definido\`.' : `<#${guildData.logs.channel}>`
+                            value: guildData.logs.channel == null ? '`Nenhum canal definido`.' : `<#${guildData.logs.channel}>`
                         },
                         {
                             name: 'Status do sistema:',
@@ -125,7 +125,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -137,7 +137,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -153,7 +153,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -165,7 +165,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -181,7 +181,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -193,7 +193,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -209,7 +209,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -221,7 +221,7 @@ export default class LogsCommand extends CommandStructure {
 
                                     this.updateFirstMenu(configMenu, guildData);
 
-                                    replied.edit({
+                                    await replied.edit({
                                         components: [row]
                                     });
 
@@ -236,7 +236,7 @@ export default class LogsCommand extends CommandStructure {
                         const logMessage = await message.channel.send({ content: 'Mencione ou insira o ID do canal de logs:' });
 
                         const filter = (msg: Message) => msg.author.id === message.author.id;
-                        const messageCollector = await interaction.channel?.awaitMessages({ filter: filter, max: 1 });
+                        const messageCollector = await message.channel.awaitMessages({ filter: filter, max: 1 });
 
                         if (messageCollector) {
                             const content = messageCollector.first()?.content;
@@ -257,9 +257,9 @@ export default class LogsCommand extends CommandStructure {
                                     guildData.logs.channel = channel.id;
                                     await guildData.save();
 
-                                    this.updateEmbed(embed, guildData);
+                                    LogsCommand.updateEmbed(embed, guildData);
 
-                                    msg.edit({
+                                    await msg.edit({
                                         embeds: [embed]
                                     });
 
@@ -278,10 +278,10 @@ export default class LogsCommand extends CommandStructure {
                             guildData.logs.status = false;
                             await guildData.save();
 
-                            this.updateEmbed(embed, guildData);
+                            LogsCommand.updateEmbed(embed, guildData);
                             this.updateSecondMenu(menu, guildData);
 
-                            msg.edit({
+                            await msg.edit({
                                 embeds: [embed],
                                 components: [row]
                             });
@@ -292,10 +292,10 @@ export default class LogsCommand extends CommandStructure {
                             guildData.logs.status = true;
                             await guildData.save();
 
-                            this.updateEmbed(embed, guildData);
+                            LogsCommand.updateEmbed(embed, guildData);
                             this.updateSecondMenu(menu, guildData);
 
-                            msg.edit({
+                            await msg.edit({
                                 embeds: [embed],
                                 components: [row]
                             });
@@ -377,12 +377,12 @@ export default class LogsCommand extends CommandStructure {
         }
     }
 
-    updateEmbed(embed: EmbedBuilder, data: GuildDocument | null) {
+    private static updateEmbed(embed: EmbedBuilder, data: GuildDocument | null): EmbedBuilder | undefined {
         if (data) {
             embed.setFields(
                 {
                     name: 'Canal definido:',
-                    value: data.logs.channel == null ? '\`Nenhum canal definido\`.' : `<#${data.logs.channel}>`
+                    value: data.logs.channel == null ? '`Nenhum canal definido`.' : `<#${data.logs.channel}>`
                 },
                 {
                     name: 'Status do sistema:',

@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structures';
-import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType } from 'discord.js';
+import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Logger } from '../../Utils/logger';
 import { Util } from '../../Utils/util';
@@ -12,7 +12,7 @@ export default class MessageCreateListener extends ListenerStructure {
         });
     }
 
-    public async eventExecute(message: Message): Promise<void> {
+    public async eventExecute(message: OmitPartialGroupDMChannel<Message>): Promise<void> {
         if (message.author.bot) return;
 
         try {

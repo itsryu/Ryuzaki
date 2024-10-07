@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { GuildSubCommandData } from '../../Data/Commands/Utilities/GuildSubCommandData';
-import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 
 export default class GuildSubCommand extends CommandStructure {
@@ -9,7 +9,7 @@ export default class GuildSubCommand extends CommandStructure {
         super(client, GuildSubCommandData);
     }
 
-    commandExecute({ message, args }: { message: Message, args: string[] }) {
+    commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const guild = this.client.guilds.cache.get(args[2]) ?? message.guild;
 

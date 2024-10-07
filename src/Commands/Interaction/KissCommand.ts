@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
-import { Message, MessageReaction, User } from 'discord.js';
+import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { KissCommandData } from '../../Data/Commands/Interaction/KissCommandData';
 import { Logger } from '../../Utils/logger';
 
@@ -13,7 +13,7 @@ export default class KissCommand extends CommandStructure {
         super(client, KissCommandData);
     }
 
-    public async commandExecute({ message, args }: { message: Message, args: string[] }) {
+    public async commandExecute({ message, args }: { message: OmitPartialGroupDMChannel<Message>, args: string[] }) {
         try {
             const member = message.mentions?.members?.first() ?? message.guild?.members.cache.get(args[0]);
 

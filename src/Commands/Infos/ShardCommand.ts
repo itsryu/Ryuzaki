@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../RyuzakiClient';
 import { CommandStructure } from '../../../src/Structures/';
 import { ShardCommandData } from '../../Data/Commands/Infos/ShardCommandData';
 import { Languages } from '../../Types/ClientTypes';
-import { Client, Message } from 'discord.js';
+import { Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import Ascii from 'ascii-table';
 import Day from 'dayjs';
 import { Bytes } from '../../Utils/bytes';
@@ -13,7 +13,7 @@ export default class ShardCommand extends CommandStructure {
         super(client, ShardCommandData);
     }
 
-    async commandExecute({ message, language }: { message: Message, language: Languages }) {
+    async commandExecute({ message, language }: { message: OmitPartialGroupDMChannel<Message>, language: Languages }) {
         try {
             const table = new Ascii('Shards Information');
 

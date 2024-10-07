@@ -1,4 +1,4 @@
-import { Message, MessageComponentInteraction } from 'discord.js';
+import { Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../RyuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { RankMoneyCommandData } from '../../Data/Commands/Economy/RankMoneyCommandData';
@@ -11,7 +11,7 @@ export default class RankMoneyCommand extends CommandStructure {
         super(client, RankMoneyCommandData);
     }
 
-    public async commandExecute({ message }: { message: Message }) {
+    public async commandExecute({ message }: { message: OmitPartialGroupDMChannel<Message> }) {
         try {
             const collection = await Ryuzaki.database.users.find({
                 $or: [

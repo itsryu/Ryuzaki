@@ -5,6 +5,7 @@ import { client } from './Client/Client';
 import App from './Web/backend/server';
 import { Logger } from './Utils/logger';
 
+
 (async () => {
     await client.login(process.env.CLIENT_TOKEN);
     await client.initialize();
@@ -21,6 +22,6 @@ import { Logger } from './Utils/logger';
     extend((await import('dayjs/plugin/relativeTime')).default);
 })()
     .catch((err: unknown) => {
-        console.error((err as Error).message);
-        console.log((err as Error).stack);
+        Logger.error((err as Error).message, 'RyuzakiLauncher');
+        Logger.warn((err as Error).stack, 'RyuzakiLauncher');
     });
