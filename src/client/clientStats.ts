@@ -1,6 +1,6 @@
 import { cpuUsage, memoryUsage } from 'node:process';
-import { client } from './Client';
-import { Stats } from '../Types/ClientTypes';
+import { client } from './client';
+import { Stats } from '../types/clientTypes';
 
 export default class ClientStats {
     private static botMessages = 0;
@@ -12,11 +12,14 @@ export default class ClientStats {
     private static totalInteractions = 0;
     private static totalMemoryUsage = 0;
     private static totalMessages = 0;
-    public static readonly totalShards = client.shard?.count ?? 0;
     private static totalUsers = 0;
     private static totalVoiceAdapters = 0;
     private static userMessages = 0;
     private static readonly usedCommands: Record<string, number> = {};
+
+    public static get totalShards(): number {
+        return client.shard?.count ?? 0;
+    }
 
     public static get channels() {
         return client.channels.cache.size;

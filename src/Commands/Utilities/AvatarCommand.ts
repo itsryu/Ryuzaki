@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { AvatarCommandData } from '../../Data/Commands/Utilities/AvatarCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';

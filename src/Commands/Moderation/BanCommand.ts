@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BanCommandData } from '../../Data/Commands/Moderation/BanCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, GuildTextBasedChannel, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';

@@ -1,6 +1,6 @@
 import Dayjs from 'dayjs';
 import { Util } from '../src/Utils/util';
-import { Languages } from '../src/Types/ClientTypes';
+import { Languages } from '../src/types/clientTypes';
 
 describe('formatDuration', () => {
     const dayjs: typeof Dayjs = jest.requireActual('dayjs');

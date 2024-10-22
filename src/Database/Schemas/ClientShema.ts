@@ -1,5 +1,5 @@
 import { Schema, Model, model } from 'mongoose';
-import { ClientDocument } from '../../Types/SchemaTypes';
+import { ClientDocument } from '../../types/schemaTypes';
 
 const ClientSchema = new Schema<ClientDocument>({
     _id: {

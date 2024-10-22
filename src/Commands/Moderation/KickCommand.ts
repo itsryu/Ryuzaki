@@ -1,5 +1,5 @@
 ﻿import { KickCommandData } from '../../Data/Commands/Moderation/KickCommandData';
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures';
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';

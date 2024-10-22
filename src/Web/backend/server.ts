@@ -4,13 +4,13 @@ import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflak
 import { urlencoded, json } from 'body-parser';
 import { InfoMiddleware, AuthMiddleware } from './middlewares/index';
 import { Logger } from '../../Utils/logger';
-import { Route } from '../../Types/HTTPSInterfaces';
+import { Route } from '../../types/HTTPSTypes';
 import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController } from './routes/index';
 import cors from 'cors';
 import { verifyKey } from 'discord-interactions';
 import { JSONResponse } from '../../Structures/RouteStructure';
 import { Webhook } from '@top-gg/sdk';
-import ClientStats from '../../Client/ClientStats';
+import ClientStats from '../../client/clientStats';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();

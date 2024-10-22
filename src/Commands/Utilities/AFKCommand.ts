@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { AFKCommandData } from '../../Data/Commands/Utilities/AFKCommandData';

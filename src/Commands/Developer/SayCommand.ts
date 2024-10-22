@@ -1,6 +1,6 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { SayCommandData } from '../../Data/Commands/Developer/SayCommandData';
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Logger } from '../../Utils/logger';
 

@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 
 type ServiceName = 'CheckPermissions' | 'DatabaseConnection' | 'LoadModules' | 'SetActivity';
 

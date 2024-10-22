@@ -1,8 +1,8 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { TextChannel, VoiceState } from 'discord.js';
 import { Util } from '../../Utils/util';
-import { Languages } from '../../Types/ClientTypes';
+import { Languages } from '../../types/clientTypes';
 import { Logger } from '../../Utils/logger';
 
 export default class VoiceStateUpdateListener extends ListenerStructure {

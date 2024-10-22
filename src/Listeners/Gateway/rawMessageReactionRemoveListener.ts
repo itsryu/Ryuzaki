@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { RawListenerStructure, ClientEmbed } from '../../Structures';
 import { TextChannel, GatewayDispatchEvents, GatewayMessageReactionRemoveDispatchData } from 'discord.js';
 import { Logger } from '../../Utils/logger';

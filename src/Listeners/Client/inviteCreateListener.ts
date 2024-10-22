@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ListenerStructure } from '../../Structures/';
 import { Events, Guild, Invite, Collection, PermissionFlagsBits } from 'discord.js';
 import { Logger } from '../../Utils/logger';

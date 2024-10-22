@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { PurgeCommandData } from '../../Data/Commands/Utilities/PurgeCommandData';
 import { Message, Collection, OmitPartialGroupDMChannel } from 'discord.js';

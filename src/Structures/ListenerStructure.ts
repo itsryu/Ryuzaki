@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 import { ClientEvents } from 'discord.js';
 
 interface EventOptions {

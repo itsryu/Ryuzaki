@@ -1,5 +1,5 @@
 import { ModuleStructure } from '../Structures';
-import { UserDocument } from '../Types/SchemaTypes';
+import { UserDocument } from '../types/schemaTypes';
 import { Interaction, Message, User } from 'discord.js';
 import { loadImage, createCanvas, Canvas } from '@napi-rs/canvas';
 import { emojis } from './Objects/emojis';

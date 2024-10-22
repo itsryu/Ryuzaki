@@ -3,12 +3,12 @@ import { renderEmoji } from './Plugins/renderEmoji';
 import { SKRSContext2D } from '@napi-rs/canvas';
 import { duration } from 'dayjs';
 import { Language } from './Objects/flags';
-import { Languages } from '../Types/ClientTypes';
+import { Languages } from '../types/clientTypes';
 import { Connection } from 'mongoose';
 
-namespace Util {
-    export type timezone = 'America/Sao_Paulo' | 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Denver' | 'America/Phoenix' | 'America/Anchorage' | 'America/Adak' | 'Pacific/Honolulu';
+type timezone = 'America/Sao_Paulo' | 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Denver' | 'America/Phoenix' | 'America/Anchorage' | 'America/Adak' | 'Pacific/Honolulu';
 
+namespace Util {
     /**
      * Returns the formatted time based on the given timestamp, language, and timeZone.
      * 
@@ -17,7 +17,7 @@ namespace Util {
      * @param timeZone - The timeZone used for formatting the time.
      * @returns The formatted time as a string.
      */
-    export function getTime(timestamp: number | Date, language: Languages, timeZone: Util.timezone): string {
+    export function getTime(timestamp: number | Date, language: Languages, timeZone: timezone): string {
         const date = new Date(timestamp || Date.now());
         return new Date(date).toLocaleString(language, { timeZone });
     }

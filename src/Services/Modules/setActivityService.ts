@@ -1,8 +1,8 @@
 import { ActivitiesOptions, ActivityType, PresenceUpdateStatus } from 'discord.js';
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ServiceStructure } from '../../Structures';
 import { Logger } from '../../Utils/logger';
-import ClientStats from '../../Client/ClientStats';
+import ClientStats from '../../client/clientStats';
 
 export default class SetActivityService extends ServiceStructure {
     declare interval: NodeJS.Timeout;

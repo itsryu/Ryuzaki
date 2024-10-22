@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import App from '../Web/backend/server';
-import { HTTPStatus } from '../Types/HTTPSInterfaces';
+import { HTTPStatus } from '../types/HTTPSTypes';
 
 interface JSONObjectResponse {
     code: number,

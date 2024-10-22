@@ -1,6 +1,6 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { emojis } from '../../Utils/Objects/emojis';
-import { Languages } from '../../Types/ClientTypes';
+import { Languages } from '../../types/clientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { RyuCommandData } from '../../Data/Commands/Infos/RyuCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';

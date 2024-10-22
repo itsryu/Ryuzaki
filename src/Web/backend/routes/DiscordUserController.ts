@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
 import { Snowflake } from 'discord-api-types/v10';
-import { DiscordUser } from '../../../Types/GatewayTypes';
+import { DiscordUser } from '../../../types/gatewayTypes';
 import { Logger } from '../../../Utils/logger';
 
 class DiscordUserController extends RouteStructure {

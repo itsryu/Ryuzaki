@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ServiceStructure, CommandStructure, ListenerStructure, RawListenerStructure, ContextCommandStructure } from '../../Structures';
 import { readdirSync } from 'node:fs';
 import { GlobalFonts } from '@napi-rs/canvas';

@@ -1,7 +1,7 @@
 import { RawCommandData, RawContextCommandData } from './src/Structures';
 import { ApplicationCommand, PermissionsBitField, REST, Routes } from 'discord.js';
 import { Logger } from './src/Utils/logger';
-import { Ryuzaki } from './src/RyuzakiClient';
+import { Ryuzaki } from './src/ryuzakiClient';
 
 export class SlashCommands {
     public static readonly rest: REST = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN);
@@ -42,4 +42,3 @@ export class SlashCommands {
         }
     }
 }
-

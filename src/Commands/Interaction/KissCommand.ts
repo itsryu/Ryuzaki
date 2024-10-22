@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { KissCommandData } from '../../Data/Commands/Interaction/KissCommandData';

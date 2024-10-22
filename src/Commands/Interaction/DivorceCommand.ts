@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { DivorceCommandData } from '../../Data/Commands/Interaction/DivorceCommandData.js';
 import { emojis } from '../../Utils/Objects/emojis';

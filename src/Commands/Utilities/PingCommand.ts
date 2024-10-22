@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { PingCommandData } from '../../Data/Commands/Utilities/PingCommandData';
 import { Colors, Message, OmitPartialGroupDMChannel } from 'discord.js';

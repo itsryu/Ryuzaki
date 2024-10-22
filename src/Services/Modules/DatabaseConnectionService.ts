@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ServiceStructure } from '../../Structures';
 import { connect, connection } from 'mongoose';
 import { Logger } from '../../Utils/logger';

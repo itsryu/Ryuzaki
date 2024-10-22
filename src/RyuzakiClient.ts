@@ -1,11 +1,11 @@
 import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './Database/index';
 import { Logger } from './Utils/logger';
-import { Translate } from '../lib/Translate';
+import { Translate } from '../lib/translate';
 import { Api } from '@top-gg/sdk';
 import { CommandStructure, ContextCommandStructure, ServiceStructure } from './Structures';
 import { Collections } from './Utils/collection';
-import { DataType, Languages, DataDocument, ShardMemory } from './Types/ClientTypes';
+import { DataType, Languages, DataDocument, ShardMemory } from './types/clientTypes';
 import { config } from 'dotenv';
 import { join } from 'node:path';
 import { SlashCommands } from '../slashCommands';
@@ -23,7 +23,6 @@ export class Ryuzaki extends Client {
     public readonly invites = new Collection<string, Collection<string, Invite>>();
     public readonly translate: Translate = new Translate(process.env.LANG_PATH);
     public t!: typeof this.translate.t;
-    public url!: string;
     public static readonly database: {
         client: typeof ClientModel;
         guilds: typeof GuildModel;

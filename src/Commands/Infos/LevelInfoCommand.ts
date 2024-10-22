@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../../src/Structures/';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Abbrev } from '../../Utils/abbrev';

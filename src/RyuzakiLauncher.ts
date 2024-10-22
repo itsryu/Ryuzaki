@@ -1,7 +1,7 @@
 import { extend } from 'dayjs';
 import 'dayjs/locale/pt';
 import 'dayjs/locale/en';
-import { client } from './Client/Client';
+import { client } from './client/client';
 import App from './Web/backend/server';
 import { Logger } from './Utils/logger';
 

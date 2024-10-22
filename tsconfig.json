@@ -23,7 +23,7 @@
         "strictPropertyInitialization": true,
         "typeRoots": [
             "./node_modules/@types",
-            "./src/Types"
+            "src/types"
         ],
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,

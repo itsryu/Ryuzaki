@@ -1,7 +1,7 @@
 import { ModuleStructure } from '../../Structures';
 import { ActionRowBuilder, ButtonBuilder, ChannelType, ButtonInteraction, ButtonStyle, TextChannel, MessageComponentInteraction } from 'discord.js';
 import { writeFileSync, readdirSync, statSync } from 'node:fs';
-import { Languages } from '../../Types/ClientTypes';
+import { Languages } from '../../types/clientTypes';
 import { Logger } from '../../Utils/logger';
 import { Util } from '../../Utils/util';
 

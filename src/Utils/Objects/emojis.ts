@@ -1,4 +1,4 @@
-import { CategoryEmojis } from '../../Types/ClientTypes';
+import { CategoryEmojis } from '../../types/clientTypes';
 
 const emojis = {
     errado: '❌',

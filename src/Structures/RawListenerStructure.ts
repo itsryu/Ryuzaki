@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 import { GatewayDispatchEvents } from 'discord.js';
 
 interface RawEventOptions {

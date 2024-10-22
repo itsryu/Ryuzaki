@@ -1,8 +1,8 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { HelpCommandData } from '../../Data/Commands/Infos/HelpCommandData';
 import { PermissionFlagKey, PermissionsFlagsText } from '../../Utils/Objects/flags';
-import { CategoryValidation, Languages } from '../../Types/ClientTypes';
+import { CategoryValidation, Languages } from '../../types/clientTypes';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField, OmitPartialGroupDMChannel } from 'discord.js';
 import { categoryEmojis } from '../../Utils/Objects/emojis';
 import { Logger } from '../../Utils/logger';

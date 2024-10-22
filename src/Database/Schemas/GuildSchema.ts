@@ -1,5 +1,5 @@
 import { Model, Schema, model } from 'mongoose';
-import { GuildDocument } from '../../Types/SchemaTypes';
+import { GuildDocument } from '../../types/schemaTypes';
 
 const GuildSchema = new Schema<GuildDocument>({
     _id: {

@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../../RyuzakiClient';
+import { Ryuzaki } from '../../../ryuzakiClient';
 import { ContextCommandStructure, ClientEmbed } from '../../../Structures';
 import { AvatarContextCommandData } from '../../../Data/Context/User/Utilities/AvatarContextCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContextMenuCommandInteraction } from 'discord.js';

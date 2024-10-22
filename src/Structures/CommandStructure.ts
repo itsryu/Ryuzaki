@@ -1,7 +1,7 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 import { PermissionResolvable, ApplicationCommandType, Message, ChatInputCommandInteraction } from 'discord.js';
 import { type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { Categories, CategoryValidation, Languages } from '../Types/ClientTypes';
+import { Categories, CategoryValidation, Languages } from '../types/clientTypes';
 
 interface RawCommandData extends RESTPostAPIChatInputApplicationCommandsJSONBody {
     name: string;

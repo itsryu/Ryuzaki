@@ -1,5 +1,5 @@
 import { Collection, Emoji, PartialEmoji, Status } from 'discord.js';
-import { GuildDocument, UserDocument, ClientDocument, CommandDocument } from './SchemaTypes';
+import { GuildDocument, UserDocument, ClientDocument, CommandDocument } from './schemaTypes';
 
 type DataType = 'user' | 'guild' | 'client' | 'command';
 type Languages = 'pt-BR' | 'en-US' | 'es-ES';

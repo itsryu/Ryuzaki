@@ -1,5 +1,5 @@
 import { Snowflake } from 'discord.js';
-import { DiscordUser } from '../Types/GatewayTypes';
+import { DiscordUser } from '../types/gatewayTypes';
 import { UserBadges, UserFlagKey } from './Objects/flags';
 import { Logger } from './logger';
 

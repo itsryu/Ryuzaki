@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../Structures';
 import { ActionRowBuilder, AuditLogEvent, ButtonBuilder, ButtonInteraction, ButtonStyle, Events, Guild, GuildAuditLogsEntry, GuildTextBasedChannel, MessageComponentInteraction, NonThreadGuildBasedChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';

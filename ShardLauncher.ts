@@ -1,4 +1,4 @@
-import { ShardManager } from './ShardManager';
+import { ShardManager } from './shardManager';
 import { join } from 'path';
 import { Logger } from './src/Utils/logger';
 

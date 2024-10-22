@@ -1,8 +1,8 @@
 import { ModuleStructure, ClientEmbed } from '../Structures';
 import { TextChannel } from 'discord.js';
-import { Reminder } from '../Types/SchemaTypes';
+import { Reminder } from '../types/schemaTypes';
 import { Logger } from '../Utils/logger';
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 
 export default class ReminderModule extends ModuleStructure {
     moduleExecute() {

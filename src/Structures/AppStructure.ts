@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 
 export abstract class AppStructure {
     public constructor(public readonly client: Ryuzaki) {

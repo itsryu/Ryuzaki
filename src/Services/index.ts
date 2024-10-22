@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 import { ModuleStructure, ServiceStructure } from '../Structures/';
 import { readdirSync } from 'fs';
 import { join } from 'path';

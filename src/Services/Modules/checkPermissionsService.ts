@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { PermissionsFlagsText, PermissionFlagKey } from '../../Utils/Objects/flags';
 import { ServiceStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { ChannelType, Message, PermissionsBitField } from 'discord.js';

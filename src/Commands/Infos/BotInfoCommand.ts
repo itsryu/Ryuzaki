@@ -1,6 +1,6 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { emojis } from '../../Utils/Objects/emojis';
-import { Languages } from '../../Types/ClientTypes';
+import { Languages } from '../../types/clientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { BotInfoCommandData } from '../../Data/Commands/Infos/BotInfoCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version, OmitPartialGroupDMChannel } from 'discord.js';
@@ -10,7 +10,7 @@ import { Bytes } from '../../Utils/bytes';
 import { memoryUsage } from 'node:process';
 import { Logger } from '../../Utils/logger';
 import Day from 'dayjs';
-import ClientStats from '../../Client/ClientStats';
+import ClientStats from '../../client/clientStats';
 import { Util } from '../../Utils/util';
 
 export default class BotInfoCommand extends CommandStructure {

@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../RyuzakiClient';
+import { Ryuzaki } from '../ryuzakiClient';
 import { PermissionResolvable, ApplicationCommandType } from 'discord.js';
 import { type RESTPostAPIContextMenuApplicationCommandsJSONBody } from 'discord-api-types/v10';
 

@@ -1,7 +1,7 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ListenerStructure, ClientEmbed } from '../../Structures';
 import { Guild, ChannelType, PermissionFlagsBits, Events, GuildInvitableChannelResolvable, WebhookClient } from 'discord.js';
-import { Languages } from '../../Types/ClientTypes';
+import { Languages } from '../../types/clientTypes';
 import { Logger } from '../../Utils/logger';
 
 export default class GuildCreateListener extends ListenerStructure {

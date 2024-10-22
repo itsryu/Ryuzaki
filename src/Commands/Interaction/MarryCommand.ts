@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { MarryCommandData } from '../../Data/Commands/Interaction/MarryCommandData';
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';

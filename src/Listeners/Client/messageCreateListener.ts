@@ -1,4 +1,4 @@
-import { Ryuzaki } from '../../RyuzakiClient';
+import { Ryuzaki } from '../../ryuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structures';
 import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
