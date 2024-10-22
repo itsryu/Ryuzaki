@@ -1,0 +1,99 @@
+{
+    "clear": {
+        "errors": {
+            "args": "Forneça um número de `<1-100> mensagens` a serem excluídas."
+        },
+        "embeds": {
+            "cleaned": {
+                "title": "Limpou mensages",
+                "description": "O usuário {{author}} `({{authorId}})` limpou `{{messages}}` mensagens no canal {{channel}} `({{channelId}})`."
+            }
+        },
+        "success": "📣 `{{size}}` mensagens limpas nesse chat!"
+    },
+    "ban": {
+        "errors": {
+            "noMember": "Você deve `fornecer um usuário válido` para que eu possa `bani-lo` do servidor.",
+            "clientPerms": "Este usuário possui cargos iguais ou acima do meu, não posso aplicar uma punição.",
+            "memberPerms": "Este usuário possuí cargos iguais ou acima do seu, você nao pode aplicar uma punição.",
+            "sameMember": "Você não pode usar este comando em si próprio, forneça outro usuário.",
+            "sameClient": "Eu não posso usar este comando em mim mesmo... Mas fico triste em saber que você queira isso. 😕",
+            "bannable": "Eu não consegui banir este membro, provalvemente ele tem as mesmas permissões ou mais altas que as minhas.",
+            "banned": "Este membro já se encontra banido neste servidor.",
+            "noReason": "Nenhum motivo especificado",
+            "failed": "😭・Não pude banir este membro, me desculpe.",
+            "rejected": "❌・Banimento de `{{member}}` foi cancelado."
+        },
+        "embeds": {
+            "button": {
+                "title": "Banimento",
+                "description": "{{author}}, você realmente deseja banir o(a) {{member}} pelo motivo: `{{reason}}`?"
+            },
+            "banned": {
+                "title": "Você foi banido(a)! 😔",
+                "description": "Olá, `{{member}}`, infelizmente você foi banido(a) do servidor `{{guild}}`, pelo seguinte motivo: `{{reason}}`. \nSe você acha que ocorreu um engano, entre em contato com o staffer que te baniu: `{{author}}`."
+            },
+            "ban": {
+                "fields": [
+                    "{{emoji}} Ação:",
+                    "{{emoji}} Membro:",
+                    "👮 Staffer:",
+                    "📜 Motivo(s):"
+                ],
+                "values": [
+                    "`Banir`"
+                ]
+            }
+        },
+        "buttons": {
+            "yesButton": {
+                "label": "Sim"
+            },
+            "noButton": {
+                "label": "Não"
+            }
+        }
+    },
+    "kick": {
+        "errors": {
+            "noMember": "Você deve `fornecer um usuário válido` para que eu possa `expulsá-lo` do servidor.",
+            "clientPerms": "Este usuário possui cargos iguais ou acima do meu, não posso aplicar uma punição.",
+            "memberPerms": "Este usuário possuí cargos iguais ou acima do seu, você nao pode aplicar uma punição.",
+            "sameMember": "Você não pode usar este comando em si próprio, forneça outro usuário.",
+            "sameClient": "Eu não posso usar este comando em mim mesmo... Mas fico triste em saber que você queira isso. 😕",
+            "kicked": "Este membro já se encontra expulso deste servidor.",
+            "noReason": "Nenhum motivo especificado",
+            "failed": "😭・Não pude expulsar este membro, me desculpe.",
+            "rejected": "❌・Expulsão de `{{member}}` foi cancelada."
+        },
+        "embeds": {
+            "button": {
+                "title": "Expulsão",
+                "description": "{{author}}, você realmente deseja expulsar o(a) {{member}} pelo motivo: `{{reason}}`?"
+            },
+            "kicked": {
+                "title": "Você foi expulso(a)! 😔",
+                "description": "Olá, `{{member}}`, infelizmente você foi expulso(a) do servidor `{{guild}}`, pelo seguinte motivo: `{{reason}}`. \nSe você acha que ocorreu um engano, entre em contato com o staffer que te expulsou: `{{author}}`."
+            },
+            "kick": {
+                "fields": [
+                    "{{emoji}} Ação:",
+                    "{{emoji}} Membro:",
+                    "👮 Staffer:",
+                    "📜 Motivo(s):"
+                ],
+                "values": [
+                    "`Expulsar`"
+                ]
+            }
+        },
+        "buttons": {
+            "yesButton": {
+                "label": "Sim"
+            },
+            "noButton": {
+                "label": "Não"
+            }
+        }
+    }
+}

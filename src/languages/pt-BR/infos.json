@@ -1,0 +1,63 @@
+{
+    "help": {
+        "!command": "Não achei nenhum comando com esse nome/sinônimo: `{{name}}`.",
+        "embed": {
+            "title": "Central de ajuda — {{client}}",
+            "description": "Olá {{author}}, eu sou o {{client}}. Um BOT multifunções desenvolvido puramente em Typescript.\n\nCaso queira saber mais informações sobre determinado comando utilize **{{prefix}}ajuda [nome do comando]**.\nUtilize o menu para exibir os comandos de cada categoria.",
+            "description_2": "Olá {{author}}, eu sou o {client}. Um BOT multifunções desenvolvido puramente em Typescript.\n\nCaso queira saber mais informações sobre determinado comando utilize **/ajuda comando: [nome do comando]**.\nUtilize o menu para exibir os comandos de cada categoria."
+        },
+        "permissions": {
+            "member": [
+                "Você `não precisa de permissões` para utilizar este comando.",
+                "Você precisa das permissões: `{{permission}}` para utilizar este comando."
+            ],
+            "client": [
+                "O {{client}} `não precisa de permissões` para executar este comando.",
+                "O {{client}} precisa das permissões: `{{permission}}` para executar este comando."
+            ],
+            "separator": "e$1"
+        },
+        "fields": [
+            "Comando:",
+            "Sinônimos:",
+            "Categoria:",
+            "Usos:",
+            "Descrição:",
+            "Modo de Uso:",
+            "Tempo de Uso:",
+            "Comandos da categoria:",
+            "Comandos:"
+        ],
+        "fields_1": [
+            "Não tem sinônimos",
+            "Não tem descrição",
+            "segundo(s)",
+            "`Nenhum Comando`"
+        ],
+        "values": [
+            "Comando não registrado.",
+            "Nenhum uso."
+        ],
+        "menu": {
+            "place": "🦠 Escolha uma categoria:",
+            "label": "Voltar",
+            "description": [
+                "Voltar ao menu principal.",
+                "Comandos da categoria: {{category}}."
+            ]
+        }
+    },
+    "ryu": {
+        "embed": {
+            "title": "Olá, eu sou o {{client}}!",
+            "fields": {
+                "name": [
+                    "Sobre Mim:"
+                ],
+                "value": [
+                    "Olá {{author}} eu sou uma aplicação criada pelo [{{tag}}](https://discord.com/users/{{id}}/) e programada na linguagem [Typescript](https://www.typescriptlang.org), eu sou um simples robô brasileiro com a incrível intenção de ajudar muitas pessoas em seus servidores, contando com comandos de moderação, utilidades, economia e diversos outros comandos. Atualmente estou em **em constante desenvolvimento** mas há muitos comandos para serem explorados. \n\nPara acessar minha lista com alguns comandos digite: `{{help}}`. \nPara acessar algumas informações mais detalhadas sobre determinado comando digite: `{{usage}}`."
+                ]
+            }
+        }
+    }
+}

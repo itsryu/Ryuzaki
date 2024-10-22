@@ -1,0 +1,52 @@
+{
+    "marry": {
+        "embeds": {
+            "single": {
+                "title": "{{emoji}} | Suas Informações:",
+                "description": "{{author}}, você está solteiro(a).",
+                "footer": "Mencione algum usuário para casar."
+            },
+            "info": {
+                "title": "{{emoji}} | Suas Informações:",
+                "description": "Casado(a) com **`{{soulmate}}`**. \nCasados desde <t:{{firstTime}}:f> (<t:{{secondTime}}:R>)."
+            },
+            "want": {
+                "title": "{{emoji}} | Pedido de casamento!",
+                "description": "{{user}}, o usuário {{author}} pediu a sua mão em casamento!",
+                "footer": "Para aceitar reaja com 💍, para recusar reaja com ❌."
+            },
+            "married": {
+                "title": "{{emoji}} | Pedido de casamento aceito!",
+                "description": "Agora {{author}} e {{user}} são casados. Felicidades!"
+            }
+        },
+        "errors": {
+            "noUser": "Você deve `mencionar alguém` para pedir a mão em casamento.",
+            "userAlreadyMarried": "Você já está casado(a).",
+            "targetAlreadyMarried": "{{user}} já está casado(a).",
+            "sameUser": "Você não pode casar com você mesmo, mencione outro usuário.",
+            "botUser": "Você não pode se casar com um BOT.",
+            "rejected": "{{author}}, infelizmente {{user}} não aceitou o seu pedido de casamento.."
+        }
+    },
+    "divorce": {
+        "embeds": {
+            "single": {
+                "title": "{{emoji}} | Suas Informações:",
+                "description": "{{author}}, você está solteiro(a)."
+            },
+            "want": {
+                "title": "{{emoji}} | Pedido de divórcio.",
+                "description": "{{author}}, você deseja mesmo se divorciar de **`{{soul}}`**?\nCasados desde <t:{{firstTime}}:f> (<t:{{secondTime}}:R>).",
+                "footer": "Para aceitar reaja com ✅, para recusar reaja com ❌."
+            },
+            "divorced": {
+                "title": "{{emoji}} | Divorcio feito.",
+                "description": "{{author}}, você não está mais casado(a)."
+            }
+        },
+        "errors": {
+            "rejected": "{{author}}, o divorcio com {{user}} foi cancelado!"
+        }
+    }
+}

@@ -1,0 +1,133 @@
+{
+    "avatar": {
+        "title": "📷 Avatar de Perfil",
+        "field": "Avatar de:",
+        "button": "Baixar"
+    },
+    "banner": {
+        "title": "📷 Banner de Perfil",
+        "field": "Banner de:",
+        "button": "Baixar",
+        "errors": {
+            "!banner": "Este usuário não tem um banner de perfil."
+        }
+    },
+    "ping": {
+        "response": "💓 **Ping de resposta:**",
+        "host": "🛰️ **Ping da host**:",
+        "database": "📡 **Ping do banco de dados:**"
+    },
+    "clock": {
+        "title": "⌚ Relógio!"
+    },
+    "serverbanner": {
+        "!banner": "Este servidor não tem um banner.",
+        "title": "📷 Banner de Servidor",
+        "field": "Banner de:",
+        "button": "Baixar"
+    },
+    "servericon": {
+        "!icon": "Este servidor não tem um ícone.",
+        "title": "📷 Ícone de Servidor",
+        "field": "Ícone de:",
+        "button": "Baixar"
+    },
+    "wiki": {
+        "help": {
+            "title": "Comando wikipédia",
+            "description": "Pesquisa sobre determinado assunto na wikipédia.",
+            "field_1": "Como utilizar:",
+            "field_2": "Exemplo:",
+            "value_1": "pesquisa",
+            "value_2": "Pesquisa sobre o presidente Jair Bolsonaro."
+        },
+        "body": "https://{{locale}}.wikipedia.org/api/rest_v1/page/summary/{{url}}",
+        "!body": "Página não encontrada, tente outra palavra-chave..",
+        "result": {
+            "field": "Fonte:",
+            "footer": "Wikipédia, a enciclopédia livre!"
+        }
+    },
+    "aboutme": {
+        "errors": {
+            "!about": "Você não definiu o que deseja colocar na mensagem do seu perfil.",
+            "length": "A mensagem deve ter menos de 90 caracteres.",
+            "same": "A mensagem que você inseriu é a mesma definida atualmente."
+        },
+        "success": "A mensagem foi definida com sucesso."
+    },
+    "hex": {
+        "!args": "Você precisa informar a cor em HEX. Exemplo:",
+        "!validate": "Essa não é uma `cor HEX` valida. Tente novamente."
+    },
+    "morse": {
+        "help": {
+            "title": "Comando morse",
+            "description": "Digite um texto para ser convertido em código morse, ou escreva o código morse para ser convertido em texto.",
+            "field": "Como utilizar:",
+            "text": "texto",
+            "value_1": "Traduz o morse para texto.",
+            "value_2": "Traduz o texto para morse."
+        }
+    },
+    "math": {
+        "help": {
+            "title": "Comando calculadora",
+            "description": "Mostra as soluções de equações matemáticas simples.",
+            "field": "Como utilizar:",
+            "values": [
+                "Resultado",
+                "Equação com radicais:",
+                "Unidades para unidades:",
+                "Expressões complexas:",
+                "Expressões básicas"
+            ]
+        },
+        "embed": {
+            "title": "Calculadora",
+            "fields": [
+                "**Operação:**",
+                "**Resultado:**"
+            ]
+        },
+        "calculating": "**🔍 | Calculando...**"
+    },
+    "AFK": {
+        "success": "😴・Você agora está AFK! O modo AFK será desativado automaticamente quando você falar algo no chat! 😉"
+    },
+    "translator": {
+        "errors": {
+            "args": [
+                "Especifique o idioma que será traduzido.",
+                "Especifique para qual idioma você deseja traduzir.",
+                "Especifique o texto que você deseja traduzir."
+            ]
+        }
+    },
+    "invite": {
+        "embed": {
+            "title": "Me adicione!",
+            "description": "Você quer me adicionar a outros servidores? Então clique [aqui]({{link}}) para me adicionar a outros servidores."
+        },
+        "button": {
+            "label": "Meu convite"
+        }
+    },
+    "purge": {
+        "errors": {
+            "args": "Forneça um número de `<1-100> mensagens` a serem excluídas."
+        },
+        "success": "📣 `{{size}}` mensagens suas limpas nesse chat!"
+    },
+    "vote": {
+        "embeds": {
+            "vote": {
+                "description": "{{author}}, você possui `{{votes}}` votos em mim, ganhe recompensas votando em mim no [Discord Bot List]({{url}})! Votando em mim você me ajuda a ter uma maior visibilidade e confiabilidade dos novos usuários que me utilizarão. Você pode votar em mim em:\n\n{{url}}\n\nA cada 40 votos você ganha uma surpresa especial!",
+                "footer": "Você pode votar a cada 12 horas"
+            },
+            "reedemed": {
+                "description": "{{author}}, você já votou em mim hoje!\n\nVocê pode votar novamente em: ||<t:{{firstTime}}:f> (<t:{{secondTime}}:R>)||"
+            }
+        }
+    }
+}

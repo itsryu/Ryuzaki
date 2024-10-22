@@ -1,0 +1,8 @@
+{
+    "embed": {
+        "footer": "Time is over - 2024 © {{client}}"
+    },
+    "interaction": {
+        "user": "{{user}}, that's interaction isn't for you. 👀"
+    }
+}

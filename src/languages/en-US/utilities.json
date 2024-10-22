@@ -1,0 +1,133 @@
+{
+    "avatar": {
+        "title": "Profile Avatar 📷",
+        "field": "Avatar from:",
+        "button": "Download"
+    },
+    "banner": {
+        "title": "📷 Profile Banner",
+        "field": "Banner from:",
+        "button": "Download",
+        "errors": {
+            "!banner": "This user does not have a banner."
+        }
+    },
+    "ping": {
+        "response": "💓 **Reply ping:**",
+        "host": "🛰️ **Host ping**:",
+        "database": "📡 **Database ping:**"
+    },
+    "clock": {
+        "title": "⌚ Clock!"
+    },
+    "serverbanner": {
+        "!banner": "This server does not have a banner.",
+        "title": "📷 Server Banner",
+        "field": "Banner from:",
+        "button": "Download"
+    },
+    "servericon": {
+        "!icon": "This server does not have an icon.",
+        "title": "📷 Server Icon",
+        "field": "Icon from:",
+        "button": "Download"
+    },
+    "wiki": {
+        "help": {
+            "title": "Wikipédia Command",
+            "description": "Search for a particular topic on wikipedia.",
+            "field_1": "How to use:",
+            "field_2": "Exemple:",
+            "value_1": "search",
+            "value_2": "Research on President Jair Bolsonaro."
+        },
+        "body": "https://{{locale}}.wikipedia.org/api/rest_v1/page/summary/{{url}}",
+        "!body": "Page not found, try another keyword..",
+        "result": {
+            "field": "Font:",
+            "footer": "Wikipédia, the free encyclopedia!"
+        }
+    },
+    "aboutme": {
+        "errors": {
+            "!about": "You haven't defined what you want to put in your profile message.",
+            "length": "The message must be less than 90 characters.",
+            "same": "The message you entered is the same as currently defined."
+        },
+        "success": "The message has been set successfully."
+    },
+    "hex": {
+        "!args": "You need to inform the color in HEX. Example:",
+        "!validate": "This is not a valid `HEX color`. Try again."
+    },
+    "morse": {
+        "help": {
+            "title": "Morse Command",
+            "description": "Enter text to be converted to morse code, or write morse code to be converted to text.",
+            "field": "How to use:",
+            "text": "text",
+            "value_1": "Translate morse to text.",
+            "value_2": "Translates the text into morse."
+        }
+    },
+    "math": {
+        "help": {
+            "title": "Calculator command",
+            "description": "Shows the solutions of simple math equations.",
+            "field": "How to use:",
+            "values": [
+                "Result",
+                "Equation with Radicals:",
+                "Units to Units:",
+                "Complex expressions:",
+                "Basic expressions:"
+            ]
+        },
+        "embed": {
+            "title": "Calculator",
+            "fields": [
+                "**Operation:**",
+                "**Result:**"
+            ]
+        },
+        "calculating": "**🔍 | Calculating...**"
+    },
+    "AFK": {
+        "success": "😴・You are now AFK! AFK mode will be automatically disabled when you say something in chat! 😉"
+    },
+    "translator": {
+        "errors": {
+            "args": [
+                "Specify the language to be translated.",
+                "Specify which language you want to translate to.",
+                "Specify the text you want to translate."
+            ]
+        }
+    },
+    "invite": {
+        "embed": {
+            "title": "Add me!",
+            "description": "Do you want to add me to other servers? Then click [here]({{link}}) to add me to other servers."
+        },
+        "button": {
+            "label": "My invite"
+        }
+    },
+    "purge": {
+        "errors": {
+            "args": "Provide a number of `<1-100> messages` to delete."
+        },
+        "success": "📣 `{{size}}` clean messages from you in this chat!"
+    },
+    "vote": {
+        "embeds": {
+            "vote": {
+                "description": "{{author}}, you have `{{votes}}` votes on me, earn rewards by voting for me in [Discord Bot List]({{url}})! By voting for me you help me to have greater visibility and reliability of new users who will use me. You can vote for me at:\n\n{{url}}\n\nEvery 40 votes you get a special surprise!",
+                "footer": "You can vote every 12 hours"
+            },
+            "reedemed": {
+                "description": "{{author}}, you already voted for me today!\n\nYou can vote again in: ||<t:{{firstTime}}:f> (<t:{{secondTime}}:R>)||"
+            }
+        }
+    }
+}
