@@ -1,9 +1,0 @@
-{
-    "screeshot": {
-        "errors": {
-            "!urls": "Forneça `um link` para converte-lo em uma `captura de tela`.",
-            "length": "A URL do link é `muito curta`, tente outra.",
-            "404": "Não encontrei `nenhum resultado`. Talvez o link esteja incorreto?"
-        }
-    }
-}
