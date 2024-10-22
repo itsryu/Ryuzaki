@@ -1,7 +1,7 @@
 import { Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
-import { RankMoneyCommandData } from '../../data/commands/Economy/RankMoneyCommandData';
+import { RankMoneyCommandData } from '../../data/commands/economy/rankMoneyCommandData';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
 import { Util } from '../../Utils/util';

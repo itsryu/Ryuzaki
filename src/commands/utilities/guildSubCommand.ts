@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures';
-import { GuildSubCommandData } from '../../data/commands/Utilities/GuildSubCommandData';
+import { GuildSubCommandData } from '../../data/commands/utilities/guildSubCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 

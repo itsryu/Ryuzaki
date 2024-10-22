@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { BanCommandData } from '../../data/commands/Moderation/BanCommandData';
+import { BanCommandData } from '../../data/commands/moderation/banCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, GuildTextBasedChannel, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis.js';
 import { Logger } from '../../Utils/logger';

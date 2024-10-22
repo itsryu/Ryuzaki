@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { MarryCommandData } from '../../data/commands/Interaction/MarryCommandData';
+import { MarryCommandData } from '../../data/commands/interaction/marryCommandData';
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Logger } from '../../Utils/logger';

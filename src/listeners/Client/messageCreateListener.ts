@@ -299,11 +299,11 @@ export default class MessageCreateListener extends ListenerStructure {
                 await new afkModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Convites:
-                const { default: inviteModule } = await import('../../Modules/InviteModule');
+                const { default: inviteModule } = await import('../../modules/inviteModule');
                 await new inviteModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Spam:
-                const { default: spamModule } = await import('../../Modules/SpamModule');
+                const { default: spamModule } = await import('../../modules/spamModule');
                 await new spamModule(this.client).moduleExecute(message);
             }
 

@@ -3,7 +3,7 @@ import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
 import { Languages } from '../../types/clientTypes';
 import { emojis } from '../../Utils/Objects/emojis';
-import { BagCommandData } from '../../data/commands/Economy/BagCommandData';
+import { BagCommandData } from '../../data/commands/economy/bagCommandData';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
 

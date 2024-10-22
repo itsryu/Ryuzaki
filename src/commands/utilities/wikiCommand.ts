@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { WikiCommandData } from '../../data/commands/Utilities/WikiCommandData';
+import { WikiCommandData } from '../../data/commands/utilities/wikiCommandData';
 import { Languages } from '../../types/clientTypes';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';

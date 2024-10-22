@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { CatsCommandData } from '../../data/commands/Fun/CatsCommandData';
+import { CatsCommandData } from '../../data/commands/fun/catsCommandData';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 

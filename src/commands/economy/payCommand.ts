@@ -2,7 +2,7 @@ import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'disco
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Languages } from '../../types/clientTypes';
-import { PayCommandData } from '../../data/commands/Economy/PayCommandData';
+import { PayCommandData } from '../../data/commands/economy/payCommandData';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
 

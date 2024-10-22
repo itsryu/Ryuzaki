@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../../src/Structures/';
-import { ShardCommandData } from '../../data/commands/Infos/ShardCommandData';
+import { ShardCommandData } from '../../data/commands/infos/shardCommandData';
 import { Languages } from '../../types/clientTypes';
 import { Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import Ascii from 'ascii-table';

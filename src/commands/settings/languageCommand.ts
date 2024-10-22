@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
-import { LanguageCommandData } from '../../data/commands/Settings/LanguageCommandData';
+import { LanguageCommandData } from '../../data/commands/settings/languageCommandData';
 import { Languages } from '../../types/clientTypes';
 import { Logger } from '../../Utils/logger';
 

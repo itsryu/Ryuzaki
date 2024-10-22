@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { UserSubCommandData } from '../../data/commands/Utilities/UserSubCommandData';
+import { UserSubCommandData } from '../../data/commands/utilities/userSubCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
 import { Languages } from '../../types/clientTypes';

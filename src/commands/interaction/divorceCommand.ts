@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { DivorceCommandData } from '../../data/commands/Interaction/DivorceCommandData.js';
+import { DivorceCommandData } from '../../data/commands/interaction/divorceCommandData.js';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { Logger } from '../../Utils/logger';

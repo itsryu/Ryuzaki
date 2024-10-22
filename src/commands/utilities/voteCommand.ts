@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { VoteCommandData } from '../../data/commands/Economy/VoteCommandData';
+import { VoteCommandData } from '../../data/commands/economy/voteCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../Utils/logger';
 

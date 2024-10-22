@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../ryuzakiClient';
 import { emojis } from '../../Utils/Objects/emojis';
 import { Languages } from '../../types/clientTypes';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
-import { BotInfoCommandData } from '../../data/commands/Infos/BotInfoCommandData';
+import { BotInfoCommandData } from '../../data/commands/infos/botInfoCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version, OmitPartialGroupDMChannel } from 'discord.js';
 import { connection } from 'mongoose';
 import { Constants } from '../../Utils/constants';

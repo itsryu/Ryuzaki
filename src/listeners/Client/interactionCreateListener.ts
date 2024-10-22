@@ -258,12 +258,12 @@ export default class InteractionCreateListener extends ListenerStructure {
 
             if (interaction.isButton()) {
                 if (interaction.customId === 'open') {
-                    const { default: CreateTicketButton } = await import('../../Modules/Buttons/CreateTicketButton');
+                    const { default: CreateTicketButton } = await import('../../modules/buttons/createTicketButton');
                     await new CreateTicketButton(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'close') {
-                    const { default: CloseTicketButton } = await import('../../Modules/Buttons/CloseTicketButton');
+                    const { default: CloseTicketButton } = await import('../../modules/buttons/closeTicketButton');
                     await new CloseTicketButton(this.client).moduleExecute(interaction, language);
                 }
 
@@ -271,7 +271,7 @@ export default class InteractionCreateListener extends ListenerStructure {
                     const parsedId = JSON.parse(interaction.customId) as ParsedId;
 
                     if (parsedId && Object.keys(parsedId).length > 0 && parsedId.c === 'calculator') {
-                        const { default: CalculatorButton } = await import('../../Modules/Buttons/CalculatorButton');
+                        const { default: CalculatorButton } = await import('../../modules/buttons/calculatorButton');
                         await new CalculatorButton(this.client).moduleExecute(interaction);
                     }
                 }
@@ -281,12 +281,12 @@ export default class InteractionCreateListener extends ListenerStructure {
 
             if (interaction.isModalSubmit()) {
                 if (interaction.customId === 'aboutme') {
-                    const { default: aboutModal } = await import('../../Modules/Modals/AboutModal');
+                    const { default: aboutModal } = await import('../../modules/modals/aboutModal');
                     await new aboutModal(this.client).moduleExecute(interaction);
                 }
 
                 if (interaction.customId === 'rep') {
-                    const { default: repModal } = await import('../../Modules/Modals/RepModal');
+                    const { default: repModal } = await import('../../modules/modals/repModal');
                     await new repModal(this.client).moduleExecute(interaction);
                 }
             }

@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../Structures/';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
-import { AFKCommandData } from '../../data/commands/Utilities/AFKCommandData';
+import { AFKCommandData } from '../../data/commands/utilities/AFKCommandData';
 import { Logger } from '../../Utils/logger';
 
 export default class AFKCommand extends CommandStructure {

@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../Structures/';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
-import { StealCommandData } from '../../data/commands/Economy/StealCommandData';
+import { StealCommandData } from '../../data/commands/economy/stealCommandData';
 import { Languages } from '../../types/clientTypes';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';

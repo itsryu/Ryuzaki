@@ -1,4 +1,4 @@
-﻿import { KickCommandData } from '../../data/commands/Moderation/KickCommandData';
+﻿import { KickCommandData } from '../../data/commands/moderation/kickCommandData';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures';
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';

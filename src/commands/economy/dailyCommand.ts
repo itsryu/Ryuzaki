@@ -1,7 +1,7 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../Structures/';
-import { DailyCommandData } from '../../data/commands/Economy/DailyCommandData';
+import { DailyCommandData } from '../../data/commands/economy/dailyCommandData';
 import { Languages } from '../../types/clientTypes';
 import { Abbrev } from '../../Utils/abbrev';
 import { Logger } from '../../Utils/logger';
