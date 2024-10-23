@@ -1,6 +1,7 @@
 import { cpuUsage, memoryUsage } from 'node:process';
 import { client } from './client';
-import { Stats } from '../types/clientTypes';
+import { ShardMemory, Stats } from '../types/clientTypes';
+import { Client, Collection } from 'discord.js';
 
 export class ClientStats {
     private static botMessages = 0;
@@ -99,7 +100,7 @@ export class ClientStats {
                 const values = keys.reduce<Record<typeof keys[number], number>>((acc, val) => {
                     acc[val] = 0;
                     return acc;
-                }, <Record<typeof keys[number], number>>{});
+                }, {} as Record<typeof keys[number], number>);
 
                 result.reduce((acc, val) => {
                     for (const key of keys) {
@@ -115,6 +116,36 @@ export class ClientStats {
                 return this;
             })
             .catch(() => this) ?? this;
+    }
+
+    public static async getMemoryUsage() {
+        const shardsCount = ClientStats.shards;
+        const shardMemoryPromises = client.shard?.broadcastEval(() => process.memoryUsage().heapUsed) ?? [];
+        const shardGuildsPromises = client.shard?.broadcastEval((client: Client) => client.guilds.cache.map(guild => guild.id)) ?? [];
+        const [shardMemoryValues, shardGuildsValues] = await Promise.all([shardMemoryPromises, shardGuildsPromises]);
+
+        const memoryUsage: ShardMemory = {
+            totalMemory: shardMemoryValues.reduce((total, shardMemory) => total + shardMemory, 0) / 1024 / 1024,
+            shards: {}
+        };
+
+        for (let shardId = 0; shardId < shardsCount; shardId++) {
+            const shardMemory = shardMemoryValues[shardId] / 1024 / 1024;
+            const shardGuilds = shardGuildsValues[shardId];
+
+            memoryUsage.shards[shardId] = {
+                shardMemory,
+                servers: new Collection<string, { memory: number }>()
+            };
+
+            const avgMemoryPerGuild = shardMemory / shardGuilds.length;
+
+            for (const guildId of shardGuilds) {
+                memoryUsage.shards[shardId].servers.set(guildId, { memory: avgMemoryPerGuild });
+            }
+        }
+
+        return memoryUsage;
     }
 
     public static toJSON(): Stats {

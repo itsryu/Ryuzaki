@@ -1,11 +1,11 @@
 import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
-import { ClientModel, CommandModel, GuildModel, UserModel } from './database/index';
+import { ClientModel, CommandModel, GuildModel, UserModel } from './database';
 import { Logger } from './utils/logger';
 import { Translate } from '../lib/translate';
 import { Api } from '@top-gg/sdk';
 import { CommandStructure, ContextCommandStructure, ServiceStructure } from './structures';
 import { Collections } from './utils/collection';
-import { DataType, Languages, DataDocument, ShardMemory } from './types/clientTypes';
+import { DataType, Languages, DataDocument } from './types/clientTypes';
 import { config } from 'dotenv';
 import { join } from 'node:path';
 import { SlashCommands } from '../slashCommands';
@@ -224,35 +224,5 @@ export class Ryuzaki extends Client {
                 return undefined;
             }
         }
-    }
-
-    public async getMemoryUsage() {
-        const shardsCount = this.shard?.count ?? 0;
-        const shardMemoryPromises = this.shard?.broadcastEval(() => process.memoryUsage().heapUsed) ?? [];
-        const shardGuildsPromises = this.shard?.broadcastEval((client: Client) => client.guilds.cache.map(guild => guild.id)) ?? [];
-        const [shardMemoryValues, shardGuildsValues] = await Promise.all([shardMemoryPromises, shardGuildsPromises]);
-
-        const memoryUsage: ShardMemory = {
-            totalMemory: shardMemoryValues.reduce((total, shardMemory) => total + shardMemory, 0) / 1024 / 1024,
-            shards: {}
-        };
-
-        for (let shardId = 0; shardId < shardsCount; shardId++) {
-            const shardMemory = shardMemoryValues[shardId] / 1024 / 1024;
-            const shardGuilds = shardGuildsValues[shardId];
-
-            memoryUsage.shards[shardId] = {
-                shardMemory,
-                servers: new Collection<string, { memory: number }>()
-            };
-
-            const avgMemoryPerGuild = shardMemory / shardGuilds.length;
-
-            for (const guildId of shardGuilds) {
-                memoryUsage.shards[shardId].servers.set(guildId, { memory: avgMemoryPerGuild });
-            }
-        }
-
-        return memoryUsage;
     }
 }

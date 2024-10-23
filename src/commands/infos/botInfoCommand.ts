@@ -32,6 +32,7 @@ export default class BotInfoCommand extends CommandStructure {
             const clientOwner = await this.client.users.fetch(process.env.OWNER_ID);
             const clientAvatar = this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 });
             const databasePing = await Util.databasePing(connection);
+            const guildMemory = new Bytes(((await ClientStats.getMemoryUsage()).shards[ClientStats.shardId].servers.get(message.guild?.id ?? '')?.memory ?? 0) * 1024 * 1024).toString();
 
             const clientInfo = new ClientEmbed(this.client)
                 .setAuthor({ name: `Olá, me chamo ${clientUsername}!`, iconURL: clientAvatar })
@@ -44,7 +45,7 @@ export default class BotInfoCommand extends CommandStructure {
                     },
                     {
                         name: 'Estatísticas:',
-                        value: `🏘️ Servidores: \`${clientGuilds}\`\n👥 Usuários: \`${clientUsers}\`\n🔧 Total de Comandos: \`${clientCommands}\`\n📀 Shard ID: \`${ClientStats.shardId}\` \`(${ClientStats.shardId + 1}/${ClientStats.totalShards}\`)`
+                        value: `🏘️ Servidores: \`${clientGuilds}\`\n👥 Usuários: \`${clientUsers}\`\n🔧 Total de Comandos: \`${clientCommands}\`\n📀 Shard ID: \`${ClientStats.shardId}\` \`(${ClientStats.shardId + 1}/${ClientStats.totalShards})\`\n💾 Memória reservada neste servidor: \`${guildMemory}\``
                     },
                     {
                         name: 'Linguagem e outros:',
