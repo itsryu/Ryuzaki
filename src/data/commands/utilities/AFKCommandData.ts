@@ -1,4 +1,4 @@
-import { CommandData } from '../../../structures';
+import { CommandData } from '../../../Structures';
 import { ApplicationCommandType, ApplicationCommandOptionType } from 'discord.js';
 
 class AFKCommandDataConstructor extends CommandData {

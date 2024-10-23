@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../../ryuzakiClient';
-import { ContextCommandStructure, ClientEmbed } from '../../../structures';
+import { ContextCommandStructure, ClientEmbed } from '../../../Structures/';
 import { BannerContextCommandData } from '../../../data/context/user/utilities/bannerContextCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContextMenuCommandInteraction } from 'discord.js';
-import { Logger } from '../../../utils';
+import { Logger } from '../../../Utils/logger';
 
 export default class BannerContextCommand extends ContextCommandStructure {
     constructor(client: Ryuzaki) {
