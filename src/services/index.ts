@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../ryuzakiClient';
-import { ModuleStructure, ServiceStructure } from '../Structures/';
-import { readdirSync } from 'fs';
-import { join } from 'path';
-import { Logger } from '../Utils/logger';
+import { ModuleStructure, ServiceStructure } from '../structures';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { Logger } from '../utils';
 
 export default class Services extends ModuleStructure {
     async moduleExecute() {

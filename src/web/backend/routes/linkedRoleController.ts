@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
-import { Logger } from '../../../Utils/logger';
+import { JSONResponse, RouteStructure } from '../../../structures';
+import { Logger } from '../../../utils';
 
 class LinkedRoleController extends RouteStructure {
     run = (_: Request, res: Response) => {
-        try {
+        try {    
             const { url, state } = this.app.getOAuthUrl();
 
             res.cookie('clientState', state, { maxAge: 1000 * 60 * 5, signed: true });

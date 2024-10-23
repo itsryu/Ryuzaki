@@ -1,4 +1,4 @@
-import { ContextCommandData } from '../../../../Structures';
+import { ContextCommandData } from '../../../../structures';
 import { ApplicationCommandType } from 'discord.js';
 
 class BannerContextCommandDataConstructor extends ContextCommandData {

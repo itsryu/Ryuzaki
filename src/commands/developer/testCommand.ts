@@ -2,7 +2,7 @@ import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { TestCommandData } from '../../data/commands/developer/testCommandData';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../structures';
-import { Logger } from '../../utils/logger';
+import { Logger } from '../../utils';
 
 export default class TestCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

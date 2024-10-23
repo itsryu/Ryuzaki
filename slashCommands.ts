@@ -1,6 +1,6 @@
-import { RawCommandData, RawContextCommandData } from './src/Structures';
+import { RawCommandData, RawContextCommandData } from './src/structures';
 import { ApplicationCommand, PermissionsBitField, REST, Routes } from 'discord.js';
-import { Logger } from './src/Utils/logger';
+import { Logger } from './src/utils/logger';
 import { Ryuzaki } from './src/ryuzakiClient';
 
 export class SlashCommands {

@@ -1,7 +1,7 @@
 import { Snowflake } from 'discord.js';
 import { DiscordUser } from '../types/gatewayTypes';
-import { UserBadges, UserFlagKey } from './Objects/flags';
-import { Logger } from './logger';
+import { UserBadges, UserFlagKey } from './objects';
+import { Logger } from './index';
 
 interface UserBoostBadge {
     atualBadge?: string | null;

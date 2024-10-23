@@ -1,10 +1,9 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { StealCommandData } from '../../data/commands/economy/stealCommandData';
-import { Languages } from '../../types/clientTypes';
-import { Abbrev } from '../../Utils/abbrev';
-import { Logger } from '../../Utils/logger';
+import { Languages } from '../../types';
+import { Abbrev, Logger } from '../../utils';
 
 export default class StealCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

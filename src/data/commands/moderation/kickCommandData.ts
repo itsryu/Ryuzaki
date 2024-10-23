@@ -1,5 +1,5 @@
 ﻿import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
-import { CommandData } from '../../../Structures';
+import { CommandData } from '../../../structures';
 
 class KickCommandDataConstructor extends CommandData {
     constructor() {

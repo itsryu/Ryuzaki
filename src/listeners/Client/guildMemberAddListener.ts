@@ -1,9 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ListenerStructure, ClientEmbed } from '../../Structures/';
+import { ListenerStructure, ClientEmbed } from '../../structures';
 import { Events, GuildMember, PermissionFlagsBits, TextChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger, Util } from '../../utils';
 import Day from 'dayjs';
-import { Util } from '../../Utils/util';
 
 export default class GuildMemberAddListener extends ListenerStructure {
     constructor(client: Ryuzaki) {

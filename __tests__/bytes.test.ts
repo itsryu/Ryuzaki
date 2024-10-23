@@ -1,4 +1,4 @@
-import { Bytes } from '../src/Utils/bytes';
+import { Bytes } from '../src/utils';
 
 describe('Bytes format', () => {
     const testCases = [

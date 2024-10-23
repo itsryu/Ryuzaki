@@ -1,9 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { renderEmoji } from './Plugins/renderEmoji';
+import { renderEmoji } from './plugins';
 import { SKRSContext2D } from '@napi-rs/canvas';
 import { duration } from 'dayjs';
-import { Language } from './Objects/flags';
-import { Languages } from '../types/clientTypes';
+import { Language } from './objects';
+import { Languages } from '../types';
 import { Connection } from 'mongoose';
 
 type timezone = 'America/Sao_Paulo' | 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Denver' | 'America/Phoenix' | 'America/Anchorage' | 'America/Adak' | 'Pacific/Honolulu';

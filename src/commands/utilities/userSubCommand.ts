@@ -1,12 +1,10 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { UserSubCommandData } from '../../data/commands/utilities/userSubCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
-import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../Utils/Objects/flags';
+import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../utils/objects';
 import { Languages } from '../../types/clientTypes';
-import { Util } from '../../Utils/util';
-import { GetDiscordUserApiData } from '../../Utils/getUserData';
-import { Logger } from '../../Utils/logger';
+import { Logger, Util, GetDiscordUserApiData } from '../../utils';
 
 export default class UserSubCommand extends CommandStructure {
     public constructor(client: Ryuzaki) {

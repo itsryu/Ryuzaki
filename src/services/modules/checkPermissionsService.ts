@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { PermissionsFlagsText, PermissionFlagKey } from '../../Utils/Objects/flags';
-import { ServiceStructure, ClientEmbed, CommandStructure } from '../../Structures';
+import { PermissionsFlagsText, PermissionFlagKey } from '../../utils/objects';
+import { ServiceStructure, ClientEmbed, CommandStructure } from '../../structures';
 import { ChannelType, Message, PermissionsBitField } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class CheckPermissionsService extends ServiceStructure<boolean> {
     constructor(client: Ryuzaki) {

@@ -1,9 +1,9 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { BanCommandData } from '../../data/commands/moderation/banCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, GuildTextBasedChannel, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
-import { emojis } from '../../Utils/Objects/emojis.js';
-import { Logger } from '../../Utils/logger';
+import { emojis } from '../../utils/objects';
+import { Logger } from '../../utils/';
 
 export default class BanCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

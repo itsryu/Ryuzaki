@@ -1,4 +1,4 @@
-import { CommandData } from '../../../Structures';
+import { CommandData } from '../../../structures';
 import { ApplicationCommandType, ApplicationCommandOptionType } from 'discord.js';
 
 class WikiCommandDataConstructor extends CommandData {

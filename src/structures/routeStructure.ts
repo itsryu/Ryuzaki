@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import App from '../Web/backend/server';
-import { HTTPStatus } from '../types/HTTPSTypes';
+import App from '../web/backend/server';
+import { HTTPStatus } from '../types';
 
 interface JSONObjectResponse {
     code: number,
@@ -53,4 +53,7 @@ abstract class RouteStructure<T = Request, K = Response, N = NextFunction, V = v
     public abstract run(req: T, res: K, next: N, ...args: any[]): Promise<V> | V;
 }
 
-export { RouteStructure, JSONResponse };
+export { 
+    RouteStructure, 
+    JSONResponse 
+};

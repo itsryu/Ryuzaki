@@ -1,7 +1,6 @@
-import { ModuleStructure } from '../../Structures/ModuleStructures';
+import { ModuleStructure } from '../../structures';
 import { AttachmentBuilder, ModalSubmitInteraction } from 'discord.js';
-import { profileConstructor } from '../../Utils/profileConstructor';
-import { Logger } from '../../Utils/logger';
+import { profileConstructor, Logger } from '../../utils';
 
 export default class RepModal extends ModuleStructure {
     async moduleExecute(interaction: ModalSubmitInteraction) {

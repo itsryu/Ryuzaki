@@ -1,4 +1,4 @@
 export * from './schemas/clientShema';
 export * from './schemas/commandSchema';
-export * from './schemas/GuildSchema';
-export * from './schemas/UserSchema';
+export * from './schemas/guildSchema';
+export * from './schemas/userSchema';

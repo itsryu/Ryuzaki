@@ -1,12 +1,11 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure } from '../../../src/Structures/';
+import { CommandStructure } from '../../structures';
 import { ShardCommandData } from '../../data/commands/infos/shardCommandData';
 import { Languages } from '../../types/clientTypes';
 import { Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import Ascii from 'ascii-table';
 import Day from 'dayjs';
-import { Bytes } from '../../Utils/bytes';
-import { Logger } from '../../Utils/logger';
+import { Bytes, Logger } from '../../utils';
 
 export default class ShardCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

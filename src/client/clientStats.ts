@@ -2,7 +2,7 @@ import { cpuUsage, memoryUsage } from 'node:process';
 import { client } from './client';
 import { Stats } from '../types/clientTypes';
 
-export default class ClientStats {
+export class ClientStats {
     private static botMessages = 0;
     private static interactions = 0;
     private static isLastShard = false;

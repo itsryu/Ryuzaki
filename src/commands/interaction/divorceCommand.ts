@@ -1,9 +1,9 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { DivorceCommandData } from '../../data/commands/interaction/divorceCommandData.js';
-import { emojis } from '../../Utils/Objects/emojis';
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
+import { emojis } from '../../utils/objects';
 
 export default class DivorceCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

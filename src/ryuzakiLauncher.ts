@@ -2,8 +2,8 @@ import { extend } from 'dayjs';
 import 'dayjs/locale/pt';
 import 'dayjs/locale/en';
 import { client } from './client/client';
-import App from './Web/backend/server';
-import { Logger } from './Utils/logger';
+import App from './web/backend/server';
+import { Logger } from './utils/logger';
 
 
 (async () => {

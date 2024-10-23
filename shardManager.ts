@@ -1,7 +1,7 @@
 import { ShardingManager } from 'discord.js';
 import { config } from 'dotenv';
 import { join } from 'path';
-import { Logger } from './src/Utils/logger';
+import { Logger } from './src/utils/logger';
 
 config({ path: join(__dirname, '../.env') });
 

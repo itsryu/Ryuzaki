@@ -1,8 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ServiceStructure } from '../../Structures';
+import { ServiceStructure } from '../../structures';
 import { connect, connection } from 'mongoose';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Logger, Util } from '../../utils';
 
 export default class DatabaseConnectionService extends ServiceStructure {
     constructor(client: Ryuzaki) {

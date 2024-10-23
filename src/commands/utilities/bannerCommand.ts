@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { BannerCommandData } from '../../data/commands/utilities/bannerCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class BannerCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

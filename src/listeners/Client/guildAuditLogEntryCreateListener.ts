@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, ListenerStructure } from '../../Structures';
+import { ClientEmbed, ListenerStructure } from '../../structures';
 import { ActionRowBuilder, AuditLogEvent, ButtonBuilder, ButtonInteraction, ButtonStyle, Events, Guild, GuildAuditLogsEntry, GuildTextBasedChannel, MessageComponentInteraction, NonThreadGuildBasedChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class GuildAuditLogEntryCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {

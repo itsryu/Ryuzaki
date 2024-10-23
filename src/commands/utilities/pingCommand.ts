@@ -1,11 +1,9 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { PingCommandData } from '../../data/commands/utilities/pingCommandData';
 import { Colors, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { connection } from 'mongoose';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
-
+import { Logger, Util } from '../../utils';
 export default class PingCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, PingCommandData);

@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ListenerStructure } from '../../Structures/';
+import { ListenerStructure } from '../../structures';
 import { Events, Guild, Invite, Collection, PermissionFlagsBits } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class inviteCreateListener extends ListenerStructure {
     private codeUses = new Collection<string, Invite>();

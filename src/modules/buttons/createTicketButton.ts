@@ -1,6 +1,6 @@
-import { ModuleStructure, ClientEmbed } from '../../Structures';
+import { ModuleStructure, ClientEmbed } from '../../structures';
 import { ButtonBuilder, ActionRowBuilder, ChannelType, PermissionFlagsBits, ButtonInteraction, ButtonStyle, TextChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class CreateTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction) {

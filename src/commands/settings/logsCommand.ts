@@ -1,10 +1,10 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { LogsCommandData } from '../../data/commands/settings/logsCommandData';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, EmbedBuilder, OmitPartialGroupDMChannel } from 'discord.js';
-import { emojis } from '../../Utils/Objects/emojis';
-import { GuildDocument } from '../../types/schemaTypes';
-import { Logger } from '../../Utils/logger';
+import { emojis } from '../../utils/objects';
+import { GuildDocument } from '../../types';
+import { Logger } from '../../utils';
 
 export default class LogsCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

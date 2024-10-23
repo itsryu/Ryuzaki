@@ -1,10 +1,8 @@
 import { Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, CommandStructure } from '../../Structures/';
+import { ClientEmbed, CommandStructure } from '../../structures';
 import { RankMoneyCommandData } from '../../data/commands/economy/rankMoneyCommandData';
-import { Abbrev } from '../../Utils/abbrev';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Abbrev, Logger, Util } from '../../utils';
 
 export default class RankMoneyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

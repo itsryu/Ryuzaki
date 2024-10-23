@@ -1,6 +1,6 @@
-import { ModuleStructure, ClientEmbed } from '../Structures';
+import { ModuleStructure, ClientEmbed } from '../structures';
 import { Message, TextChannel } from 'discord.js';
-import { Logger } from '../Utils/logger';
+import { Logger } from '../utils';
 import ms from 'ms';
 
 interface SpamMap {

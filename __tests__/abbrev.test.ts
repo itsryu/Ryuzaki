@@ -1,4 +1,4 @@
-import { Abbrev } from '../src/Utils/abbrev';
+import { Abbrev } from '../src/utils';
 
 describe('Abbrev format', () => {
     const testCases = [

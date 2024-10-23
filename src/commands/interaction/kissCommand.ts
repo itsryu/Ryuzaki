@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { KissCommandData } from '../../data/commands/interaction/kissCommandData';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 interface KissData {
     url: string

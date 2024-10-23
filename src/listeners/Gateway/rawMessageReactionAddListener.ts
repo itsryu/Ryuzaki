@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { RawListenerStructure, ClientEmbed } from '../../Structures';
+import { RawListenerStructure, ClientEmbed } from '../../structures';
 import { TextChannel, GatewayDispatchEvents, GatewayMessageReactionAddDispatchData } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class RawMessageReactionAddListener extends RawListenerStructure {
     constructor(client: Ryuzaki) {

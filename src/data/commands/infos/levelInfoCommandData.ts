@@ -1,4 +1,4 @@
-import { CommandData } from '../../../Structures';
+import { CommandData } from '../../../structures';
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
 
 class LevelInfoCommandDataConstructor extends CommandData {

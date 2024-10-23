@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../../ryuzakiClient';
-import { ContextCommandStructure, ClientEmbed } from '../../../Structures';
+import { ContextCommandStructure, ClientEmbed } from '../../../structures';
 import { AvatarContextCommandData } from '../../../data/context/user/utilities/avatarContextCommandData';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContextMenuCommandInteraction } from 'discord.js';
-import { Logger } from '../../../Utils/logger';
+import { Logger } from '../../../utils';
 
 export default class AvatarContextCommand extends ContextCommandStructure {
     constructor(client: Ryuzaki) {

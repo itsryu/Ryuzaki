@@ -3,8 +3,8 @@
         "target": "ES2022",
         "module": "commonjs",
         "lib": [
-          "ES2022",
-          "ES6"
+            "ES2022",
+            "ES6"
         ],
         "rootDir": "./",
         "esModuleInterop": true,
@@ -30,14 +30,14 @@
         "skipLibCheck": true
     },
     "include": [
-        "__test__/**/*.ts",
-        "./__tests__/*.ts",
-        "./src/**/*.ts",
-        "lib/*.d.ts",
-        "./*.d.ts",
         "./*.ts",
-        "./*.js"
-, "eslint.config.mjs"    ],
+        "./*.d.ts",
+        "./lib/*.ts",
+        "./src/*.ts",
+        "./src/**/*.ts",
+        "./__tests__/*.ts",
+        "eslint.config.mjs"
+    ],
     "exclude": [
         "./node_modules",
         "./dist"

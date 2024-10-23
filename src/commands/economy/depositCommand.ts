@@ -1,10 +1,9 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure } from '../../Structures/';
-import { Languages } from '../../types/clientTypes';
+import { CommandStructure } from '../../structures';
+import { Languages } from '../../types';
 import { DepositCommandData } from '../../data/commands/economy/depositCommandData';
-import { Abbrev } from '../../Utils/abbrev';
-import { Logger } from '../../Utils/logger';
+import { Abbrev, Logger } from '../../utils';
 
 export default class DepositCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

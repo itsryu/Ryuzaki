@@ -1,11 +1,9 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, CommandStructure } from '../../Structures/';
+import { ClientEmbed, CommandStructure } from '../../structures';
 import { DailyCommandData } from '../../data/commands/economy/dailyCommandData';
-import { Languages } from '../../types/clientTypes';
-import { Abbrev } from '../../Utils/abbrev';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Languages } from '../../types';
+import { Abbrev, Util, Logger } from '../../utils';
 
 export default class DailyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

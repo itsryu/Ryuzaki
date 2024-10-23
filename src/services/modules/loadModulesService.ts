@@ -1,9 +1,9 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ServiceStructure, CommandStructure, ListenerStructure, RawListenerStructure, ContextCommandStructure } from '../../Structures';
+import { ServiceStructure, CommandStructure, ListenerStructure, RawListenerStructure, ContextCommandStructure } from '../../structures';
 import { readdirSync } from 'node:fs';
 import { GlobalFonts } from '@napi-rs/canvas';
 import { join } from 'node:path';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class LoadModulesService extends ServiceStructure {
     constructor(client: Ryuzaki) {

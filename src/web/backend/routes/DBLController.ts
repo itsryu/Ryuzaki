@@ -1,10 +1,8 @@
 import { WebhookPayload } from '@top-gg/sdk';
 import { NextFunction, Request, Response } from 'express';
-import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
+import { JSONResponse, RouteStructure } from '../../../structures';
 import { EmbedBuilder } from 'discord.js';
-import { Abbrev } from '../../../Utils/abbrev';
-import { Logger } from '../../../Utils/logger';
-import { Util } from '../../../Utils/util';
+import { Util, Abbrev, Logger } from '../../../utils';
 
 class DBLController extends RouteStructure {
     run = async (_: Request, res: Response, __: NextFunction, vote: WebhookPayload) => {

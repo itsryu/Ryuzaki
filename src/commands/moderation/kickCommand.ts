@@ -1,9 +1,9 @@
 ﻿import { KickCommandData } from '../../data/commands/moderation/kickCommandData';
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, CommandStructure } from '../../Structures';
+import { ClientEmbed, CommandStructure } from '../../structures';
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, GuildTextBasedChannel, Message, MessageComponentInteraction, OmitPartialGroupDMChannel } from 'discord.js';
-import { emojis } from '../../Utils/Objects/emojis.js';
-import { Logger } from '../../Utils/logger';
+import { emojis } from '../../utils/objects';
+import { Logger } from '../../utils';
 
 export default class KickCommand extends CommandStructure {
     public constructor(client: Ryuzaki) {

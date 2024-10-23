@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../ryuzakiClient';
-import { ModuleStructure } from '../Structures';
-import { Logger } from '../Utils/logger';
+import { ModuleStructure } from '../structures';
+import { Logger } from '../utils';
 
 export default class VipModule extends ModuleStructure {
     moduleExecute() {

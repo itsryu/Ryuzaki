@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, CommandStructure } from '../../Structures/';
+import { ClientEmbed, CommandStructure } from '../../structures';
 import { ClearCommandData } from '../../data/commands/moderation/clearCommandData';
 import { Collection, Message, TextChannel, GuildTextBasedChannel, PartialMessage, OmitPartialGroupDMChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class ClearCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

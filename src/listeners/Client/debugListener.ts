@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ListenerStructure } from '../../Structures';
+import { ListenerStructure } from '../../structures';
 import { Events} from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class DebugListener extends ListenerStructure {
     constructor(client: Ryuzaki) {

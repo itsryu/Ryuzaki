@@ -1,5 +1,5 @@
 import { Schema,Model, model } from 'mongoose';
-import { CommandDocument } from '../../types/schemaTypes';
+import { CommandDocument } from '../../types';
 
 const CommandSchema = new Schema<CommandDocument>({
     _id: {

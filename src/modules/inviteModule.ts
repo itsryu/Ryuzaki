@@ -1,6 +1,6 @@
-import { ModuleStructure } from '../Structures';
+import { ModuleStructure } from '../structures';
 import { ChannelType, Message, PermissionFlagsBits } from 'discord.js';
-import { Logger } from '../Utils/logger';
+import { Logger } from '../utils';
 
 export default class InviteModule extends ModuleStructure {
     async moduleExecute(message: Message) {

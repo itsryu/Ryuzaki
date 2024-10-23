@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
-import { Logger } from '../../../Utils/logger';
+import { JSONResponse, RouteStructure } from '../../../structures';
+import { Logger } from '../../../utils/logger';
 
 class AuthMiddleware extends RouteStructure {
     run = (req: Request, res: Response, next: NextFunction) => {

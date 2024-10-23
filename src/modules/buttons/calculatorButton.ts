@@ -1,5 +1,5 @@
 import { APIEmbed, ButtonInteraction, codeBlock, Colors } from 'discord.js';
-import { ModuleStructure } from '../../Structures';
+import { ModuleStructure } from '../../structures';
 
 interface ParsedId {
     c: string;

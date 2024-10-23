@@ -1,11 +1,10 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { HelpCommandData } from '../../data/commands/infos/helpCommandData';
-import { PermissionFlagKey, PermissionsFlagsText } from '../../Utils/Objects/flags';
-import { CategoryValidation, Languages } from '../../types/clientTypes';
+import { CategoryValidation, Languages } from '../../types';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField, OmitPartialGroupDMChannel } from 'discord.js';
-import { categoryEmojis } from '../../Utils/Objects/emojis';
-import { Logger } from '../../Utils/logger';
+import { PermissionFlagKey, PermissionsFlagsText, categoryEmojis } from '../../utils/objects';
+import { Logger } from '../../utils';
 
 export default class HelpCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

@@ -1,8 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ListenerStructure } from '../../Structures/';
+import { ListenerStructure } from '../../structures/';
 import { Events, GuildMember, TextChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Logger, Util } from '../../utils';
 
 export default class GuildMemberRemoveListener extends ListenerStructure {
     constructor(client: Ryuzaki) {

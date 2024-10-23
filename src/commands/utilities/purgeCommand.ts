@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure } from '../../Structures/';
+import { CommandStructure } from '../../structures';
 import { PurgeCommandData } from '../../data/commands/utilities/purgeCommandData';
 import { Message, Collection, OmitPartialGroupDMChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class purgeCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

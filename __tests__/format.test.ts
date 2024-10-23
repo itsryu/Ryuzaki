@@ -1,5 +1,5 @@
 import Dayjs from 'dayjs';
-import { Util } from '../src/Utils/util';
+import { Util } from '../src/utils';
 import { Languages } from '../src/types/clientTypes';
 
 describe('formatDuration', () => {

@@ -1,4 +1,4 @@
-import { CommandData } from '../../../Structures';
+import { CommandData } from '../../../structures';
 import { ApplicationCommandType } from 'discord.js';
 
 class TestCommandDataConstructor extends CommandData {

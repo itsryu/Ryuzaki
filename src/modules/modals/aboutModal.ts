@@ -1,7 +1,6 @@
-import { ModuleStructure } from '../../Structures';
-import { profileConstructor } from '../../Utils/profileConstructor';
+import { ModuleStructure } from '../../structures';
 import { AttachmentBuilder, ModalSubmitInteraction } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger, profileConstructor } from '../../utils';
 
 export default class AboutModal extends ModuleStructure {
     async moduleExecute(interaction: ModalSubmitInteraction) {

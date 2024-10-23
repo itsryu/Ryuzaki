@@ -1,8 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { PrefixCommandData } from '../../data/commands/settings/prefixCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction, ButtonInteraction, OmitPartialGroupDMChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class PrefixCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

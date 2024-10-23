@@ -1,9 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, CommandStructure } from '../../../src/Structures/';
+import { ClientEmbed, CommandStructure } from '../../structures';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
-import { Abbrev } from '../../Utils/abbrev';
 import { LevelInfoCommandData } from '../../data/commands/infos/levelInfoCommandData';
-import { Logger } from '../../Utils/logger';
+import { Logger, Abbrev } from '../../utils';
 
 export default class LevelInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

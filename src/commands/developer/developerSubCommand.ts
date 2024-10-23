@@ -1,11 +1,10 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure, ClientEmbed } from '../../Structures';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { DeveloperSubCommandData } from '../../data/commands/developer/developerSubCommandData';
 import { Message, MessageComponentInteraction, OmitPartialGroupDMChannel, StringSelectMenuInteraction } from 'discord.js';
 import { inspect } from 'node:util';
-import { Languages } from '../../types/clientTypes';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Languages } from '../../types';
+import { Logger, Util } from '../../utils';
 
 export default class DeveloperSubCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

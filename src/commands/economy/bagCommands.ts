@@ -1,11 +1,10 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, CommandStructure } from '../../Structures/';
-import { Languages } from '../../types/clientTypes';
-import { emojis } from '../../Utils/Objects/emojis';
+import { ClientEmbed, CommandStructure } from '../../structures/';
+import { Languages } from '../../types';
+import { emojis } from '../../utils/objects';
 import { BagCommandData } from '../../data/commands/economy/bagCommandData';
-import { Abbrev } from '../../Utils/abbrev';
-import { Logger } from '../../Utils/logger';
+import { Abbrev, Logger } from '../../utils';
 
 export default class BagCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

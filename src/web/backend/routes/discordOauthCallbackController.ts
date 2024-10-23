@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { JSONResponse, RouteStructure } from '../../../Structures/RouteStructure';
-import { Logger } from '../../../Utils/logger';
+import { JSONResponse, RouteStructure } from '../../../structures';
+import { Logger } from '../../../utils';
 
 class DiscordOauthCallbackController extends RouteStructure {
     run = async (req: Request, res: Response) => {

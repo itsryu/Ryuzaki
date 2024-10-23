@@ -1,6 +1,6 @@
-import { ModuleStructure } from '../Structures';
+import { ModuleStructure } from '../structures';
 import { Message } from 'discord.js';
-import { Logger } from '../Utils/logger';
+import { Logger } from '../utils';
 
 export default class AFKModule extends ModuleStructure {
     async moduleExecute(message: Message) {

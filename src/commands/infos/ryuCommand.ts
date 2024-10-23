@@ -1,10 +1,10 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { emojis } from '../../Utils/Objects/emojis';
-import { Languages } from '../../types/clientTypes';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { RyuCommandData } from '../../data/commands/infos/ryuCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
+import { emojis } from '../../utils/objects';
+import { Languages } from '../../types';
 
 export default class RyuCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

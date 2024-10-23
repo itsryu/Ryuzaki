@@ -1,7 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ClientEmbed, ListenerStructure } from '../../Structures';
+import { ClientEmbed, ListenerStructure } from '../../structures';
 import { Events, WebhookClient, Colors } from 'discord.js';
-import { Logger } from '../../Utils/logger';
+import { Logger } from '../../utils';
 
 export default class ErrorListener extends ListenerStructure {
     constructor(client: Ryuzaki) {

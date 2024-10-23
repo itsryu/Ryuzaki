@@ -1,17 +1,14 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { emojis } from '../../Utils/Objects/emojis';
-import { Languages } from '../../types/clientTypes';
-import { CommandStructure, ClientEmbed } from '../../Structures/';
+import { emojis } from '../../utils/objects';
+import { Languages } from '../../types';
+import { CommandStructure, ClientEmbed } from '../../structures';
 import { BotInfoCommandData } from '../../data/commands/infos/botInfoCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version, OmitPartialGroupDMChannel } from 'discord.js';
 import { connection } from 'mongoose';
-import { Constants } from '../../Utils/constants';
-import { Bytes } from '../../Utils/bytes';
 import { memoryUsage } from 'node:process';
-import { Logger } from '../../Utils/logger';
+import { ClientStats } from '../../client';
+import { Util, Constants, Bytes, Logger } from '../../utils';
 import Day from 'dayjs';
-import ClientStats from '../../client/clientStats';
-import { Util } from '../../Utils/util';
 
 export default class BotInfoCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

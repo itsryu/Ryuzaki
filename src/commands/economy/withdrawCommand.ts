@@ -1,10 +1,9 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
-import { CommandStructure } from '../../Structures/';
-import { Languages } from '../../types/clientTypes';
+import { CommandStructure } from '../../structures';
+import { Languages } from '../../types';
 import { WithdrawCommandData } from '../../data/commands/economy/withdrawCommandData';
-import { Abbrev } from '../../Utils/abbrev';
-import { Logger } from '../../Utils/logger';
+import { Abbrev, Logger } from '../../utils';
 
 export default class WithdrawCommand extends CommandStructure {
     constructor(client: Ryuzaki) {

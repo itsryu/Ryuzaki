@@ -1,10 +1,10 @@
 import { Client, Collection, PermissionFlagsBits, OAuth2Scopes, Snowflake, Invite, ClientOptions } from 'discord.js';
 import { ClientModel, CommandModel, GuildModel, UserModel } from './database/index';
-import { Logger } from './Utils/logger';
+import { Logger } from './utils/logger';
 import { Translate } from '../lib/translate';
 import { Api } from '@top-gg/sdk';
-import { CommandStructure, ContextCommandStructure, ServiceStructure } from './Structures';
-import { Collections } from './Utils/collection';
+import { CommandStructure, ContextCommandStructure, ServiceStructure } from './structures';
+import { Collections } from './utils/collection';
 import { DataType, Languages, DataDocument, ShardMemory } from './types/clientTypes';
 import { config } from 'dotenv';
 import { join } from 'node:path';
@@ -54,7 +54,7 @@ export class Ryuzaki extends Client {
     }
 
     private async clientManager() {
-        const { default: servicesIndex } = await import('./Services/index');
+        const { default: servicesIndex } = await import('./services/index');
         await new servicesIndex(this).moduleExecute();
     }
 

@@ -1,6 +1,6 @@
 import { ShardManager } from './shardManager';
 import { join } from 'path';
-import { Logger } from './src/Utils/logger';
+import { Logger } from './src/utils/logger';
 
 const shard = new ShardManager(join(__dirname, './src/RyuzakiLauncher.js'), {
     mode: 'process',

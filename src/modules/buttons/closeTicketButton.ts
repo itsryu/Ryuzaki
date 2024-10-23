@@ -1,9 +1,8 @@
-import { ModuleStructure } from '../../Structures';
+import { ModuleStructure } from '../../structures';
 import { ActionRowBuilder, ButtonBuilder, ChannelType, ButtonInteraction, ButtonStyle, TextChannel, MessageComponentInteraction } from 'discord.js';
 import { writeFileSync, readdirSync, statSync } from 'node:fs';
-import { Languages } from '../../types/clientTypes';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Languages } from '../../types';
+import { Logger, Util } from '../../utils';
 
 export default class CloseTicketButton extends ModuleStructure {
     async moduleExecute(interaction: ButtonInteraction, language: Languages) {

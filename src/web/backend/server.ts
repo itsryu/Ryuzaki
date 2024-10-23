@@ -1,16 +1,16 @@
-import { AppStructure } from '../../Structures';
+import { AppStructure } from '../../structures';
 import express, { Express, Router } from 'express';
 import { Client, RESTGetAPIUserResult, RESTPostOAuth2AccessTokenResult, Snowflake } from 'discord.js';
 import { urlencoded, json } from 'body-parser';
-import { InfoMiddleware, AuthMiddleware } from './middlewares/index';
-import { Logger } from '../../Utils/logger';
-import { Route } from '../../types/HTTPSTypes';
-import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController } from './routes/index';
+import { InfoMiddleware, AuthMiddleware } from './middlewares';
+import { Logger } from '../../utils';
+import { Route } from '../../types';
+import { HomeController, NotFoundController, HealthCheckController, DBLController, DiscordUserController } from './routes';
 import cors from 'cors';
 import { verifyKey } from 'discord-interactions';
-import { JSONResponse } from '../../Structures/RouteStructure';
+import { JSONResponse } from '../../structures';
 import { Webhook } from '@top-gg/sdk';
-import ClientStats from '../../client/clientStats';
+import { ClientStats } from '../../client';
 
 export default class App extends AppStructure {
     private readonly app: Express = express();

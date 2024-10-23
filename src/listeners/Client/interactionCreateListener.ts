@@ -1,8 +1,7 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../Structures/';
+import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../structures';
 import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType, Message } from 'discord.js';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { Logger, Util } from '../../utils';
 
 export default class InteractionCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -237,7 +236,7 @@ export default class InteractionCreateListener extends ListenerStructure {
                                     await userData.save();
 
                                     //===============> Levels:
-                                    const { default: XPModule } = await import('../../Modules/XPModule');
+                                    const { default: XPModule } = await import('../../modules/XPModule');
                                     await new XPModule(this.client).moduleExecute({ message });
                                 }
                             });

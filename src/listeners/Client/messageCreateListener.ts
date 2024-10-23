@@ -1,9 +1,8 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { ListenerStructure, ClientEmbed, CommandStructure } from '../../Structures';
+import { ListenerStructure, ClientEmbed, CommandStructure } from '../../structures';
 import { Message, Collection, WebhookClient, PermissionFlagsBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, MessageReaction, Colors, GuildChannel, ChannelType, OmitPartialGroupDMChannel } from 'discord.js';
-import { emojis } from '../../Utils/Objects/emojis';
-import { Logger } from '../../Utils/logger';
-import { Util } from '../../Utils/util';
+import { emojis } from '../../utils/objects';
+import { Logger, Util } from '../../utils';
 
 export default class MessageCreateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -280,7 +279,7 @@ export default class MessageCreateListener extends ListenerStructure {
                                     await userData.save();
 
                                     //===============> Levels:
-                                    const { default: XPModule } = await import('../../Modules/XPModule');
+                                    const { default: XPModule } = await import('../../modules/XPModule');
                                     await new XPModule(this.client).moduleExecute({ message });
                                 }
                             } catch (err) {
@@ -295,7 +294,7 @@ export default class MessageCreateListener extends ListenerStructure {
 
             if (message.guild) {
                 //===============> AFK:
-                const { default: afkModule } = await import('../../Modules/AFKModule');
+                const { default: afkModule } = await import('../../modules/AFKModule');
                 await new afkModule(this.client).moduleExecute(message);
 
                 //===============> Anti-Convites:

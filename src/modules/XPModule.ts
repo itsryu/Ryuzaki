@@ -1,7 +1,6 @@
-import { ModuleStructure } from '../Structures';
+import { ModuleStructure } from '../structures';
 import { Message } from 'discord.js';
-import { Logger } from '../Utils/logger';
-import { Util } from '../Utils/util';
+import { Logger, Util } from '../utils';
 
 export default class XPModule extends ModuleStructure {
     async moduleExecute({ message }: { message: Message }) {
