@@ -1,16 +1,16 @@
 import { Message, MessageReaction, OmitPartialGroupDMChannel, User } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../structures';
-import { Languages } from '../../types';
 import { PayCommandData } from '../../data/commands/economy/payCommandData';
 import { Abbrev, Logger } from '../../utils';
+import { Language } from '../../utils/objects';
 
 export default class PayCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, PayCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Language }) {
         try {
             const member = message.mentions?.members?.first() ?? message.guild?.members.cache.get(args[0]);
             const amount = args[1];

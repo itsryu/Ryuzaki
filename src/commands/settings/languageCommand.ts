@@ -2,8 +2,8 @@ import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../structures';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
 import { LanguageCommandData } from '../../data/commands/settings/languageCommandData';
-import { Languages } from '../../types';
 import { Logger } from '../../utils';
+import { Language } from '../../utils/objects';
 
 interface LanguageProps {
     name: string;
@@ -15,7 +15,7 @@ export default class LanguageCommand extends CommandStructure {
         super(client, LanguageCommandData);
     }
 
-    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
+    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Language }) {
         try {
             const guildLang = args[0];
             const guildData = await this.client.getData(message.guild?.id, 'guild');
@@ -25,7 +25,7 @@ export default class LanguageCommand extends CommandStructure {
             if (!data) {
                 return void message.reply({ content: 'Erro ao obter os dados do banco de dados. Tente novamente mais tarde.' });
             } else {
-                const languages: Record<Languages, LanguageProps> = {
+                const languages: Record<Language, LanguageProps> = {
                     'pt-BR': {
                         name: 'pt-BR 🇧🇷',
                         complete: 100
@@ -98,7 +98,7 @@ export default class LanguageCommand extends CommandStructure {
                             await message.channel.send({ content: this.client.t('config:language:responses.cancel') });
                         }
 
-                        const id = i.values[0] as Languages;
+                        const id = i.values[0];
 
                         if (id === data.lang) {
                             return void message.channel.send(this.client.t('config:language:responses.filter_currently'));

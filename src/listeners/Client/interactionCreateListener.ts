@@ -1,6 +1,6 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ListenerStructure, ClientEmbed, CommandStructure, ContextCommandStructure } from '../../structures';
-import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType, Message } from 'discord.js';
+import { WebhookClient, Collection, PermissionFlagsBits, ApplicationCommandOptionType, Events, TextChannel, Interaction, PermissionsBitField, InteractionReplyOptions, MessagePayload, InteractionEditReplyOptions, MessageResolvable, InteractionType, ChatInputCommandInteraction, ChannelType, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger, Util } from '../../utils';
 
 export default class InteractionCreateListener extends ListenerStructure {
@@ -140,14 +140,18 @@ export default class InteractionCreateListener extends ListenerStructure {
 
                         //===============> Execução dos comandos:
 
-                        command.data.options.config.ephemeral ? (await interaction.deferReply({ fetchReply: true, ephemeral: true })) : (await interaction.deferReply({ fetchReply: true }));
+                        if (command.data.options.config.ephemeral) {
+                            await interaction.deferReply({ fetchReply: true, ephemeral: true });
+                        } else {
+                            await interaction.deferReply({ fetchReply: true, ephemeral: false });
+                        }
 
                         const message = Object.assign(interaction, {
                             author: interaction.user,
                             reply: async (options: string | MessagePayload | InteractionReplyOptions) => await interaction.followUp(options).catch((err: unknown) => { Logger.error((err as Error).message, InteractionCreateListener.name); }),
                             edit: async (options: string | MessagePayload | InteractionEditReplyOptions) => await interaction.editReply(options).catch((err: unknown) => { Logger.error((err as Error).message, InteractionCreateListener.name); }),
                             delete: async (message?: MessageResolvable) => { await interaction.deleteReply(message); }
-                        }) as Message & ChatInputCommandInteraction;
+                        }) as OmitPartialGroupDMChannel<Message> | ChatInputCommandInteraction;
 
                         //===============> Checando permissões dos membros e do cliente:
 

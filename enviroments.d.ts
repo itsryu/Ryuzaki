@@ -16,7 +16,7 @@ declare global {
 			PREFIX: string;
 			STATE: string;
 			LANG_PATH: string;
-			PORT: number;
+			PORT: string;
 			LOCAL_URL: string;
 			DOMAIN_URL: string;
 			MONGO_CONNECTION_URI: string;

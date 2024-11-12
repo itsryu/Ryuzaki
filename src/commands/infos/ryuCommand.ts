@@ -3,15 +3,14 @@ import { CommandStructure, ClientEmbed } from '../../structures';
 import { RyuCommandData } from '../../data/commands/infos/ryuCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../utils';
-import { emojis } from '../../utils/objects';
-import { Languages } from '../../types';
+import { emojis, Language } from '../../utils/objects';
 
 export default class RyuCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, RyuCommandData);
     }
 
-    async commandExecute({ message, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, prefix: string, language: Languages }) {
+    async commandExecute({ message, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, prefix: string, language: Language }) {
         try {
             const owner = await this.client.users.fetch(process.env.OWNER_ID).catch(() => undefined);
             const username = this.client.user?.username;

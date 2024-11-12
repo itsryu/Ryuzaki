@@ -2,15 +2,15 @@ import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../structures';
 import { DailyCommandData } from '../../data/commands/economy/dailyCommandData';
-import { Languages } from '../../types';
 import { Abbrev, Util, Logger } from '../../utils';
+import { Language } from '../../utils/objects';
 
 export default class DailyCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, DailyCommandData);
     }
 
-    public async commandExecute({ message, language }: { message: OmitPartialGroupDMChannel<Message>, language: Languages }) {
+    public async commandExecute({ message, language }: { message: OmitPartialGroupDMChannel<Message>, language: Language }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
             const money = Util.randomValueFromInterval(1000, 5000);

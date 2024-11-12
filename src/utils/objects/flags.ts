@@ -4,6 +4,7 @@ type FlagBadge = Record<string, string>
 export enum Language {
     pt_BR = 'pt-BR',
     en_US = 'en-US',
+    es_ES = 'es-ES'
 }
 
 enum PermissionsFlagsKeys {

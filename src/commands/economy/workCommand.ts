@@ -1,16 +1,16 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../structures';
-import { Languages } from '../../types';
 import { WorkCommandData } from '../../data/commands/economy/workCommandData';
 import { Abbrev, Logger, Util } from '../../utils';
+import { Language } from '../../utils/objects';
 
 export default class WorkCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, WorkCommandData);
     }
 
-    public async commandExecute({ message, language }: { message: OmitPartialGroupDMChannel<Message>, language: Languages }) {
+    public async commandExecute({ message, language }: { message: OmitPartialGroupDMChannel<Message>, language: Language }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
 

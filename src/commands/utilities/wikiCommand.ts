@@ -1,16 +1,16 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../structures';
 import { WikiCommandData } from '../../data/commands/utilities/wikiCommandData';
-import { Languages } from '../../types/clientTypes';
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger } from '../../utils';
+import { Language } from '../../utils/objects';
 
 export default class wikiCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, WikiCommandData);
     }
 
-    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
+    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Language }) {
         try {
             const search = args.join(' ');
 

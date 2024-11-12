@@ -2,8 +2,7 @@ import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../structures';
 import { UserSubCommandData } from '../../data/commands/utilities/userSubCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, GuildMember, MessageComponentInteraction, StringSelectMenuInteraction, OmitPartialGroupDMChannel } from 'discord.js';
-import { PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../utils/objects';
-import { Languages } from '../../types/clientTypes';
+import { Language, PermissionFlagKey, PermissionsFlagsText, UserFlagKey, UserFlagsText } from '../../utils/objects';
 import { Logger, Util, GetDiscordUserApiData } from '../../utils';
 
 export default class UserSubCommand extends CommandStructure {
@@ -11,7 +10,7 @@ export default class UserSubCommand extends CommandStructure {
         super(client, UserSubCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Language }) {
         try {
             switch (args[0]) {
                 case 'image': {
@@ -249,7 +248,7 @@ export default class UserSubCommand extends CommandStructure {
         }
     }
 
-    private static getUserFlags(user: User, language: Languages) {
+    private static getUserFlags(user: User, language: Language) {
         const flags = user.flags;
 
         if (flags) {
@@ -261,7 +260,7 @@ export default class UserSubCommand extends CommandStructure {
         }
     }
 
-    private static getMemberPermissions(member: GuildMember, language: Languages): string[] {
+    private static getMemberPermissions(member: GuildMember, language: Language): string[] {
         const permissions = member.permissions.toArray();
 
         return Object.entries(PermissionsFlagsText)

@@ -2,7 +2,7 @@ import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, ListenerStructure } from '../../structures';
 import { TextChannel, VoiceState } from 'discord.js';
 import { Util, Logger } from '../../utils';
-import { Languages } from '../../types';
+import { Language } from '../../utils/objects';
 
 export default class VoiceStateUpdateListener extends ListenerStructure {
     constructor(client: Ryuzaki) {
@@ -21,7 +21,7 @@ export default class VoiceStateUpdateListener extends ListenerStructure {
 
                 if (userData && guildData) {
                     const call = userData.call;
-                    const language = guildData.lang as Languages;
+                    const language = guildData.lang as Language;
 
                     if (!oldState.channel && newState.channel) {
                         call.lastRegister = Date.now();

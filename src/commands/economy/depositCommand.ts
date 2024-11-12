@@ -1,16 +1,16 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure } from '../../structures';
-import { Languages } from '../../types';
 import { DepositCommandData } from '../../data/commands/economy/depositCommandData';
 import { Abbrev, Logger } from '../../utils';
+import { Language } from '../../utils/objects';
 
 export default class DepositCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, DepositCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Language }) {
         try {
             const userData = await this.client.getData(message.author.id, 'user');
             const amount = args[0];

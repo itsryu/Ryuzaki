@@ -6,7 +6,7 @@ import { Language } from './objects';
 import { Languages } from '../types';
 import { Connection } from 'mongoose';
 
-type timezone = 'America/Sao_Paulo' | 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Denver' | 'America/Phoenix' | 'America/Anchorage' | 'America/Adak' | 'Pacific/Honolulu';
+type Timezone = 'America/Sao_Paulo' | 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Denver' | 'America/Phoenix' | 'America/Anchorage' | 'America/Adak' | 'Pacific/Honolulu';
 
 namespace Util {
     /**
@@ -17,7 +17,7 @@ namespace Util {
      * @param timeZone - The timeZone used for formatting the time.
      * @returns The formatted time as a string.
      */
-    export function getTime(timestamp: number | Date, language: Languages, timeZone: timezone): string {
+    export function getTime(timestamp: number | Date, language: Languages, timeZone: Timezone): string {
         const date = new Date(timestamp || Date.now());
         return new Date(date).toLocaleString(language, { timeZone });
     }
@@ -113,13 +113,13 @@ namespace Util {
      * @param isSecondDisabled - Indicates whether the second button should be disabled.
      * @returns An ActionRowBuilder instance with three buttons.
      */
-    export function button(pageNumber: number, isFirstDisabled: boolean, isSecondDisabled: boolean): ActionRowBuilder<ButtonBuilder> {
+    export function button(pageNumber: number, isLeftDisabled: boolean, isRightDisabled: boolean): ActionRowBuilder<ButtonBuilder> {
         return new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('-')
                     .setLabel('👈')
-                    .setDisabled(isFirstDisabled)
+                    .setDisabled(isLeftDisabled)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('page')
@@ -129,7 +129,7 @@ namespace Util {
                 new ButtonBuilder()
                     .setCustomId('+')
                     .setLabel('👉')
-                    .setDisabled(isSecondDisabled)
+                    .setDisabled(isRightDisabled)
                     .setStyle(ButtonStyle.Secondary)
             );
     }
@@ -155,7 +155,7 @@ namespace Util {
      * @param format - Optional. An array of format strings to include in the result.
      * @returns The formatted duration as a string.
      */
-    export function formatDuration(milliseconds: number, language: Languages, format?: string[]): string {
+    export function formatDuration(milliseconds: number, language: Language, format?: string[]): string {
         const timeDuration = duration(milliseconds);
 
         const arrays: Record<Language, [number, string[]][]> | [] = {
@@ -174,6 +174,14 @@ namespace Util {
                 [timeDuration.hours(), ['hour', 'hours']],
                 [timeDuration.minutes(), ['minute', 'minutes']],
                 [timeDuration.seconds(), ['second', 'seconds']]
+            ],
+            'es-ES': [
+                [timeDuration.years(), ['año', 'años']],
+                [timeDuration.months(), ['mes', 'meses']],
+                [timeDuration.days(), ['día', 'días']],
+                [timeDuration.hours(), ['hora', 'horas']],
+                [timeDuration.minutes(), ['minuto', 'minutos']],
+                [timeDuration.seconds(), ['segundo', 'segundos']]
             ]
         };
 
@@ -187,7 +195,7 @@ namespace Util {
         const lastCommaIndex = result.lastIndexOf(', ');
 
         if (lastCommaIndex !== -1) {
-            const languageSpecificConjunction = language === 'pt-BR' ? ' e' : ' and';
+            const languageSpecificConjunction = language === Language.pt_BR ? ' e' : ' and';
             return result.slice(0, lastCommaIndex) + languageSpecificConjunction + result.slice(lastCommaIndex + 1);
         }
 

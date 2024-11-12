@@ -9,6 +9,7 @@ import { DataType, Languages, DataDocument } from './types/clientTypes';
 import { config } from 'dotenv';
 import { join } from 'node:path';
 import { SlashCommands } from '../slashCommands';
+import { Language } from './utils/objects';
 
 config({ path: join(__dirname, '../.env') });
 
@@ -85,7 +86,7 @@ export class Ryuzaki extends Client {
         });
     }
 
-    public async getLanguage(id: string): Promise<Languages> {
+    public async getLanguage(id: string): Promise<Language> {
         const guild = this.guilds.cache.get(id);
         const user = guild ? null : await this.users.fetch(id).catch(() => undefined);
 
@@ -95,13 +96,13 @@ export class Ryuzaki extends Client {
 
             await guildData?.updateOne({ $set: { lang: languages.some((lang) => lang === guild.preferredLocale) ? guild.preferredLocale : 'en-US' } }, { new: true });
 
-            return guildData?.lang as Languages;
+            return (guildData?.lang ?? 'en-US') as Language;
         } else {
             const userData = await this.getData(user?.id, 'user');
 
             await userData?.updateOne({ $set: { lang: 'pt-BR' } }, { new: true });
 
-            return userData?.lang as Languages;
+            return (userData?.lang ?? 'pt-BR') as Language;
         }
     }
 

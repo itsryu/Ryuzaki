@@ -75,7 +75,6 @@ interface Stats {
     wsStatus: Status
 }
 
-
 export type {
     DataType,
     Languages,

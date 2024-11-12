@@ -1,17 +1,17 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../structures';
 import { DeveloperSubCommandData } from '../../data/commands/developer/developerSubCommandData';
-import { Message, MessageComponentInteraction, OmitPartialGroupDMChannel, StringSelectMenuInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, Message, MessageComponentInteraction, OmitPartialGroupDMChannel, StringSelectMenuInteraction } from 'discord.js';
 import { inspect } from 'node:util';
-import { Languages } from '../../types';
 import { Logger, Util } from '../../utils';
+import { Language } from '../../utils/objects';
 
 export default class DeveloperSubCommand extends CommandStructure {
     constructor(client: Ryuzaki) {
         super(client, DeveloperSubCommandData);
     }
 
-    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], prefix: string, language: Languages }) {
+    async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message> | ChatInputCommandInteraction, args: string[], prefix: string, language: Language }) {
         try {
             switch (args[0]) {
                 case 'eval': {
@@ -54,12 +54,12 @@ export default class DeveloperSubCommand extends CommandStructure {
                         }
                     }
 
-                    const msg = await message.reply({ embeds: [pages[current]], components: [Util.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)] });
-                    const filter = (i: MessageComponentInteraction) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
+                    const msg = await message.reply({ embeds: [pages[current]], components: [Util.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)], fetchReply: true });
+                    const filter = (i: MessageComponentInteraction) => (i.user.id === (message instanceof ChatInputCommandInteraction ? message.user.id : message.author.id) && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate({ fetchReply: true }), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true, fetchReply: true }), false);
                     const collector = msg.createMessageComponentCollector({ filter, time: 60000 * 3 });
 
                     collector.on('end', async () => {
-                        return void await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [Util.button(current + 1, true, true)] });
+                        return void await msg.edit({ embeds: [pages[current].setFooter({ text: this.client.t('client:embed.footer', { client: this.client.user?.username }), iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 4096 }) })], components: [Util.button(current + 1, true, true)], options: { fetchReply: true } });
                     });
 
                     collector.on('collect', async (i: StringSelectMenuInteraction) => {

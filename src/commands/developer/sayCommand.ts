@@ -14,7 +14,7 @@ export default class SayCommand extends CommandStructure {
             const msg = args.join(' ');
 
             await message.delete();
-            return void await message.channel.send({ content: msg });
+            return void await message.channel?.send({ content: msg });
         } catch (err) {
             Logger.error((err as Error).message, SayCommand.name);
             Logger.warn((err as Error).stack, SayCommand.name);

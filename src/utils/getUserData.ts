@@ -2,7 +2,7 @@ import { Snowflake } from 'discord.js';
 import { DiscordUser } from '../types/gatewayTypes';
 import { UserBadges, UserFlagKey } from './objects';
 import { Logger } from './index';
-
+import { MonthBadge } from '../types';
 interface UserBoostBadge {
     atualBadge?: string | null;
     atualBadgeTime?: number;
@@ -47,77 +47,78 @@ export class GetDiscordUserApiData {
         const atualBoostDate = user?.premium_guild_since;
 
         if (atualBoostDate) {
-            const atualBoostTimeMs = new Date(atualBoostDate).getTime();
-            const calculatedAtualBoostTime = Math.abs(Date.now() - atualBoostTimeMs);
-            const avarageMonth = 365 / 12;
+            const atualBoostTimeMs = new Date(atualBoostDate).valueOf();
+            const calculatedAtualBoostTime = Math.abs(Date.now() - atualBoostTimeMs) - (1 * 24 * 60 * 60 * 1000);
+            const averageMonth = 365 / 12;
+            const monthInMs = 1000 * 60 * 60 * 24 * averageMonth;
 
             switch (true) {
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 1): {
+                case calculatedAtualBoostTime < (monthInMs * 2): {
                     return {
-                        atualBadge: '<:1Month:1252302212559015986>',
+                        atualBadge: MonthBadge.OneMonth,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:2Months:1252302325918335109>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 1))
+                        nextBadge: MonthBadge.TwoMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - monthInMs * 2)
                     };
                 }
 
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 2): {
+                case calculatedAtualBoostTime > (monthInMs * 2) && calculatedAtualBoostTime <= (monthInMs * 3): {
                     return {
-                        atualBadge: '<:2Months:1252302325918335109>',
+                        atualBadge: MonthBadge.TwoMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:3Months:1252302405572362466>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 2))
+                        nextBadge: MonthBadge.ThreeMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 3))
                     };
                 }
 
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 3): {
+                case calculatedAtualBoostTime > (monthInMs * 3) && calculatedAtualBoostTime <= (monthInMs * 6): {
                     return {
-                        atualBadge: '<:3Months:1252302405572362466>',
+                        atualBadge: MonthBadge.ThreeMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:6Months:1252346325136314489>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 3))
+                        nextBadge: MonthBadge.SixMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 6))
                     };
                 }
 
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 6): {
+                case calculatedAtualBoostTime > (monthInMs * 6) && calculatedAtualBoostTime <= (monthInMs * 9): {
                     return {
-                        atualBadge: '<:6Months:1252346325136314489>',
+                        atualBadge: MonthBadge.SixMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:9Months:1252346547996196937>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 9))
+                        nextBadge: MonthBadge.NineMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 9))
                     };
                 }
 
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 12): {
+                case calculatedAtualBoostTime > (monthInMs * 9) && calculatedAtualBoostTime <= (monthInMs * 12): {
                     return {
-                        atualBadge: '<:9Months:1252346547996196937>',
+                        atualBadge: MonthBadge.NineMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:12Months:1252346695547752478>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 12))
+                        nextBadge: MonthBadge.TwelveMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 12))
                     };
                 }
 
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 18): {
+                case calculatedAtualBoostTime > (monthInMs * 12) && calculatedAtualBoostTime <= (monthInMs * 18): {
                     return {
-                        atualBadge: '<:12Months:1252346695547752478>',
+                        atualBadge: MonthBadge.TwelveMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:18Months:1252346969355980820>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 18))
+                        nextBadge: MonthBadge.EighteenMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 18))
                     };
                 }
 
-                case calculatedAtualBoostTime < (1000 * 60 * 60 * 24 * avarageMonth * 24): {
+                case calculatedAtualBoostTime > (monthInMs * 18) && calculatedAtualBoostTime <= (monthInMs * 24): {
                     return {
-                        atualBadge: '<:18Months:1252346969355980820>',
+                        atualBadge: MonthBadge.EighteenMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: '<:24Months:1252347148381589574>',
-                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (1000 * 60 * 60 * 24 * avarageMonth * 24))
+                        nextBadge: MonthBadge.TwentyFourMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 24))
                     };
                 }
 
-                case calculatedAtualBoostTime > (1000 * 60 * 60 * 24 * avarageMonth * 24): {
+                case calculatedAtualBoostTime > (monthInMs * 24): {
                     return {
-                        atualBadge: '<:24Months:1252347148381589574>',
+                        atualBadge: MonthBadge.TwentyFourMonths,
                         atualBadgeTime: calculatedAtualBoostTime
                     };
                 }
@@ -131,3 +132,4 @@ export class GetDiscordUserApiData {
         }
     }
 }
+

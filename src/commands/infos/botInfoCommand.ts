@@ -1,6 +1,5 @@
 import { Ryuzaki } from '../../ryuzakiClient';
-import { emojis } from '../../utils/objects';
-import { Languages } from '../../types';
+import { emojis, Language } from '../../utils/objects';
 import { CommandStructure, ClientEmbed } from '../../structures';
 import { BotInfoCommandData } from '../../data/commands/infos/botInfoCommandData';
 import { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, version, OmitPartialGroupDMChannel } from 'discord.js';
@@ -15,7 +14,7 @@ export default class BotInfoCommand extends CommandStructure {
         super(client, BotInfoCommandData);
     }
 
-    async commandExecute({ message, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, prefix: string, language: Languages }) {
+    async commandExecute({ message, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, prefix: string, language: Language }) {
         try {
             const clientUsername = this.client.user?.username;
             const clientTag = this.client.user?.tag;

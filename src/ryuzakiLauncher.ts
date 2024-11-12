@@ -5,7 +5,6 @@ import { client } from './client/client';
 import App from './web/backend/server';
 import { Logger } from './utils/logger';
 
-
 (async () => {
     await client.login(process.env.CLIENT_TOKEN);
     await client.initialize();

@@ -1,6 +1,6 @@
 import Dayjs from 'dayjs';
 import { Util } from '../src/utils';
-import { Languages } from '../src/types/clientTypes';
+import { Language } from '../src/utils/objects';
 
 describe('formatDuration', () => {
     const dayjs: typeof Dayjs = jest.requireActual('dayjs');
@@ -8,7 +8,7 @@ describe('formatDuration', () => {
 
     it('should format duration correctly in English', () => {
         const milliseconds = (1000 * 60 * 60 * 24 * 365);
-        const language: Languages = 'en-US';
+        const language: Language = Language.pt_BR;
         const format = ['year'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('1 year');
@@ -16,7 +16,7 @@ describe('formatDuration', () => {
 
     it('should format duration correctly in Portuguese', () => {
         const milliseconds = (1000 * 60 * 60 * 24 * 365);
-        const language: Languages = 'pt-BR';
+        const language: Language = Language.pt_BR;
         const format = ['ano'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('1 ano');
@@ -24,7 +24,7 @@ describe('formatDuration', () => {
 
     it('should format multiple components correctly in English', () => {
         const milliseconds = (1000 * 60 * 60 * 24 * 365) + (1000 * 60 * 60 * 24 * 60);
-        const language: Languages = 'en-US';
+        const language: Language = Language.en_US;
         const format = ['year', 'month'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('1 year and 1 month');
@@ -32,7 +32,7 @@ describe('formatDuration', () => {
 
     it('should format multiple components correctly in Portuguese', () => {
         const milliseconds = (1000 * 60 * 60 * 24 * 365) + (1000 * 60 * 60 * 24 * 60);
-        const language: Languages = 'pt-BR';
+        const language: Language = Language.pt_BR;
         const format = ['ano', 'mês'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('1 ano e 1 mês');
@@ -40,7 +40,7 @@ describe('formatDuration', () => {
 
     it('should handle zero values correctly', () => {
         const milliseconds = 0;
-        const language: Languages = 'en-US';
+        const language: Language = Language.en_US;
         const format = ['year', 'month', 'day', 'hour', 'minute', 'second'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('');
@@ -48,7 +48,7 @@ describe('formatDuration', () => {
 
     it('should format partial components correctly in English', () => {
         const milliseconds = (1000 * 60 * 60 * 24); 
-        const language: Languages = 'en-US';
+        const language: Language = Language.en_US;
         const format = ['day'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('1 day');
@@ -56,7 +56,7 @@ describe('formatDuration', () => {
 
     it('should format partial components correctly in Portuguese', () => {
         const milliseconds = (1000 * 60 * 60 * 24);
-        const language: Languages = 'pt-BR';
+        const language: Language = Language.pt_BR;
         const format = ['dia'];
         const result = Util.formatDuration(milliseconds, language, format);
         expect(result).toBe('1 dia');
@@ -64,7 +64,7 @@ describe('formatDuration', () => {
 
     it('should format all components correctly in English', () => {
         const milliseconds = (1000 * 60 * 60 * 24) + (1000 * 60 * 60) + (1000 * 60) + 1000;
-        const language: Languages = 'en-US';
+        const language: Language = Language.en_US;
         const result = Util.formatDuration(milliseconds, language);
         expect(result).toBe('1 day, 1 hour, 1 minute and 1 second');
     });

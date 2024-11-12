@@ -1,11 +1,11 @@
 import { ModuleStructure } from '../structures';
-import { Message } from 'discord.js';
+import { ChatInputCommandInteraction, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Logger, Util } from '../utils';
 
 export default class XPModule extends ModuleStructure {
-    async moduleExecute({ message }: { message: Message }) {
+    async moduleExecute({ message }: { message: OmitPartialGroupDMChannel<Message> | ChatInputCommandInteraction }) {
         try {
-            const userData = await this.client.getData(message.author.id, 'user');
+            const userData = await this.client.getData((message instanceof ChatInputCommandInteraction ? message.user.id : message.author.id), 'user');
 
             if (userData) {
                 try {
@@ -33,7 +33,7 @@ export default class XPModule extends ModuleStructure {
 
                         await userData.save();
 
-                        return void message.reply({ content: `Você acaba de subir para o nível **${level + 1}**.` })
+                        return void message.reply({ content: `Você acaba de subir para o nível **${level + 1}**.`, fetchReply: true })
                             .then(async (message) => { await message.react('⬆️'); });
                     }
 

@@ -1,8 +1,7 @@
 import { Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { Ryuzaki } from '../../ryuzakiClient';
 import { ClientEmbed, CommandStructure } from '../../structures/';
-import { Languages } from '../../types';
-import { emojis } from '../../utils/objects';
+import { emojis, Language } from '../../utils/objects';
 import { BagCommandData } from '../../data/commands/economy/bagCommandData';
 import { Abbrev, Logger } from '../../utils';
 
@@ -11,7 +10,7 @@ export default class BagCommand extends CommandStructure {
         super(client, BagCommandData);
     }
 
-    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Languages }) {
+    public async commandExecute({ message, args, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], language: Language }) {
         try {
             const user = message.mentions?.users?.first() ?? await this.client.users.fetch(args[0]).catch(() => undefined) ?? message.author;
             const userData = await this.client.getData(user.id, 'user');

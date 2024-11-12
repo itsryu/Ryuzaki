@@ -1,9 +1,9 @@
 import { Ryuzaki } from '../../ryuzakiClient';
 import { CommandStructure, ClientEmbed } from '../../structures';
 import { HelpCommandData } from '../../data/commands/infos/helpCommandData';
-import { CategoryValidation, Languages } from '../../types';
+import { CategoryValidation } from '../../types';
 import { Message, ActionRowBuilder, StringSelectMenuBuilder, MessageComponentInteraction, StringSelectMenuInteraction, PermissionsBitField, OmitPartialGroupDMChannel } from 'discord.js';
-import { PermissionFlagKey, PermissionsFlagsText, categoryEmojis } from '../../utils/objects';
+import { Language, PermissionFlagKey, PermissionsFlagsText, categoryEmojis } from '../../utils/objects';
 import { Logger } from '../../utils';
 
 export default class HelpCommand extends CommandStructure {
@@ -11,7 +11,7 @@ export default class HelpCommand extends CommandStructure {
         super(client, HelpCommandData);
     }
 
-    async commandExecute({ message, args, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], prefix: string, language: Languages }) {
+    async commandExecute({ message, args, prefix, language }: { message: OmitPartialGroupDMChannel<Message>, args: string[], prefix: string, language: Language }) {
         try {
             const { commands } = this.client;
 
@@ -100,7 +100,7 @@ export default class HelpCommand extends CommandStructure {
                         }
                     ]);
 
-                const supressedCategories: CategoryValidation<Languages>[] = [
+                const supressedCategories: CategoryValidation<Language>[] = [
                     {
                         'en-US': 'Developer',
                         'pt-BR': 'Desenvolvedor',
