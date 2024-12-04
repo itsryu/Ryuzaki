@@ -98,9 +98,18 @@ export class GetDiscordUserApiData {
                     };
                 }
 
-                case calculatedAtualBoostTime > (monthInMs * 12) && calculatedAtualBoostTime <= (monthInMs * 18): {
+                case calculatedAtualBoostTime > (monthInMs * 12) && calculatedAtualBoostTime <= (monthInMs * 15): {
                     return {
                         atualBadge: MonthBadge.TwelveMonths,
+                        atualBadgeTime: calculatedAtualBoostTime,
+                        nextBadge: MonthBadge.EighteenMonths,
+                        nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 15))
+                    };
+                }
+
+                case calculatedAtualBoostTime > (monthInMs * 15) && calculatedAtualBoostTime <= (monthInMs * 18): {
+                    return {
+                        atualBadge: MonthBadge.FifthteenMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
                         nextBadge: MonthBadge.EighteenMonths,
                         nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 18))

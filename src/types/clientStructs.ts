@@ -5,6 +5,7 @@ enum MonthBadge {
     SixMonths = '<:6Months:1252346325136314489>',
     NineMonths = '<:9Months:1252346547996196937>',
     TwelveMonths = '<:12Months:1252346695547752478>',
+    FifthteenMonths = '<:15Months:1313883417007620106>',
     EighteenMonths = '<:18Months:1252346969355980820>',
     TwentyFourMonths = '<:24Months:1252347148381589574>'
 }
