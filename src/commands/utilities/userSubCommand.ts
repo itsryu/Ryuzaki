@@ -123,7 +123,14 @@ export default class UserSubCommand extends CommandStructure {
                             });
 
                     const embed = new ClientEmbed(this.client)
-                        .setAuthor({ name: 'Informações do Membro', iconURL: user.displayAvatarURL({ size: 4096 }) });
+                        .setAuthor({ name: 'Informações do Membro', iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .setFields(
+                            {
+                                name: '🚩 Flags:',
+                                value: flags.length >= 1 ? flags.map((flag) => `\`${flag}\``).join('\n') : '`Nenhuma`',
+                                inline: true
+                            }
+                        );
 
                     if (badges.length >= 1) {
                         menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`);
@@ -166,20 +173,6 @@ export default class UserSubCommand extends CommandStructure {
                                 {
                                     name: '🛡️ Permissões:',
                                     value: permissions.length >= 1 ? permissions.map((permission) => `\`${permission}\``).join('\n') : '`Nenhuma`',
-                                    inline: true
-                                },
-                                {
-                                    name: '🚩 Flags:',
-                                    value: flags.length >= 1 ? flags.map((flag) => `\`${flag}\``).join('\n') : '`Nenhuma`',
-                                    inline: true
-                                }
-                            );
-                    } else {
-                        embed
-                            .setFields(
-                                {
-                                    name: '🚩 Flags:',
-                                    value: flags.length >= 1 ? flags.map((flag) => `\`${flag}\``).join('\n') : '`Nenhuma`',
                                     inline: true
                                 }
                             );

@@ -28,8 +28,8 @@ export class Translate {
 
         await Promise.all(
             dirs.map((file) => {
-                // node 22: .split('\\').slice(-2); 
-                // node 20: .split('/').slice(-2);
+                // windows: .split('\\').slice(-2); 
+                // linux: .split('/').slice(-2);
 
                 const [language, ns] = process.platform === 'win32' ? file.split('\\').slice(-2) : file.split('/').slice(-2);
 
