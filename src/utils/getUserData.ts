@@ -19,8 +19,8 @@ export class GetDiscordUserApiData {
                     'Authorization': 'Bearer ' + process.env.AUTH_KEY
                 }
             })
-                .then((res) => res.json())
-                .catch(() => undefined) as DiscordUser | undefined;
+                .then((res) => res.json() as Promise<DiscordUser>)
+                .catch(() => undefined);
 
             if (data) return data;
             else return undefined;
@@ -102,7 +102,7 @@ export class GetDiscordUserApiData {
                     return {
                         atualBadge: MonthBadge.TwelveMonths,
                         atualBadgeTime: calculatedAtualBoostTime,
-                        nextBadge: MonthBadge.EighteenMonths,
+                        nextBadge: MonthBadge.FifthteenMonths,
                         nextBadgeTime: Math.abs(calculatedAtualBoostTime - (monthInMs * 15))
                     };
                 }

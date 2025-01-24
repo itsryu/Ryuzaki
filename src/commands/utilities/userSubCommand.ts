@@ -107,23 +107,48 @@ export default class UserSubCommand extends CommandStructure {
                     const badges = GetDiscordUserApiData.getUserBadges(data);
                     const boostBadge = GetDiscordUserApiData.getUserBoostBadge(data);
 
+                    const menuEmbed = new ClientEmbed(this.client)
+                        .setThumbnail(user.displayAvatarURL({ size: 4096 }))
+                        .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        .addFields(
+                            {
+                                name: 'Nickname:',
+                                value: `\`${user.tag}\` \`(${user.id}\`)`,
+                                inline: true
+                            },
+                            {
+                                name: '📆 Data de Criação:',
+                                value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`,
+                                inline: true
+                            });
+
+                    const embed = new ClientEmbed(this.client)
+                        .setAuthor({ name: 'Informações do Membro', iconURL: user.displayAvatarURL({ size: 4096 }) });
+
+                    if (badges.length >= 1) {
+                        menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`);
+                    }
+
+                    if (boostBadge?.atualBadge && boostBadge.atualBadgeTime) {
+                        menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
+                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '`Atingiu o limite!`', inline: true });
+                    }
+
+                    if (userData && userData.call.totalCall > 0) {
+                        const time = Util.formatDuration(userData.call.totalCall, language);
+                        menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
+                    }
+
+                    if (userData && userData.marry.has) {
+                        const soul = await this.client.users.fetch(userData.marry.user).catch(() => undefined);
+                        menuEmbed.addFields({ name: '💍 Casado(a):', value: `Casado(a) com \`${soul?.tag}\`.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
+                    }
+
                     if (member) {
                         const permissions = UserSubCommand.getMemberPermissions(member, language);
 
-                        const menuEmbed = new ClientEmbed(this.client)
-                            .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-                            .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
-                            .setFields(
-                                {
-                                    name: 'Nickname:',
-                                    value: `\`${member.user.tag}\` \`(${member.id})\``,
-                                    inline: true
-                                },
-                                {
-                                    name: '📆 Data de Criação:',
-                                    value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`,
-                                    inline: true
-                                },
+                        menuEmbed
+                            .addFields(
                                 {
                                     name: '📱 Dispositivo:',
                                     value: UserSubCommand.getMemberDevice(member),
@@ -131,29 +156,12 @@ export default class UserSubCommand extends CommandStructure {
                                 }
                             );
 
-                        if (badges.length >= 1) {
-                            menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`);
-                        }
-
-                        if (boostBadge?.atualBadge && boostBadge.atualBadgeTime) {
-                            menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
-                            menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '`Atingiu o limite!`', inline: true });
-                        }
-
-                        if (userData && userData.call.totalCall > 0) {
-                            const time = Util.formatDuration(userData.call.totalCall, language);
-                            menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
-                        }
-
                         if (member.roles.cache.size > 1) {
                             const roles = member.roles.cache.filter((role) => role.id !== message.guild?.id).map((role) => role).join(' ');
                             menuEmbed.addFields({ name: '🔰 Cargos:', value: roles, inline: false });
                         }
 
-                        pages.push(menuEmbed);
-
-                        const embed = new ClientEmbed(this.client)
-                            .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        embed
                             .setFields(
                                 {
                                     name: '🛡️ Permissões:',
@@ -166,49 +174,8 @@ export default class UserSubCommand extends CommandStructure {
                                     inline: true
                                 }
                             );
-
-                        if (userData && userData.marry.has) {
-                            const soul = await this.client.users.fetch(userData.marry.user).catch(() => undefined);
-                            embed.addFields({ name: '💍 Casado(a):', value: `Casado(a) com \`${soul?.tag}\`.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
-                        }
-
-                        pages.push(embed);
                     } else {
-                        const menuEmbed = new ClientEmbed(this.client)
-                            .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-                            .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
-                            .setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`)
-                            .setFields(
-                                {
-                                    name: 'Nickname:',
-                                    value: `\`${user.tag}\` \`(${user.id}\`)`,
-                                    inline: true
-                                },
-                                {
-                                    name: '📆 Data de Criação:',
-                                    value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`,
-                                    inline: true
-                                }
-                            );
-
-                        if (badges.length >= 1) {
-                            menuEmbed.setDescription(`**Badges:** ${badges.join(' ')} ${boostBadge?.atualBadge ?? ''}`);
-                        }
-
-                        if (boostBadge?.atualBadge && boostBadge.atualBadgeTime) {
-                            menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
-                            menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '`Atingiu o limite!`', inline: true });
-                        }
-
-                        if (userData && userData.call.totalCall > 0) {
-                            const time = Util.formatDuration(userData.call.totalCall, language);
-                            menuEmbed.addFields({ name: '🎙️ Tempo total em call\'s:', value: `**\`${time}\`**`, inline: false });
-                        }
-
-                        pages.push(menuEmbed);
-
-                        const embed = new ClientEmbed(this.client)
-                            .setAuthor({ name: 'Informações do Usuário', iconURL: user.displayAvatarURL({ size: 4096 }) })
+                        embed
                             .setFields(
                                 {
                                     name: '🚩 Flags:',
@@ -216,14 +183,10 @@ export default class UserSubCommand extends CommandStructure {
                                     inline: true
                                 }
                             );
-
-                        if (userData && userData.marry.has) {
-                            const soul = await this.client.users.fetch(userData.marry.user).catch(() => undefined);
-                            embed.addFields({ name: '💍 Casado(a):', value: `Casado(a) com \`${soul?.tag}\`.\nCasados desde <t:${Math.floor(userData.marry.time / 1000)}:f> (<t:${Math.floor(userData.marry.time / 1000)}:R>).` });
-                        }
-
-                        pages.push(embed);
                     }
+
+                    pages.push(menuEmbed);
+                    pages.push(embed);
 
                     const msg = await message.reply({ embeds: [pages[current]], components: [Util.button(1, current <= 0 ? true : false, pages.length <= 1 ? true : false)] });
                     const filter = (i: MessageComponentInteraction) => (i.user.id === message.author.id && i.isButton() && i.message.id === msg.id) ? (i.deferUpdate(), true) : (i.reply({ content: this.client.t('client:interaction.user', { user: i.user }), ephemeral: true }), false);
