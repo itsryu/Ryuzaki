@@ -137,8 +137,8 @@ export default class UserSubCommand extends CommandStructure {
                     }
 
                     if (boostBadge?.atualBadge && boostBadge.atualBadgeTime) {
-                        menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\``, inline: false });
-                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\`` : '`Atingiu o limite!`', inline: true });
+                        menuEmbed.addFields({ name: boostBadge.atualBadge + ' Boost atual', value: `\`${Util.formatDuration(boostBadge.atualBadgeTime, language)}\` (<t:${Math.floor((Date.now() - boostBadge.atualBadgeTime) / 1000)}:R>)`, inline: false });
+                        menuEmbed.addFields({ name: boostBadge.nextBadge ? (boostBadge.nextBadge + ' Boost Up:') : 'Boost Up:', value: boostBadge.nextBadgeTime ? `\`${Util.formatDuration(boostBadge.nextBadgeTime, language)}\` (<t:${Math.floor((Date.now() + boostBadge.nextBadgeTime) / 1000)}:R>)` : '`Atingiu o limite!`', inline: true });
                     }
 
                     if (userData && userData.call.totalCall > 0) {
